@@ -1,0 +1,2 @@
+### My personal homepage
+This homepage was created from RStudio using the [blogdown](https://github.com/rstudio/blogdown) package. You can find the page here: https://priceless-sinoussi-3f419d.netlify.com/

@@ -1,0 +1,51 @@
+---
+title: My first blogdown post
+author: Johannes Gruber
+date: '2018-04-15'
+slug: my-first-blogdown-post
+categories: []
+tags:
+  - R
+header:
+  caption: ''
+  image: ''
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+
+
+<p>I have been playing with the idea of getting a personal website for a while now. The concept of personal websites seems to have lost appeal in recent years, due to the omnipresence of social media sites and universities (and other employers) giving space on their website for the most crucial information that should be out on the web about an employer. However, it seems that most self-respecting academics still operate personal websites and after tweaking my <a href="https://www.gla.ac.uk/schools/socialpolitical/research/students/johannesgruber/"><strong>own profile</strong></a> I tried to show it to a friend and failed miserably to find it again in the maze that is the UoG website (which is not worse than most other university’s site I’ve seen).</p>
+<p>Additionally, It seems that a blog offers good practice to get some smaller ideas out there in a concise and straightforward form. And additionally, I’m hoping to get some practice writing (in a foreign language).</p>
+<p>So when I read about blogdown, I thought I might give it a try. And in fact, due to Yihui Xie’s wonderful <a href="https://bookdown.org/yihui/bookdown/"><strong>online book</strong></a> setting up a blog or personal website means you just have to execute a couple of commands in R (which is my favourite thing to do anyway) to get a personal site, that includes space to share information about myself, my research and have a nice spot to share some of my endeavours with <strong>R</strong>.</p>
+<p>One major upside of this approach is that it is quick and easy to share R code and the plots it creates. This, for example, is the code to one of my favourite plots: a proportional stacked area graph. Enjoy!</p>
+<pre class="r"><code># Load libraries
+library(ggplot2)
+library(RColorBrewer)
+
+# Make some data
+set.seed(345)
+Sector &lt;- rep(c(&quot;S01&quot;,&quot;S02&quot;,&quot;S03&quot;,&quot;S04&quot;,&quot;S05&quot;,&quot;S06&quot;,&quot;S07&quot;),times=7)
+Year &lt;- as.numeric(rep(c(&quot;1950&quot;,&quot;1960&quot;,&quot;1970&quot;,&quot;1980&quot;,&quot;1990&quot;,&quot;2000&quot;,&quot;2010&quot;),each=7))
+Value &lt;- runif(49, 10, 100)
+data &lt;- data.frame(Sector,Year,Value)
+
+# Plot proportional stacked area graph
+data$prop &lt;- data$Value / sapply(data$Year, function(y) {
+  sum(data$Value[data$Year == y])
+})
+
+ggplot(data, aes(x=Year, y=prop, fill=Sector)) + 
+  geom_area(alpha=0.6 , size=1, colour=&quot;black&quot;) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_brewer(palette = &quot;Dark2&quot;) +
+  theme_bw() +
+  theme(text = element_text(size=12),
+        panel.grid.major = element_line(colour = &quot;grey&quot;,
+                                        size = 0.75, 
+                                        linetype = 3),
+        panel.grid.minor = element_blank())</code></pre>
+<p><img src="/post/2018-04-15-my-first-blogdown-post_files/figure-html/unnamed-chunk-1-1.svg" width="576" /></p>
