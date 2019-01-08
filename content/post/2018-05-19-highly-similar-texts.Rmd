@@ -20,20 +20,22 @@ output:
 A while ago I was building a database of newspaper articles retrieved from LexisNexis for a research project in which I was working as a research assistant.
 At some point we noticed that we seemed to have a lot of duplicates in our database.
 I had already removed the duplicates with `R` so we were really surprised that those are still in there.
-However, after some investigation, I found that there are indeed small differences between the articles we had identified as duplicates in our data.
+However, after some investigation, I found that there are indeed small differences between the articles we had identified manually as duplicates in our data.
+This post describes a strategy we came up with to effectivly find those highly similar articles.
+For convenience, I implemented a version of that solution in the function `lnt_similarity` of my [LexisNexisTools package](https://github.com/JBGruber/LexisNexisTools#identify-highly-similar-articles).
 
-`R` of course will not consider two texts duplicates when a single character, such as a comma, whitespace or quotation mark is different.
+The problem is that `R` will not consider two texts duplicates when only a single character, such as a comma, whitespace or quotation mark is different.
 That was therefore our first guess.
 But we found more than that.
 In some cases, subtle edits had been made.
 A different word with the same meaning, the title or position of a person added or removed from the article or a new sentence added to the end of an article.
 Strangely, many of those articles were published on the same date and in the same newspaper.
 
-For some instances that could be explained by taking a look at the editions:
+For some instances, the differences could be explained by taking a look at the editions:
 Many newspapers in the UK have localised editions and the Scottish edition of the Daily Mail might have and extra sentence about how a story affected Scotland or a comment from a Scottish politician was added somewhere in the article.
 
 However, this poses a problem to any valid media analysis:
-Those articles would be wrongfully counted several times in the sample.
+These articles would be wrongfully counted several times in the sample.
 The introduced bias would mean that there are more articles from newspapers that add several different editions to the LexisNexis database.
 An additional problem was that while the information on editions was available for some outlets, it seemed that LexisNexis did not provide it for others.
 So we needed a computational way to find the duplicates.
@@ -77,7 +79,7 @@ compare <- c("kitten", "sitting", "knitting", "omitting")
 adist(compare) / max(nchar(compare))
 ```
 
-For the four words above, 12 calculations are necessary, since each text needs to be calculated to each other text in the sample (i.e. n*(n-1) calculation with n = number of texts to compare).
+For the four words above, 12 calculations are necessary, since each text needs to be compared to each other text in the sample (i.e. n*(n-1) calculation with n = number of texts to compare).
 The longer a text, the more computationally expensive a calculation will be.
 
 Consider the following.
@@ -99,14 +101,14 @@ dplyr::select(benchmark, mean, mem_alloc)
 
 To get a feel for this, the mean time for the second calculation is `r paste(benchmark$mean[2])` that is miliseconds.
 In the same unit as the first calculation, that would be `r scales::comma(as.numeric(benchmark$mean[2]) * 1000000)` microseconds.
-That is an `r scales::comma(as.numeric(benchmark$mean[2]) / as.numeric(benchmark$mean[1]))`% increase on average.
+This is an `r scales::comma(as.numeric(benchmark$mean[2]) / as.numeric(benchmark$mean[1]))`% increase on average.
 The allocated memory can't even be calculated since the first value is too small to measure while the second calculation uses quite a bit of memory.
 Some testing revealed that around 3500 articles would already bring my 32GB RAM machine to its knees.
+This makes it almost impossible to compare hundreds or thousands of newspaper articles.
 
 ## Available solutions: the fast one
 
-This makes a job with hundreds or thousands of newspaper articles almost impossible to compare.
-However, while the edit distance is the most accurate method for comparing texts, there are others which are much more efficient.
+While the edit distance is the most accurate method for comparing texts, there are others which are much more efficient.
 Instead of comparing character for character, it is also possible to chop up each text into its elements and then compare which elements are shared by two or more texts.
 
 I use the excellent `quanteda` package to do this.
@@ -222,9 +224,10 @@ simil_clean %>%
 ```
 
 
-Now this is a little confusing but the lower the relative distance, the more similar the texts are---the exact opposite of the similarity measure.
-What we learned from the exercise is that "Dog bites man" and "Man bites dog" have quite a relative distance from each other while the two Lorem Ipsum texts are highly similar.
+Now this is a little confusing, so let me explain:
+ID 3 and 4 are the Lorem Ipsum texts, 5 and 6 are "Dog bites man" and "Man bites dog".
+These texts end up in pairs, as their similarity value is above a threshold I used (0.95).
+rel_edit is the relative edit distance.
+The more similar two texts are, the lower this second value---the exact opposite of the similarity measure.
+So the very low distance between the two Lorem Ipsum texts and the high distance between "Dog bites man" and "Man bites dog" indicate that the first pair is extremely similar while the latter pair consists of pretty different texts.
 In a newspaper media analysis, it would be therefore make a lot of sense to remove either text 6 or 5 from the database.
-
-For convenience, I implemented this in the function `lnt_similarity` of my [LexisNexisTools package](https://github.com/JBGruber/LexisNexisTools#identify-highly-similar-articles).
-
