@@ -1,0 +1,230 @@
+---
+title: Highly Similar Texts
+author: Johannes Gruber
+date: '2018-05-17'
+slug: similarity
+categories: []
+tags:
+  - R
+  - media anlysis
+header:
+  caption: ''
+  image: ''
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+A while ago I was building a database of newspaper articles retrieved from LexisNexis for a research project in which I was working as a research assistant.
+At some point we noticed that we seemed to have a lot of duplicates in our database.
+I had already removed the duplicates with `R` so we were really surprised that those are still in there.
+However, after some investigation, I found that there are indeed small differences between the articles we had identified as duplicates in our data.
+
+`R` of course will not consider two texts duplicates when a single character, such as a comma, whitespace or quotation mark is different.
+That was therefore our first guess.
+But we found more than that.
+In some cases, subtle edits had been made.
+A different word with the same meaning, the title or position of a person added or removed from the article or a new sentence added to the end of an article.
+Strangely, many of those articles were published on the same date and in the same newspaper.
+
+For some instances that could be explained by taking a look at the editions:
+Many newspapers in the UK have localised editions and the Scottish edition of the Daily Mail might have and extra sentence about how a story affected Scotland or a comment from a Scottish politician was added somewhere in the article.
+
+However, this poses a problem to any valid media analysis:
+Those articles would be wrongfully counted several times in the sample.
+The introduced bias would mean that there are more articles from newspapers that add several different editions to the LexisNexis database.
+An additional problem was that while the information on editions was available for some outlets, it seemed that LexisNexis did not provide it for others.
+So we needed a computational way to find the duplicates.
+
+## Available solutions: the accurate one
+
+Comparing chunks of text is more complicated than we initially thought.
+The most accurate solution available would be the so-called Levensthein or edit distance.
+
+Consider this example that I pulled off Wikipedia:
+
+1. kitten → sitten (substitution of "s" for "k")
+2. sitten → sittin (substitution of "i" for "e")
+3. sittin → sitting (insertion of "g" at the end).
+
+The distance between "kitten" and "sitting" is three, because three edits need to be made to turn the former into the latter.
+This is implemented in base `R`:
+
+```{r}
+adist("kitten", "sitting")
+```
+
+One problem with this is that arguably "kitten" and "sitting" are two very different character string whereas two newspaper articles of a few hundred words where the edit distance is just 3 are very similar.
+An easy solution is to calculate the relative distance instead:
+I chose to divide the distance by the length of the longer word, which has the advantage that the result will be between 0 (for identical texts) or 1 (for texts that are completely different).
+
+```{r}
+compare <- c("kitten", "sitting")
+adist(compare[1], compare[2]) / max(nchar(compare))
+```
+
+The relative distance of 0.43 means that the texts are very different, which is intuitively right.
+
+However, there is a second problem when using the edit distance:
+Although Vladimir Levenshtein publish his paper about the algorithm to calculate the distance more than 50 years ago, it is still extremely computational demanding, even for modern machines.
+
+The main reason for this is that the demand for calculation scales up extremely quickly when comparing more than one text:
+
+```{r}
+compare <- c("kitten", "sitting", "knitting", "omitting")
+adist(compare) / max(nchar(compare))
+```
+
+For the four words above, 12 calculations are necessary, since each text needs to be calculated to each other text in the sample (i.e. n*(n-1) calculation with n = number of texts to compare).
+The longer a text, the more computationally expensive a calculation will be.
+
+Consider the following.
+I measure time and resources needed to calculate the difference between two words ("kitten" and "sitting") and between two chunks of Lorem Ipsum, 651 and 650 characters long.
+
+```{r}
+compare <- c("kitten", "sitting")
+compare2 <- c(
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia elementum sapien, eget aliquet ex finibus ut. Suspendisse eget molestie ligula. Etiam quis purus sed urna lacinia lobortis. Suspendisse tempor purus at nibh ultricies pellentesque. Cras sed blandit risus. Duis sit amet felis magna. Quisque consequat libero id turpis dapibus, non venenatis elit sodales. Nam fermentum, sapien nec vehicula blandit, nulla lectus fringilla ligula, eget tempus eros justo vel ante. Ut quis urna id nunc maximus accumsan vitae non leo. Phasellus vestibulum felis id erat euismod consequat. Nam ac metus vitae nunc volutpat luctus sit amet quis sapien.",
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia elementum sapien, eget aliquet ex finibus ut. Suspendisse eget molestie ligula. Etiam quis purus sed urna lacinia lobortis. Suspendisse tempor purus at nibh ultricies pellentesque. Cras sed blandit risus. Duis sit amet felis magna. Quisque consequat libero id turpis dapibus, non venenatis elit sodales. Nam fermentum, sapien nec vehicula blandit, nulla lectus fringilla ligula, eget tempus eros justo vel ante. Ut quis urna id nunc maximus accumsan vitae non leo. Phasellus vestibulum felis id erat euismod consequat. Nam ac metus vitae nunc volutpat luctus sit amet quis sapien"
+)
+benchmark <- bench::mark(
+  short <- adist(compare) / max(nchar(compare)),
+  long <- adist(compare2) / max(nchar(compare2)),
+  check = FALSE
+)
+dplyr::select(benchmark, mean, mem_alloc)
+```
+
+To get a feel for this, the mean time for the second calculation is `r paste(benchmark$mean[2])` that is miliseconds.
+In the same unit as the first calculation, that would be `r scales::comma(as.numeric(benchmark$mean[2]) * 1000000)` microseconds.
+That is an `r scales::comma(as.numeric(benchmark$mean[2]) / as.numeric(benchmark$mean[1]))`% increase on average.
+The allocated memory can't even be calculated since the first value is too small to measure while the second calculation uses quite a bit of memory.
+Some testing revealed that around 3500 articles would already bring my 32GB RAM machine to its knees.
+
+## Available solutions: the fast one
+
+This makes a job with hundreds or thousands of newspaper articles almost impossible to compare.
+However, while the edit distance is the most accurate method for comparing texts, there are others which are much more efficient.
+Instead of comparing character for character, it is also possible to chop up each text into its elements and then compare which elements are shared by two or more texts.
+
+I use the excellent `quanteda` package to do this.
+
+```{r eval=FALSE}
+library(quanteda)
+dfm <- dfm(c(compare, compare2))
+as.matrix(dfm)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(quanteda)
+library(kableExtra)
+dfm <- dfm(c(compare, compare2))
+as.matrix(dfm)[, 1:10] %>%
+  kable() %>%
+  kable_styling()
+```
+
+I'm only displaying the first 10 columns of the document feature matrix (dfm) here.
+Basically every column is one word and then every row is one text.
+The number in the cell tells us how often a word occurred in a text.
+Comparing the matrices of two texts is a much easier task for a computer and the implementation in `quanteda` is extra efficient and fast (I use the cosine similarity, as this is, in my opinion, easiest to read and interpret for humans).
+
+```{r}
+textstat_simil(dfm, method = "cosine")
+```
+
+What we see here is that of the four texts, only text 3 and 4 are similar (more than 99% similar), the other two ("kitten" and "sitting") are considered completely different from the others.
+
+However, consider another example:
+
+```{r}
+compare3 <- c(
+  "Dog bites man",
+  "Man bites dog"
+)
+
+dfm2 <- dfm(compare3)
+textstat_simil(dfm2, method = "cosine")
+```
+
+The similarity between "Dog bites man" and "Man bites dog" is 100%.
+But the *meaning* of the two sentences is arguably very different!
+This mismatch between intuition and results is caused by `textstat_simil()` ignoring word order and `dfm()` getting rid of capital letters by the default---which is the main reason behind the performance gain!
+This makes `textstat_simil()` a fast alternative but also relatively inaccurate when comparing text with similar vocabulary but different meaning.
+
+## Divide and conquer
+
+However, the two methods combined can cancel each other's shortcomings out.
+Let's check this on all three examples I used so far, combined:
+
+```{r}
+texts <- c(compare, compare2, compare3)
+dfm3 <- dfm(texts)
+simil <- textstat_simil(dfm3, method = "cosine")
+simil
+```
+
+As you can see again, text three and four as well as text five and six are deemed very similar by `textstat_simil()`.
+We can use this information to do some more in-depth testing, *only on the texts already flagged as highly similar*.
+I do some data wrangling here to get the distance matrix into a presentable form:
+
+```{r eval=FALSE}
+library(dplyr)
+simil_clean <- simil %>%
+  as.matrix() %>%
+  reshape2::melt() %>%
+  mutate_if(is.factor, as.character) %>% 
+  filter(value > 0.95) %>% 
+  filter(Var1 != Var2) %>% 
+  mutate(comb = purrr::map_chr(seq_along(Var1), function(i) {
+    paste(sort(c(Var1[i], Var2[i])), collapse = " ")
+  })) %>% 
+  distinct(comb, .keep_all = TRUE) %>% 
+  mutate(Orig_ID = as.integer(gsub("text", "", Var1)),
+         Dup_ID = as.integer(gsub("text", "", Var2))) %>% 
+  mutate(Orig_text = texts[Orig_ID],
+         Dup_text = texts[Dup_ID]) %>% 
+  select(-Var1, -Var2, -comb) %>% 
+  mutate(rel_edit = purrr::map_dbl (seq_along(Orig_ID), function(i) {
+    compare <- c(.data$Orig_text[i], .data$Dup_text[i])
+    as.numeric(adist(compare)[2] / max(nchar(compare)))
+  })) 
+simil_clean %>% 
+  select(-Orig_text, -Dup_text)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+simil_clean <- simil %>%
+  as.matrix() %>%
+  reshape2::melt() %>%
+  mutate_if(is.factor, as.character) %>% 
+  filter(value > 0.95) %>% 
+  filter(Var1 != Var2) %>% 
+  mutate(comb = purrr::map_chr(seq_along(Var1), function(i) {
+    paste(sort(c(Var1[i], Var2[i])), collapse = " ")
+  })) %>% 
+  distinct(comb, .keep_all = TRUE) %>% 
+  mutate(Orig_ID = as.integer(gsub("text", "", Var1)),
+         Dup_ID = as.integer(gsub("text", "", Var2))) %>% 
+  mutate(Orig_text = texts[Orig_ID],
+         Dup_text = texts[Dup_ID]) %>% 
+  select(-Var1, -Var2, -comb) %>% 
+  mutate(rel_edit = purrr::map_dbl (seq_along(Orig_ID), function(i) {
+    compare <- c(.data$Orig_text[i], .data$Dup_text[i])
+    as.numeric(adist(compare)[2] / max(nchar(compare)))
+  })) 
+simil_clean %>% 
+  select(-Orig_text, -Dup_text) %>%
+  kable() %>%
+  kable_styling()
+```
+
+
+Now this is a little confusing but the lower the relative distance, the more similar the texts are---the exact opposite of the similarity measure.
+What we learned from the exercise is that "Dog bites man" and "Man bites dog" have quite a relative distance from each other while the two Lorem Ipsum texts are highly similar.
+In a newspaper media analysis, it would be therefore make a lot of sense to remove either text 6 or 5 from the database.
+
+For convenience, I implemented this in the function `lnt_similarity` of my [LexisNexisTools package](https://github.com/JBGruber/LexisNexisTools#identify-highly-similar-articles).
+

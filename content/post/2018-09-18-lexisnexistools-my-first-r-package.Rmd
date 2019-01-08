@@ -1,0 +1,82 @@
+---
+title: LexisNexisTools. My first `R` package
+author: Johannes B. Gruber
+date: '2018-05-19'
+slug: lexisnexistools
+categories: []
+tags:
+  - R
+header:
+  caption: ''
+  image: ''
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+My PhD supervisor once told me that everyone doing newspaper analysis starts by writing code to read in files from the 'LexisNexis' newspaper archive. 
+However, while I do recommend this exercise, not everyone has the time.
+
+These are the first words of the introduction to my first `R` package, LexisNexisTools.
+My PhD supervisor was also my supervisor for my master dissertation and he said these words before he gave me my very first book about `R`.
+After getting the initial bits of code from him, I worked with files from LexisNexis first for my dissertation, then in a project where we used LexisNexis data and since I'm also using newspaper data for my PhD project, I knew I would be using the code again.
+
+At some point, I decided that I would spare others the hassle of figuring out all the quirks of files that come from LexisNexis.
+I made the decision to write an `R` package instead of just sharing the code because of two reasons:
+1. I wanted that others who stumble across my work have a chance to report any issues and bugs they find.
+This was at first a scary thought: my work would be scrutinised by others on the internet!
+But after some deliberation I concluded that someone calling out my sloppy code is much better than if I find an error myself months down the line when it means that I have to re-do all the work to make it right.
+2. I admire people who write good packages since they make my own life much easier.
+I wanted to give something back to the community.
+
+One might think that the process of reading files into `R` which are in the txt format is not harder than using the command `readLines()`.
+Yet, while this gets you a nice character object, LexisNexis puts up to 500 articles into one file, together with the meta data of each article.
+To get this into a spreadsheet like format and to get all the data types correctly can be a great hassle and definitely caused me some headache.
+Especially since LexisNexis seems to have changed the file structure a couple of times over the years.
+They use different structures for different sources and on top of that are inconsistent with the order of meta data.
+
+The task was thus to find the structure in the files.
+For those who haven't seen a file from LexisNexis, here is a small example:
+
+<p align="center">
+<a href="https://ibb.co/fj5YjG"><img src="https://preview.ibb.co/fOfNdb/LN.png" alt="LN" border="1"></a>
+</p>
+
+After the cover sheet, the first article starts with *1 of 87 DOCUMENTS*.
+The 87 can of course change but the format is always the same, which means the beginning of an article is always (at least for the English version) `\\d+ of \\d+ DOCUMENTS$`. 
+This information can be used to chop up the file into individual articles.
+
+```{r eval=FALSE}
+beginnings <- which(stringi::stri_detect_regex(articles.v, "\\d+ of \\d+ DOCUMENTS$"))
+articles.l <- lapply(seq_along(beginnings), function(n) {
+  if (n < length(beginnings)) {
+    articles.v[beginnings[n]:(beginnings[n + 1] - 1)]
+  } else {
+    articles.v[beginnings[n]:length(articles.v)]
+  }
+})
+```
+
+`articles.v` here is simply the the read-in file as a character vector.
+The `lapply()` loop goes through the instances in beginnings and constructs a list where each entry starts at the line with `\\d+ of \\d+ DOCUMENTS$` and ends one line before the next article begins.
+At the last iteration of the loop, where `n` is equal to `length(beginnings)`, the list entry will contain the text from the last `\\d+ of \\d+ DOCUMENTS$` until the end of the file.
+
+Each entry is then further divided at a second crucial keyword: `LENGTH`.
+This marks the end of the metadata and hence can be use to separate article text from meta information provided by LexisNexis.
+
+Then a number of commands perform some Regex magic or use experience about the position of certain information to put the pieces in columns.
+
+But users don't have to worry about any of this any more.
+They can simply use:
+
+```{r eval=FALSE}
+LexisNexisTools::lnt_read()
+```
+
+You can check out a quick walk-through at [github.com/JBGruber/LexisNexisTools](https://github.com/JBGruber/LexisNexisTools).
+
+I'm really proud of my first package.
+Much of the code already existed before I first posted it online but seeing and hearing that others find it useful gave me a major boost of confidence.
+So far nobody has complained about the code base and I'm happy all the work I put into it does not just sit on my own computer but others can profit.

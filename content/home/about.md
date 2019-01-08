@@ -49,4 +49,4 @@ In my PhD project, I’m trying to find out how the media in the UK portrays pro
 In my project, I will collect all newspaper articles published in selected UK newspaper outlets that mention a protest over the last 25 years (1992-2017) and analyse the content via supervised and unsupervised methods of computational text analysis.
 
 After a detour that included a Master on Political Theory, I realised during my Master in Political Communication---which was originally planned as a semester abroad---how much I love working with data. 
-Especially **R**, the free software environment for statistical computing and graphics, is captivating much of my attention nowadays and has helped me to combine my two most longstanding passions: Political Science and fiddling with computers. I'm using **R** to do nearly everything (including writing this website).
+Especially **R**, the free software environment for statistical computing and graphics, is captivating much of my attention nowadays and has helped me to combine my two most long-standing passions: Political Science and fiddling with computers. I'm using **R** to do nearly everything (including writing this website).

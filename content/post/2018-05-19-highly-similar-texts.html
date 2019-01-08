@@ -1,0 +1,374 @@
+---
+title: Highly Similar Texts
+author: Johannes Gruber
+date: '2018-05-17'
+slug: similarity
+categories: []
+tags:
+  - R
+  - media anlysis
+header:
+  caption: ''
+  image: ''
+output:
+  blogdown::html_page:
+    toc: true
+    fig_width: 6
+    dev: "svg"
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#available-solutions-the-accurate-one">Available solutions: the accurate one</a></li>
+<li><a href="#available-solutions-the-fast-one">Available solutions: the fast one</a></li>
+<li><a href="#divide-and-conquer">Divide and conquer</a></li>
+</ul>
+</div>
+
+<p>A while ago I was building a database of newspaper articles retrieved from LexisNexis for a research project in which I was working as a research assistant. At some point we noticed that we seemed to have a lot of duplicates in our database. I had already removed the duplicates with <code>R</code> so we were really surprised that those are still in there. However, after some investigation, I found that there are indeed small differences between the articles we had identified as duplicates in our data.</p>
+<p><code>R</code> of course will not consider two texts duplicates when a single character, such as a comma, whitespace or quotation mark is different. That was therefore our first guess. But we found more than that. In some cases, subtle edits had been made. A different word with the same meaning, the title or position of a person added or removed from the article or a new sentence added to the end of an article. Strangely, many of those articles were published on the same date and in the same newspaper.</p>
+<p>For some instances that could be explained by taking a look at the editions: Many newspapers in the UK have localised editions and the Scottish edition of the Daily Mail might have and extra sentence about how a story affected Scotland or a comment from a Scottish politician was added somewhere in the article.</p>
+<p>However, this poses a problem to any valid media analysis: Those articles would be wrongfully counted several times in the sample. The introduced bias would mean that there are more articles from newspapers that add several different editions to the LexisNexis database. An additional problem was that while the information on editions was available for some outlets, it seemed that LexisNexis did not provide it for others. So we needed a computational way to find the duplicates.</p>
+<div id="available-solutions-the-accurate-one" class="section level2">
+<h2>Available solutions: the accurate one</h2>
+<p>Comparing chunks of text is more complicated than we initially thought. The most accurate solution available would be the so-called Levensthein or edit distance.</p>
+<p>Consider this example that I pulled off Wikipedia:</p>
+<ol style="list-style-type: decimal">
+<li>kitten → sitten (substitution of “s” for “k”)</li>
+<li>sitten → sittin (substitution of “i” for “e”)</li>
+<li>sittin → sitting (insertion of “g” at the end).</li>
+</ol>
+<p>The distance between “kitten” and “sitting” is three, because three edits need to be made to turn the former into the latter. This is implemented in base <code>R</code>:</p>
+<pre class="r"><code>adist(&quot;kitten&quot;, &quot;sitting&quot;)</code></pre>
+<pre><code>##      [,1]
+## [1,]    3</code></pre>
+<p>One problem with this is that arguably “kitten” and “sitting” are two very different character string whereas two newspaper articles of a few hundred words where the edit distance is just 3 are very similar. An easy solution is to calculate the relative distance instead: I chose to divide the distance by the length of the longer word, which has the advantage that the result will be between 0 (for identical texts) or 1 (for texts that are completely different).</p>
+<pre class="r"><code>compare &lt;- c(&quot;kitten&quot;, &quot;sitting&quot;)
+adist(compare[1], compare[2]) / max(nchar(compare))</code></pre>
+<pre><code>##           [,1]
+## [1,] 0.4285714</code></pre>
+<p>The relative distance of 0.43 means that the texts are very different, which is intuitively right.</p>
+<p>However, there is a second problem when using the edit distance: Although Vladimir Levenshtein publish his paper about the algorithm to calculate the distance more than 50 years ago, it is still extremely computational demanding, even for modern machines.</p>
+<p>The main reason for this is that the demand for calculation scales up extremely quickly when comparing more than one text:</p>
+<pre class="r"><code>compare &lt;- c(&quot;kitten&quot;, &quot;sitting&quot;, &quot;knitting&quot;, &quot;omitting&quot;)
+adist(compare) / max(nchar(compare))</code></pre>
+<pre><code>##       [,1]  [,2]  [,3] [,4]
+## [1,] 0.000 0.375 0.375 0.50
+## [2,] 0.375 0.000 0.250 0.25
+## [3,] 0.375 0.250 0.000 0.25
+## [4,] 0.500 0.250 0.250 0.00</code></pre>
+<p>For the four words above, 12 calculations are necessary, since each text needs to be calculated to each other text in the sample (i.e. n*(n-1) calculation with n = number of texts to compare). The longer a text, the more computationally expensive a calculation will be.</p>
+<p>Consider the following. I measure time and resources needed to calculate the difference between two words (“kitten” and “sitting”) and between two chunks of Lorem Ipsum, 651 and 650 characters long.</p>
+<pre class="r"><code>compare &lt;- c(&quot;kitten&quot;, &quot;sitting&quot;)
+compare2 &lt;- c(
+  &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia elementum sapien, eget aliquet ex finibus ut. Suspendisse eget molestie ligula. Etiam quis purus sed urna lacinia lobortis. Suspendisse tempor purus at nibh ultricies pellentesque. Cras sed blandit risus. Duis sit amet felis magna. Quisque consequat libero id turpis dapibus, non venenatis elit sodales. Nam fermentum, sapien nec vehicula blandit, nulla lectus fringilla ligula, eget tempus eros justo vel ante. Ut quis urna id nunc maximus accumsan vitae non leo. Phasellus vestibulum felis id erat euismod consequat. Nam ac metus vitae nunc volutpat luctus sit amet quis sapien.&quot;,
+  &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia elementum sapien, eget aliquet ex finibus ut. Suspendisse eget molestie ligula. Etiam quis purus sed urna lacinia lobortis. Suspendisse tempor purus at nibh ultricies pellentesque. Cras sed blandit risus. Duis sit amet felis magna. Quisque consequat libero id turpis dapibus, non venenatis elit sodales. Nam fermentum, sapien nec vehicula blandit, nulla lectus fringilla ligula, eget tempus eros justo vel ante. Ut quis urna id nunc maximus accumsan vitae non leo. Phasellus vestibulum felis id erat euismod consequat. Nam ac metus vitae nunc volutpat luctus sit amet quis sapien&quot;
+)
+benchmark &lt;- bench::mark(
+  short &lt;- adist(compare) / max(nchar(compare)),
+  long &lt;- adist(compare2) / max(nchar(compare2)),
+  check = FALSE
+)
+dplyr::select(benchmark, mean, mem_alloc)</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##       mean mem_alloc
+##   &lt;bch:tm&gt; &lt;bch:byt&gt;
+## 1   15.3µs        0B
+## 2   12.8ms    10.4KB</code></pre>
+<p>To get a feel for this, the mean time for the second calculation is 12.8ms that is miliseconds. In the same unit as the first calculation, that would be 12,799 microseconds. That is an 839% increase on average. The allocated memory can’t even be calculated since the first value is too small to measure while the second calculation uses quite a bit of memory. Some testing revealed that around 3500 articles would already bring my 32GB RAM machine to its knees.</p>
+</div>
+<div id="available-solutions-the-fast-one" class="section level2">
+<h2>Available solutions: the fast one</h2>
+<p>This makes a job with hundreds or thousands of newspaper articles almost impossible to compare. However, while the edit distance is the most accurate method for comparing texts, there are others which are much more efficient. Instead of comparing character for character, it is also possible to chop up each text into its elements and then compare which elements are shared by two or more texts.</p>
+<p>I use the excellent <code>quanteda</code> package to do this.</p>
+<pre class="r"><code>library(quanteda)
+dfm &lt;- dfm(c(compare, compare2))
+as.matrix(dfm)</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+kitten
+</th>
+<th style="text-align:right;">
+sitting
+</th>
+<th style="text-align:right;">
+lorem
+</th>
+<th style="text-align:right;">
+ipsum
+</th>
+<th style="text-align:right;">
+dolor
+</th>
+<th style="text-align:right;">
+sit
+</th>
+<th style="text-align:right;">
+amet
+</th>
+<th style="text-align:right;">
+,
+</th>
+<th style="text-align:right;">
+consectetur
+</th>
+<th style="text-align:right;">
+adipiscing
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+text1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+text4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>I’m only displaying the first 10 columns of the document feature matrix (dfm) here. Basically every column is one word and then every row is one text. The number in the cell tells us how often a word occurred in a text. Comparing the matrices of two texts is a much easier task for a computer and the implementation in <code>quanteda</code> is extra efficient and fast (I use the cosine similarity, as this is, in my opinion, easiest to read and interpret for humans).</p>
+<pre class="r"><code>textstat_simil(dfm, method = &quot;cosine&quot;)</code></pre>
+<pre><code>##           text1     text2     text3
+## text2 0.0000000                    
+## text3 0.0000000 0.0000000          
+## text4 0.0000000 0.0000000 0.9990959</code></pre>
+<p>What we see here is that of the four texts, only text 3 and 4 are similar (more than 99% similar), the other two (“kitten” and “sitting”) are considered completely different from the others.</p>
+<p>However, consider another example:</p>
+<pre class="r"><code>compare3 &lt;- c(
+  &quot;Dog bites man&quot;,
+  &quot;Man bites dog&quot;
+)
+
+dfm2 &lt;- dfm(compare3)
+textstat_simil(dfm2, method = &quot;cosine&quot;)</code></pre>
+<pre><code>##       text1
+## text2     1</code></pre>
+<p>The similarity between “Dog bites man” and “Man bites dog” is 100%. But the <em>meaning</em> of the two sentences is arguably very different! This mismatch between intuition and results is caused by <code>textstat_simil()</code> ignoring word order and <code>dfm()</code> getting rid of capital letters by the default—which is the main reason behind the performance gain! This makes <code>textstat_simil()</code> a fast alternative but also relatively inaccurate when comparing text with similar vocabulary but different meaning.</p>
+</div>
+<div id="divide-and-conquer" class="section level2">
+<h2>Divide and conquer</h2>
+<p>However, the two methods combined can cancel each other’s shortcomings out. Let’s check this on all three examples I used so far, combined:</p>
+<pre class="r"><code>texts &lt;- c(compare, compare2, compare3)
+dfm3 &lt;- dfm(texts)
+simil &lt;- textstat_simil(dfm3, method = &quot;cosine&quot;)
+simil</code></pre>
+<pre><code>##           text1     text2     text3     text4     text5
+## text2 0.0000000                                        
+## text3 0.0000000 0.0000000                              
+## text4 0.0000000 0.0000000 0.9990959                    
+## text5 0.0000000 0.0000000 0.0000000 0.0000000          
+## text6 0.0000000 0.0000000 0.0000000 0.0000000 1.0000000</code></pre>
+<p>As you can see again, text three and four as well as text five and six are deemed very similar by <code>textstat_simil()</code>. We can use this information to do some more in-depth testing, <em>only on the texts already flagged as highly similar</em>. I do some data wrangling here to get the distance matrix into a presentable form:</p>
+<pre class="r"><code>library(dplyr)
+simil_clean &lt;- simil %&gt;%
+  as.matrix() %&gt;%
+  reshape2::melt() %&gt;%
+  mutate_if(is.factor, as.character) %&gt;% 
+  filter(value &gt; 0.95) %&gt;% 
+  filter(Var1 != Var2) %&gt;% 
+  mutate(comb = purrr::map_chr(seq_along(Var1), function(i) {
+    paste(sort(c(Var1[i], Var2[i])), collapse = &quot; &quot;)
+  })) %&gt;% 
+  distinct(comb, .keep_all = TRUE) %&gt;% 
+  mutate(Orig_ID = as.integer(gsub(&quot;text&quot;, &quot;&quot;, Var1)),
+         Dup_ID = as.integer(gsub(&quot;text&quot;, &quot;&quot;, Var2))) %&gt;% 
+  mutate(Orig_text = texts[Orig_ID],
+         Dup_text = texts[Dup_ID]) %&gt;% 
+  select(-Var1, -Var2, -comb) %&gt;% 
+  mutate(rel_edit = purrr::map_dbl (seq_along(Orig_ID), function(i) {
+    compare &lt;- c(.data$Orig_text[i], .data$Dup_text[i])
+    as.numeric(adist(compare)[2] / max(nchar(compare)))
+  })) 
+simil_clean %&gt;% 
+  select(-Orig_text, -Dup_text)</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+value
+</th>
+<th style="text-align:right;">
+Orig_ID
+</th>
+<th style="text-align:right;">
+Dup_ID
+</th>
+<th style="text-align:right;">
+rel_edit
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.9990959
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.0015361
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0.4615385
+</td>
+</tr>
+</tbody>
+</table>
+<p>Now this is a little confusing but the lower the relative distance, the more similar the texts are—the exact opposite of the similarity measure. What we learned from the exercise is that “Dog bites man” and “Man bites dog” have quite a relative distance from each other while the two Lorem Ipsum texts are highly similar. In a newspaper media analysis, it would be therefore make a lot of sense to remove either text 6 or 5 from the database.</p>
+<p>For convenience, I implemented this in the function <code>lnt_similarity</code> of my <a href="https://github.com/JBGruber/LexisNexisTools#identify-highly-similar-articles">LexisNexisTools package</a>.</p>
+</div>
