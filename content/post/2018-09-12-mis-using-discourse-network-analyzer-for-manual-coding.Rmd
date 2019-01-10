@@ -11,7 +11,7 @@ header:
   image: ''
 output:
   blogdown::html_page:
-    toc: true
+    toc: false
     fig_width: 6
     dev: "svg"
 ---
@@ -39,7 +39,7 @@ Neither do I think that is worse than other, often rather expensive tools (excep
 # Enter 'Discourse Network Analyzer' (´DNA´)
 
 Last year I worked with Philip Leifeld on extending a software suite (a Java GUI and 'R' package) he initially developed for people to use his method discourse network analysis---which combines (manual) content and network analysis.
-However, while extending and re-writing the manual and some 'R' functions, I realised that the software was also pretty powerful for other content analysis work.
+However, while extending and re-writing the manual and some `R` functions, I realised that the software was also pretty powerful for other content analysis work.
 
 Specifically, I think ´DNA´ has three advantages:
 
@@ -57,9 +57,9 @@ Since the two most important words for my analysis were "protest" and "demonstra
 That means you can check out the source code at any point on: https://github.com/leifeld/dna
 You can also submit bug reports, request a feature or contribute code via your own pull request.
 
-![DNA in action](/post/2018-09-12-mis-using-discourse-network-analyzer-for-manual-coding_files/DNA.png)
+![](/post/2018-09-12-mis-using-discourse-network-analyzer-for-manual-coding_files/DNA.png)
 
-Even though ´DNA´ was developed for using it with a specific method (discourse network analysis) and I won't be using that, I think that at least for me it is the best choice.
+Even though ´DNA´ was developed for using it with a specific method (discourse network analysis) and I won't be using that for now in my PhD, I think that at least for me it is the best choice.
 It combines the possibility to highlight text chunks and sort them into categories and provides a few nice features on top of that.
 The category system is set up for doing discourse network analysis by default and 'rDNA' makes the workflow with this method very easy.
 However, this does not mean the program can't be used for other content analytical tasks and might be better for them than many of the available tools as well.
