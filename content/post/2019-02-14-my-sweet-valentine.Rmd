@@ -1,0 +1,41 @@
+---
+title: My sweet Valentine
+author: ''
+date: '2019-02-14'
+slug: my-sweet-valentine
+categories: []
+tags: []
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+Today is Valentine's Day. And since both I and my sweetheart are `R` enthusiasts, here is how to say "I love you" using a statistical programming language:
+
+```{r message=FALSE}
+library("dplyr")
+library("gganimate")
+library("ggplot2")
+
+hrt_dat <- data.frame(t = seq(0, 2 * pi, by = 0.01)) %>%
+  bind_rows(data.frame(t = rep(max(.$t), 300))) %>% 
+  mutate(xhrt = 16 * sin(t) ^ 3,
+         yhrt = 13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t),
+         frame = seq_along(t)) %>% 
+  mutate(text = ifelse(frame > 300, "            J", "")) %>%
+  mutate(text = ifelse(frame > 500, "A           J", text)) %>%
+  mutate(text = ifelse(frame > 628, "A     +     J", text)) %>% 
+  mutate(texty = 0, textx = 0)
+
+ggplot(hrt_dat, aes(x = xhrt, y = yhrt)) +
+  geom_line(colour = "#C8152B") +
+  geom_polygon(fill = "#C8152B") +
+  geom_text(aes(x = textx, y = texty, label = text), 
+            size = 18, 
+            colour = "white",
+            vjust = "center") +
+  theme_void() +
+  transition_reveal(frame)
+```
+

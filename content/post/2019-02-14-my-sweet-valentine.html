@@ -1,0 +1,40 @@
+---
+title: My sweet Valentine
+author: ''
+date: '2019-02-14'
+slug: my-sweet-valentine
+categories: []
+tags: []
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<p>Today is Valentine’s Day. And since both I and my sweetheart are <code>R</code> enthusiasts, here is how to say “I love you” using a statistical programming language:</p>
+<pre class="r"><code>library(&quot;dplyr&quot;)
+library(&quot;gganimate&quot;)
+library(&quot;ggplot2&quot;)
+
+hrt_dat &lt;- data.frame(t = seq(0, 2 * pi, by = 0.01)) %&gt;%
+  bind_rows(data.frame(t = rep(max(.$t), 300))) %&gt;% 
+  mutate(xhrt = 16 * sin(t) ^ 3,
+         yhrt = 13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t),
+         frame = seq_along(t)) %&gt;% 
+  mutate(text = ifelse(frame &gt; 300, &quot;            J&quot;, &quot;&quot;)) %&gt;%
+  mutate(text = ifelse(frame &gt; 500, &quot;A           J&quot;, text)) %&gt;%
+  mutate(text = ifelse(frame &gt; 628, &quot;A     +     J&quot;, text)) %&gt;% 
+  mutate(texty = 0, textx = 0)
+
+ggplot(hrt_dat, aes(x = xhrt, y = yhrt)) +
+  geom_line(colour = &quot;#C8152B&quot;) +
+  geom_polygon(fill = &quot;#C8152B&quot;) +
+  geom_text(aes(x = textx, y = texty, label = text), 
+            size = 18, 
+            colour = &quot;white&quot;,
+            vjust = &quot;center&quot;) +
+  theme_void() +
+  transition_reveal(frame)</code></pre>
+<p><img src="/post/2019-02-14-my-sweet-valentine_files/figure-html/unnamed-chunk-1-1.gif" /><!-- --></p>
