@@ -31,7 +31,7 @@ weight = 5
 
 [[education.courses]]
   course = "MA Political Theory"
-  institution = "Goethe University of Frankfurt/Main & TU Darmstad"
+  institution = "Goethe University of Frankfurt/Main & TU Darmstadt"
   year = 2017
   
 [[education.courses]]
