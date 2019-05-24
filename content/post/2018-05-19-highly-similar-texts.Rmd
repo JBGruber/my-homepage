@@ -21,7 +21,7 @@ A while ago I was building a database of newspaper articles retrieved from Lexis
 At some point we noticed that we seemed to have a lot of duplicates in our database.
 I had already removed the duplicates with `R` so we were really surprised that those are still in there.
 However, after some investigation, I found that there are indeed small differences between the articles we had identified manually as duplicates in our data.
-This post describes a strategy we came up with to effectivly find those highly similar articles.
+This post describes a strategy we came up with to effectively find those highly similar articles.
 For convenience, I implemented a version of that solution in the function `lnt_similarity` of my [LexisNexisTools package](https://github.com/JBGruber/LexisNexisTools#identify-highly-similar-articles).
 
 The problem is that `R` will not consider two texts duplicates when only a single character, such as a comma, whitespace or quotation mark is different.
@@ -230,4 +230,24 @@ These texts end up in pairs, as their similarity value is above a threshold I us
 rel_edit is the relative edit distance.
 The more similar two texts are, the lower this second value---the exact opposite of the similarity measure.
 So the very low distance between the two Lorem Ipsum texts and the high distance between "Dog bites man" and "Man bites dog" indicate that the first pair is extremely similar while the latter pair consists of pretty different texts.
-In a newspaper media analysis, it would be therefore make a lot of sense to remove either text 6 or 5 from the database.
+In a newspaper media analysis, it would probably make a lot of sense to remove either text 4 or 3.
+Texts 5 and 6, however, should probably stay in the database as they are, in fact, quite different.
+
+# Implementation in LexisNexisTools
+
+Luckily for you, all this is already conveniently implemented in `LexisNexisTools`.
+Since the package is made for newspaper data, the function to find similar texts assumes that articles need to be published on the same day to consider them similar.
+To get the similarity between texts anyway, just provide a date vector with the same length as the text object:
+
+```{r eval=FALSE}
+LexisNexisTools::lnt_similarity(texts, rep("2018-05-19", length(texts)))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+LexisNexisTools::lnt_similarity(texts, rep("2018-05-19", length(texts))) %>%
+  kable() %>%
+  kable_styling()
+```
+
+As you can see, the result is the same, but the code a lot easier.
+

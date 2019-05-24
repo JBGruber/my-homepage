@@ -54,7 +54,7 @@ defaultContentLanguageInSubdir = false
 
   # Your details.
   name = "Johannes B. Gruber"
-  role = "PhD Researchr in Politics"
+  role = "PhD Researcher in Politics"
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
@@ -118,7 +118,7 @@ defaultContentLanguageInSubdir = false
 
   # Enable global LaTeX math rendering?
   #   If false, you can enable it locally on a per page basis.
-  math = false
+  math = true
 
   # Highlight.js options
   #   highlight
@@ -270,6 +270,11 @@ defaultContentLanguageInSubdir = false
 #  name = "Teaching"
 #  url = "#teaching"
 #  weight = 5
+
+[[menu.main]]
+  name = "CV"
+  url = "#cv"
+  weight = 5
 
 [[menu.main]]
   name = "Contact"
