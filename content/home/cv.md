@@ -11,8 +11,8 @@ title = "CV"
 subtitle = ""
 
 # Order that this section will appear in.
-weight = 25
+weight = 60
 
 +++
 
-Download my [academic CV](cv/CV_JohannesGruber.pdf) (last update: 24 May 2019).
+Download my [academic CV](cv/CV_JohannesGruber.pdf) (last update: 31 May 2019).

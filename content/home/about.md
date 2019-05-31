@@ -35,7 +35,7 @@ weight = 5
   year = 2017
   
 [[education.courses]]
-  course = "BA Political Science; Economics and EconomicStudies in History"
+  course = "BA Political Science; Economics and Economic Studies in History"
   institution = "RWTH Aachen-University"
   year = 2012
  
@@ -46,7 +46,7 @@ weight = 5
 I am currently a PhD researcher in Politics at the University of Glasgow.
 
 In my PhD project, I’m trying to find out how the media in the UK portrays protest events. Most literature about the topic assumes that the messages of protests are marginalised by the media through routinized framing, i.e. a focus on disruption by and deviance of protesters. 
-In my project, I will collect all newspaper articles published in selected UK newspaper outlets that mention a protest over the last 25 years (1992-2017) and analyse the content via supervised and unsupervised methods of computational text analysis.
+In my project, I collected all newspaper articles published in selected UK newspaper outlets that mention a protest over the last 26 years (1992-2017) and analyse the content via framing analysis and supervised methods of computational text analysis.
 
 After a detour that included a Master on Political Theory, I realised during my Master in Political Communication---which was originally planned as a semester abroad---how much I love working with data. 
 Especially **R**, the free software environment for statistical computing and graphics, is captivating much of my attention nowadays and has helped me to combine my two most long-standing passions: Political Science and fiddling with computers. I'm using **R** to do nearly everything (including writing this website).
