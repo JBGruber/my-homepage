@@ -33,6 +33,11 @@ h1, h2, h3 {
   color: #fecf37;
 }
 
+.extra {
+  background-color: #99dbf8;
+  color: #fecf37;
+}
+
 .duke-softblue a, .duke-softblue a > code {
   /* color: rgb(153,50, 153); */
   color: rgb(51,153,153);

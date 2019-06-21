@@ -3,8 +3,6 @@ tidyr
 dplyr
 stringr
 kableExtra
-magick
-magrittr
-leaflet
 DT
+magick
 ggplot2
