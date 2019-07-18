@@ -15,4 +15,6 @@ weight = 60
 
 +++
 
+[Troublemakers in the streets?](slides/jbgruber_protest).
+
 [Semi-automated Content Analysis of Media Frames](slides/jbgruber_framing).
