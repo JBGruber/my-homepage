@@ -108,9 +108,9 @@ h4 {
 .Large { font-size: 144% }
 .large { font-size: 120% }
 .small { font-size: 90% }
-.footnotesize { font-size: 80% }
+.footnotesize { font-size: 50% }
 .scriptsize { font-size: 70% }
-.tiny { font-size: 60% }
+.tiny { font-size: 30% }
 
 .black { color: black; }
 .red { color: #CC3300; }
@@ -334,8 +334,8 @@ h4 {
 
 .footer-note {
     position: absolute;
-    bottom: 5px;
+    bottom: 10px;
     left: 10px;
-    width: 200px;
-    height: 25px;
+    width: 790px;
+    height: 30px;
 }
