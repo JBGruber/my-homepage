@@ -6,7 +6,7 @@ active = true
 date = "2016-04-20T00:00:00"
 
 title = "Recent Posts"
-subtitle = ""
+subtitle = "Also on [R-Bloggers](https://www.r-bloggers.com/) (soon)"
 
 # Order that this section will appear in.
 weight = 40

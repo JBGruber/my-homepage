@@ -1,0 +1,190 @@
+---
+title: Smarter Wordclouds
+author: Johannes Gruber
+date: '2019-02-02'
+slug: smarter-wordclouds
+tags:
+  - R
+  - text analysis
+header:
+  caption: ''
+output:
+  blogdown::html_page:
+    toc: false
+    fig_width: 8
+---
+
+
+
+<p>Some time ago, I saw a <a href="http://vanatteveldt.com/p/atteveldt_textvis.html#/5" target="_blank">presentation by Wouter van Atteveldt</a> who showed that wordclouds aren’t necessarily stupid.
+I was amazed since wordclouds were one of the first things I ever did in <code>R</code> and they are still often shown in introductions to text analysis.
+But the way they are mostly done is, in fact, not very informative.
+Because the position of the individual words in the cloud do not mean anything, the only information communicated is through the font size and sometimes font colour of the words.
+Usually these devices are used to show word counts and group membership—both could be shown more easily using a ranked table or bar plot.</p>
+<p>What set Wouter’s approach apart from anything I had seen before, was that he used the x-axis to indicate over-representation of words by one of the text authors.
+I reproduced the plot some time ago with my own data, but found it relatively hard to wrap my head around the <code>corpustools</code> package.
+(It has since been rewritten and I definitely still want to <a href="https://github.com/kasperwelbers/corpustools">check it out</a>.)</p>
+<p>Today I found the <code>ggwordcloud</code> package which wraps the task of producing wordloud plots into a familiar ‘grammar of graphics’ approach used by <code>ggplot2</code> and other related packages.</p>
+<p>Therefore I thought it makes sense to give it ago trying to reproduce the non-stupid wordclouds and maybe even go a step further.</p>
+<pre class="r"><code>library(&quot;ggwordcloud&quot;)
+library(&quot;quanteda&quot;)
+library(&quot;dplyr&quot;)
+library(&quot;sotu&quot;)
+quanteda_options(verbose = TRUE)</code></pre>
+<p>I’m using the State of the Union Addresses data from the <code>sotu</code> package since this includes the information used in the presentation.</p>
+<pre class="r"><code>sotu_meta %&gt;%
+  filter(!duplicated(president, fromLast = TRUE)) %&gt;%
+  tail()</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   president           year years_active party      sotu_type
+##   &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;    
+## 1 Jimmy Carter        1981 1977-1981    Democratic written  
+## 2 Ronald Reagan       1988 1985-1989    Republican speech   
+## 3 George Bush         1992 1989-1993    Republican speech   
+## 4 William J. Clinton  2000 1997-2001    Democratic speech   
+## 5 George W. Bush      2008 2005-2009    Republican speech   
+## 6 Barack Obama        2016 2013-2016    Democratic speech</code></pre>
+<p>We see that the data set ends with Obama’s last address.
+So I will compare him against his predecessor first and then explore and easy pipeline to do a comparison to a number of others.</p>
+<pre class="r"><code>sotu &lt;- sotu_meta %&gt;%
+  bind_cols(text = sotu_text) %&gt;%
+  mutate(docnames = paste(president, year, sep = &quot;: &quot;))
+sotu</code></pre>
+<pre><code>## # A tibble: 236 x 7
+##    president    year years_active party sotu_type text           docnames  
+##    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;     
+##  1 George Was…  1790 1789-1793    Nonp… speech    &quot;Fellow-Citiz… George Wa…
+##  2 George Was…  1790 1789-1793    Nonp… speech    &quot;\n\n Fellow-… George Wa…
+##  3 George Was…  1791 1789-1793    Nonp… speech    &quot;\n\n Fellow-… George Wa…
+##  4 George Was…  1792 1789-1793    Nonp… speech    &quot;Fellow-Citiz… George Wa…
+##  5 George Was…  1793 1793-1797    Nonp… speech    &quot;\n\n Fellow-… George Wa…
+##  6 George Was…  1794 1793-1797    Nonp… speech    &quot;\n\n Fellow-… George Wa…
+##  7 George Was…  1795 1793-1797    Nonp… speech    &quot;\n\nFellow-C… George Wa…
+##  8 George Was…  1796 1793-1797    Nonp… speech    &quot;\n\n Fellow-… George Wa…
+##  9 John Adams   1797 1797-1801    Fede… speech    &quot;\n\n Gentlem… John Adam…
+## 10 John Adams   1798 1797-1801    Fede… speech    &quot;\n\n Gentlem… John Adam…
+## # … with 226 more rows</code></pre>
+<p>Now I can do the pre-processing in <code>quanteda</code>:</p>
+<pre class="r"><code>sotu_dfm &lt;- sotu %&gt;%
+  corpus(
+    docid_field = &quot;docnames&quot;,
+    text_field = &quot;text&quot;
+  ) %&gt;%
+  dfm(
+    select = &quot;[[:alpha:]]&quot;,
+    valuetype = &quot;regex&quot;
+  ) %&gt;%
+  dfm(
+    remove = stopwords()
+  )</code></pre>
+<pre><code>## Creating a dfm from a corpus input...</code></pre>
+<pre><code>## removed 2 features
+##    ... lowercasing
+##    ... found 236 documents, 32,582 features
+##    ... kept 27,669 features
+##    ... created a 236 x 27,669 sparse dfm
+##    ... complete. 
+## Elapsed time: 2.19 seconds.
+## Creating a dfm from a dfm input...
+##    ... lowercasing
+##    ... removed 169 features
+##    ... created a 236 x 27,500 sparse dfm
+##    ... complete. 
+## Elapsed time: 0.181 seconds.</code></pre>
+<p>At this point, let us begin with a “stupid” wordcloud.
+It’s already interesting to get at look at it since the syntax of the <code>ggwordcloud</code> fits in nicely with what I already knew from regular <code>ggplot2</code></p>
+<pre class="r"><code>sotu_dfm_cmp &lt;- sotu_dfm %&gt;%
+  dfm_subset(
+    president %in% c(&quot;George W. Bush&quot;, &quot;Barack Obama&quot;)
+  )
+
+set.seed(1)
+textstat_frequency(sotu_dfm_cmp, 50, groups = &quot;president&quot;) %&gt;%
+  arrange(-frequency) %&gt;%
+  ggplot(aes(label = feature, size = frequency, colour = group)) +
+  scale_size_area(max_size = 7) +
+  geom_text_wordcloud(show.legend = TRUE) +
+  theme_minimal()</code></pre>
+<p><img src="/post/2019-02-02-smarter-wordclouds_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p>This shows us some some interesting things.
+america and congress are in the middle and large for both presidents, meaning it was used most often.
+Bush uses words like freedom and terror while Obama about the economy, jobs and the word now.
+But it’s hard to make out as many words appear twice and usually not very close to each other.</p>
+<p>It’s easier to let an algorithm figure out which words are key to one president compared to the other.
+We can do that using the <code>keyness</code> command from quanteda:</p>
+<pre class="r"><code>keyness &lt;- sotu_dfm_cmp %&gt;%
+  textstat_keyness(which(docvars(., &quot;president&quot;) == &quot;Barack Obama&quot;))
+head(keyness)</code></pre>
+<pre><code>##      feature     chi2            p n_target n_reference
+## 1       jobs 61.53717 4.329870e-15      179          38
+## 2        get 44.57363 2.449685e-11      124          25
+## 3        now 35.73363 2.262253e-09      217          79
+## 4 businesses 33.24494 8.125074e-09       84          15
+## 5       just 30.45912 3.409768e-08      117          32
+## 6    college 28.00028 1.212980e-07       54           6</code></pre>
+<p>As noted above, <em>jobs</em> and <em>now</em> seem more important in Obama’s speeches.
+But in this table a few more interesting words pop up like <em>college</em> and <em>businesses</em>.
+These didn’t show up before as their overall usage is less frequent overall.</p>
+<p>In Wouter’s plot, he used an over-representation measure which I find interesting and since it is easy enough, we can calculate it ourselves:</p>
+<pre class="r"><code>keyness_over &lt;- keyness %&gt;%
+  mutate(total = (n_target + n_reference),
+         relfreq_target =  (n_target + 1) / (total + 1),
+         relfreq_reference = (n_reference + 1) / (total + 1),
+         Overrepresentation = log((relfreq_target) / (relfreq_reference)))</code></pre>
+<p>Basically, we are looking at the relative term frequency of the target divided by that of the reference.
+The <span class="math inline">\(+1\)</span> in the formula above is simply a smoothing term, so we don’t get problems where n_target or n_reference is <span class="math inline">\(0\)</span>.
+After arranging this new keyness data by total frequency, we can plot it</p>
+<pre class="r"><code>plot_data &lt;- keyness_over %&gt;%
+  top_n(130, total) %&gt;%
+  arrange(desc(total))
+
+plot &lt;- plot_data %&gt;%
+  ggplot(aes(
+    x = Overrepresentation, y = 0,
+    label = feature, size = total, colour = Overrepresentation)
+  ) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 7) +
+  scale_colour_gradient(low =  &quot;red&quot;, high = &quot;blue&quot;) +
+  theme_minimal()
+plot</code></pre>
+<p><img src="/post/2019-02-02-smarter-wordclouds_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<p>The plot needs a little explanation.
+A higher over-representation in this case means that a word appears significantly more often in Obama’s speeches than in the reference corpus—in this case the State of the Union addresses of George W. Bush.</p>
+<p>As noted above, we can see that america is right in the middle, meaning it is used equally often by both presidents.
+The word furthest on the left is terror which is something only Bush used in his speeches.
+On Obama’s end of the spectrum we find a few interesting words like families, college, jobs and change.</p>
+<p>But wait, there is more!
+If using the x-axis was a step forward, how about also employing the y-axis of the plot?
+Since we have two different measures of keyness, we can use both in the plot to compare which words are more prominently drawn into one of the corners.
+We can also set something as y-axis:</p>
+<pre class="r"><code>plot_data %&gt;%
+  ggplot(aes(
+    x = Overrepresentation, y = chi2,
+    label = feature, size = total, colour = Overrepresentation)
+  ) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 7) +
+  scale_colour_gradient(low =  &quot;red&quot;, high = &quot;blue&quot;) +
+  theme_minimal() +
+  ylab(expression(chi^{2}))</code></pre>
+<p><img src="/post/2019-02-02-smarter-wordclouds_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+<p>Now the <span class="math inline">\(\chi^2\)</span> and over-representation do something very similar here, namely indicating which words are used more in one corpus compared to a reference collection of text.
+Theoretically, this means the words should be plotted along an axis going from the left lower to the right upper corner.
+But we can see that some words are picked up more prominently in one of the measures.
+<em>must</em>, for example is the most negative on the <span class="math inline">\(\chi^2\)</span> axis but not quite as negative in the over-representation index.
+Comparing this to a few more ‘well-behaved’ words we can see that <span class="math inline">\(\chi^2\)</span> seems to be influenced by the total number to a larger degree</p>
+<pre class="r"><code>plot_data %&gt;%
+  select(feature, total, n_target, n_reference, chi2, Overrepresentation) %&gt;%
+  filter(feature %in% c(&quot;must&quot;, &quot;terror&quot;, &quot;freedom&quot;, &quot;college&quot;))</code></pre>
+<pre><code>##   feature total n_target n_reference       chi2 Overrepresentation
+## 1    must   242       54         188 -112.87159          -1.234414
+## 2 freedom    86       11          75  -65.68373          -1.845827
+## 3 college    60       54           6   28.00028           2.061423
+## 4  terror    57        2          55  -64.14577          -2.926739</code></pre>
+<p>The <span class="math inline">\(\chi^2\)</span> for <em>must</em> is almost twice as low as <em>terror</em>, even though the ratio here is far more extreme for <em>terror</em> (28 times more often used in the reference set than in the target set) than for <em>must</em> (only used 3.5 times as often in the reference set).</p>
+<p>The wordcloud in this case served a real purpose of identifying differences not only between the target and reference corpus, but also between the two keyness measures employed here.
+And we haven’t yet tapped the full potential of the plot either.
+The colours above show over-representation which is also displayed on the axis.
+It would be easy to map this to another variable if you can think of one.
+So that proofs: wordclouds are not necessarily stupid.</p>
