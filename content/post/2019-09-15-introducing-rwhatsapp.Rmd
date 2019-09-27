@@ -8,7 +8,7 @@ tags:
   - R
 header:
   caption: ''
-  image: ''
+  image: 'emojis-1.png'
   preview: yes
 ---
 

@@ -3,7 +3,7 @@
 
 # The URL of your website.
 # End your URL with a `/` trailing slash, e.g. `https://example.com/`.
-baseurl = "http://www.johannesbgruber.eu/"
+baseurl = "https://www.johannesbgruber.eu/"
 
 # Title of your site
 title = "Johannes B. Gruber"
@@ -13,12 +13,12 @@ title = "Johannes B. Gruber"
 copyright = "&copy; 2018"
 
 theme = "hugo-academic"
-enableEmoji = false
+enableEmoji = true
 footnotereturnlinkcontents = "<sup>^</sup>"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 preserveTaxonomyNames = true
 paginate = 10
-relativeurls = true
+relativeurls = false
 #[permalinks]
 # post = "/:year/:month/:day/:slug/"
 
@@ -33,8 +33,18 @@ defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
 [outputs]
-  home = [ "HTML", "CSS", "RSS" ]
+  home = [ "HTML", "CSS", "RSS", "RFEED" ]
   section = [ "HTML", "RSS" ]
+
+[outputFormats]
+[outputFormats.RSS]
+  mediatype = "application/rss"
+  baseName = "feed"
+
+[outputFormats.RFEED]
+  mediatype = "application/rss"
+  baseName = "feed_r"
+  noUgly = true
 
 # Configure BlackFriday Markdown rendering.
 #   See: https://gohugo.io/readfiles/bfconfig/

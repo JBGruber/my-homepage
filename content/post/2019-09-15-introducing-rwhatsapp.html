@@ -8,7 +8,7 @@ tags:
   - R
 header:
   caption: ''
-  image: ''
+  image: 'emojis-1.png'
   preview: yes
 ---
 
@@ -34,15 +34,15 @@ chat</code></pre>
 <pre><code>## # A tibble: 9 x 6
 ##   time                author   text          source        emoji emoji_name
 ##   &lt;dttm&gt;              &lt;fct&gt;    &lt;chr&gt;         &lt;chr&gt;         &lt;lis&gt; &lt;list&gt;    
-## 1 2017-07-12 22:35:15 &lt;NA&gt;     Messages to … /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 2 2017-07-12 22:35:15 &lt;NA&gt;     &quot;You created… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 3 2017-07-12 22:35:15 Johanne… &lt;Media omitt… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 4 2017-07-12 22:35:15 Johanne… Fruit bread … /home/johann… &lt;chr… &lt;chr [2]&gt; 
-## 5 2017-07-13 09:12:15 Test     &quot;It&#39;s fun do… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 6 2017-07-13 09:16:15 Johanne… Haha it sure… /home/johann… &lt;chr… &lt;chr [1]&gt; 
-## 7 2018-09-28 13:27:15 Johanne… Did you know… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 8 2018-09-28 13:28:15 Johanne… 😀😃😄😁😆😅😂🤣☺😊😇🙂… /home/johann… &lt;chr… &lt;chr [242…
-## 9 2018-09-28 13:30:15 Johanne… 🤷‍♀🤷🏻‍♂🙎‍♀🙎‍…     /home/johann… &lt;chr… &lt;chr [87]&gt;</code></pre>
+## 1 2017-07-12 22:35:00 &lt;NA&gt;     Messages to … /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 2 2017-07-12 22:35:00 &lt;NA&gt;     &quot;You created… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 3 2017-07-12 22:35:00 Johanne… &lt;Media omitt… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 4 2017-07-12 22:35:00 Johanne… Fruit bread … /home/johann… &lt;chr… &lt;chr [2]&gt; 
+## 5 2017-07-13 09:12:00 Test     &quot;It&#39;s fun do… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 6 2017-07-13 09:16:00 Johanne… Haha it sure… /home/johann… &lt;chr… &lt;chr [1]&gt; 
+## 7 2018-09-28 13:27:00 Johanne… Did you know… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 8 2018-09-28 13:28:00 Johanne… 😀😃😄😁😆😅😂🤣☺😊😇🙂… /home/johann… &lt;chr… &lt;chr [242…
+## 9 2018-09-28 13:30:00 Johanne… 🤷‍♀🤷🏻‍♂🙎‍♀🙎‍…     /home/johann… &lt;chr… &lt;chr [87]&gt;</code></pre>
 <p>This is really all the package does: bring your chat logs into a nice usable format.
 But since this isn’t very intresting, I decided to also show you a few quick analysis steps to illustrate what you can do with data obtained in this way.
 For this, I use one of my own chat logs from a conversation with friends.
@@ -52,16 +52,16 @@ chat</code></pre>
 <pre><code>## # A tibble: 16,816 x 6
 ##    time                author   text             source    emoji emoji_name
 ##    &lt;dttm&gt;              &lt;fct&gt;    &lt;chr&gt;            &lt;chr&gt;     &lt;lis&gt; &lt;list&gt;    
-##  1 2015-12-10 19:57:15 Artur K… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  2 2015-12-10 22:31:15 Erika I… 😂😂😂😂😂😂     /home/jo… &lt;chr… &lt;chr [6]&gt; 
-##  3 2015-12-11 02:13:15 Alexand… 🙈               /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  4 2015-12-11 02:23:15 Johanne… 😂               /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  5 2015-12-11 02:24:15 Johanne… Die Petitionen … /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  6 2015-12-11 03:51:15 Erika I… Läääuft          /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  7 2015-12-12 07:49:15 Johanne… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  8 2015-12-12 07:53:15 Erika I… was macht ihr h… /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  9 2015-12-12 07:55:15 Johanne… Alex arbeitet w… /home/jo… &lt;chr… &lt;chr [0]&gt; 
-## 10 2015-12-12 07:55:15 Johanne… und ich spiele … /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  1 2015-12-10 19:57:00 Artur K… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  2 2015-12-10 22:31:00 Erika I… 😂😂😂😂😂😂     /home/jo… &lt;chr… &lt;chr [6]&gt; 
+##  3 2015-12-11 02:13:00 Alexand… 🙈               /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  4 2015-12-11 02:23:00 Johanne… 😂               /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  5 2015-12-11 02:24:00 Johanne… Die Petitionen … /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  6 2015-12-11 03:51:00 Erika I… Läääuft          /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  7 2015-12-12 07:49:00 Johanne… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  8 2015-12-12 07:53:00 Erika I… was macht ihr h… /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  9 2015-12-12 07:55:00 Johanne… Alex arbeitet w… /home/jo… &lt;chr… &lt;chr [0]&gt; 
+## 10 2015-12-12 07:55:00 Johanne… und ich spiele … /home/jo… &lt;chr… &lt;chr [0]&gt; 
 ## # … with 16,806 more rows</code></pre>
 <p>You can see from the size of the resulting <code>data.frame</code> that we write a lot in this group!
 Let’s see over how much time we managed to accumulate 16,816 messages.
