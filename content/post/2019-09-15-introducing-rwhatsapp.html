@@ -21,7 +21,7 @@ The goal of the package is to make working with ‘WhatsApp’ chat logs as easy
 Furthermore, retrieving chat logs from the Android or iOS app is very straightforward:
 Simply choose <code>More</code> in the menu of a chat, then <code>Export chat</code> and export the history to a txt file.</p>
 <p><img src="https://i.imgur.com/9pZjPFC.jpg" width="200" /> <img src="https://i.imgur.com/OwUE6aE.jpg" width="200" /> <img src="https://i.imgur.com/8lCJQfZ.jpg" width="200" /></p>
-<p>While this is easy enough to do, please make sure to ask other chat participants for consent before working with this data.</p>
+<p>While this is easy enough to do, please make sure to ask other chat participants for consent before working with their data.</p>
 <p>Install the package with:</p>
 <pre class="r"><code>install.packages(&quot;rwhatsapp&quot;)</code></pre>
 <p>The package comes with a small sample that you can use to get going.</p>
@@ -35,15 +35,15 @@ chat</code></pre>
 <pre><code>## # A tibble: 9 x 6
 ##   time                author   text          source        emoji emoji_name
 ##   &lt;dttm&gt;              &lt;fct&gt;    &lt;chr&gt;         &lt;chr&gt;         &lt;lis&gt; &lt;list&gt;    
-## 1 2017-07-12 22:35:57 &lt;NA&gt;     Messages to … /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 2 2017-07-12 22:35:57 &lt;NA&gt;     &quot;You created… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 3 2017-07-12 22:35:57 Johanne… &lt;Media omitt… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 4 2017-07-12 22:35:57 Johanne… Fruit bread … /home/johann… &lt;chr… &lt;chr [2]&gt; 
-## 5 2017-07-13 09:12:57 Test     &quot;It&#39;s fun do… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 6 2017-07-13 09:16:57 Johanne… Haha it sure… /home/johann… &lt;chr… &lt;chr [1]&gt; 
-## 7 2018-09-28 13:27:57 Johanne… Did you know… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 8 2018-09-28 13:28:57 Johanne… 😀😃😄😁😆😅😂🤣☺😊😇🙂… /home/johann… &lt;chr… &lt;chr [242…
-## 9 2018-09-28 13:30:57 Johanne… 🤷‍♀🤷🏻‍♂🙎‍♀🙎‍…     /home/johann… &lt;chr… &lt;chr [87]&gt;</code></pre>
+## 1 2017-07-12 22:35:30 &lt;NA&gt;     Messages to … /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 2 2017-07-12 22:35:30 &lt;NA&gt;     &quot;You created… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 3 2017-07-12 22:35:30 Johanne… &lt;Media omitt… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 4 2017-07-12 22:35:30 Johanne… Fruit bread … /home/johann… &lt;chr… &lt;chr [2]&gt; 
+## 5 2017-07-13 09:12:30 Test     &quot;It&#39;s fun do… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 6 2017-07-13 09:16:30 Johanne… Haha it sure… /home/johann… &lt;chr… &lt;chr [1]&gt; 
+## 7 2018-09-28 13:27:30 Johanne… Did you know… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 8 2018-09-28 13:28:30 Johanne… 😀😃😄😁😆😅😂🤣☺😊😇🙂… /home/johann… &lt;chr… &lt;chr [242…
+## 9 2018-09-28 13:30:30 Johanne… 🤷‍♀🤷🏻‍♂🙎‍♀🙎‍…     /home/johann… &lt;chr… &lt;chr [87]&gt;</code></pre>
 <p>This is really all the package does: bring your chat logs into a nice usable format.
 But since this isn’t very intresting, I decided to also show you a few quick analysis steps to illustrate what you can do with data obtained in this way.
 For this, I use one of my own chat logs from a conversation with friends.
@@ -53,16 +53,16 @@ chat</code></pre>
 <pre><code>## # A tibble: 16,816 x 6
 ##    time                author   text             source    emoji emoji_name
 ##    &lt;dttm&gt;              &lt;fct&gt;    &lt;chr&gt;            &lt;chr&gt;     &lt;lis&gt; &lt;list&gt;    
-##  1 2015-12-10 19:57:57 Artur K… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  2 2015-12-10 22:31:57 Erika I… 😂😂😂😂😂😂     /home/jo… &lt;chr… &lt;chr [6]&gt; 
-##  3 2015-12-11 02:13:57 Alexand… 🙈               /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  4 2015-12-11 02:23:57 Johanne… 😂               /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  5 2015-12-11 02:24:57 Johanne… Die Petitionen … /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  6 2015-12-11 03:51:57 Erika I… Läääuft          /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  7 2015-12-12 07:49:57 Johanne… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  8 2015-12-12 07:53:57 Erika I… was macht ihr h… /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  9 2015-12-12 07:55:57 Johanne… Alex arbeitet w… /home/jo… &lt;chr… &lt;chr [0]&gt; 
-## 10 2015-12-12 07:55:57 Johanne… und ich spiele … /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  1 2015-12-10 19:57:31 Artur K… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  2 2015-12-10 22:31:31 Erika I… 😂😂😂😂😂😂     /home/jo… &lt;chr… &lt;chr [6]&gt; 
+##  3 2015-12-11 02:13:31 Alexand… 🙈               /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  4 2015-12-11 02:23:31 Johanne… 😂               /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  5 2015-12-11 02:24:31 Johanne… Die Petitionen … /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  6 2015-12-11 03:51:31 Erika I… Läääuft          /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  7 2015-12-12 07:49:31 Johanne… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  8 2015-12-12 07:53:31 Erika I… was macht ihr h… /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  9 2015-12-12 07:55:31 Johanne… Alex arbeitet w… /home/jo… &lt;chr… &lt;chr [0]&gt; 
+## 10 2015-12-12 07:55:31 Johanne… und ich spiele … /home/jo… &lt;chr… &lt;chr [0]&gt; 
 ## # … with 16,806 more rows</code></pre>
 <p>You can see from the size of the resulting <code>data.frame</code> that we write a lot in this group!
 Let’s see over how much time we managed to accumulate 16,816 messages.
