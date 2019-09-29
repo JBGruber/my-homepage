@@ -6,18 +6,12 @@ slug: you-r-my-valentine
 categories: []
 tags:
   - R
-header:
-  caption: ''
-  image: ''
-output:
-  blogdown::html_page:
-    toc: false
-    preview: false
+  - animation
 ---
 
 Today is Valentine's Day. And since both I and my sweetheart are `R` enthusiasts, here is how to say "I love you" using a statistical programming language:
 
-```{r message=FALSE}
+```{r eval=FALSE}
 library("dplyr")
 library("gganimate")
 library("ggplot2")
@@ -43,3 +37,4 @@ ggplot(hrt_dat, aes(x = xhrt, y = yhrt)) +
   transition_reveal(frame)
 ```
 
+![](https://www.johannesbgruber.eu/img/heart.gif)

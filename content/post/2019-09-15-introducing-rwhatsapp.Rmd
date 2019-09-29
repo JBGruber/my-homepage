@@ -6,6 +6,7 @@ slug: introducing-rwhatsapp
 categories: []
 tags:
   - R
+  - text-analysis
 header:
   caption: ''
   image: 'emojis-1.png'
@@ -14,7 +15,7 @@ header:
 
 ```{r global_options, include=FALSE}
 library(knitr)
-opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "1babd0decbb90f2"), base.url = NULL)
+opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "efeb70e3253127f"), base.url = NULL)
 ```
 
 I'm happy to announce that `rwhatsapp` is now on `CRAN`.

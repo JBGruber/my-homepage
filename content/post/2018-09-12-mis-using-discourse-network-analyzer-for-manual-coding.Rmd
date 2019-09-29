@@ -57,7 +57,7 @@ Since the two most important words for my analysis were "protest" and "demonstra
 That means you can check out the source code at any point on: https://github.com/leifeld/dna
 You can also submit bug reports, request a feature or contribute code via your own pull request.
 
-![](/post/2018-09-12-mis-using-discourse-network-analyzer-for-manual-coding_files/DNA.png)
+![](https://www.johannesbgruber.eu/img/DNA.png)
 
 Even though ´DNA´ was developed for using it with a specific method (discourse network analysis) and I won't be using that for now in my PhD, I think that at least for me it is the best choice.
 It combines the possibility to highlight text chunks and sort them into categories and provides a few nice features on top of that.

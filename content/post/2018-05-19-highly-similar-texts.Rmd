@@ -9,12 +9,14 @@ tags:
   - media anlysis
 header:
   caption: ''
-  image: ''
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
+  image: 'wordcloud.png'
+  preview: yes
 ---
+
+```{r global_options, include=FALSE}
+library(knitr)
+opts_knit$set(upload.fun = function(file) imgur_upload(file, key = "efeb70e3253127f"), base.url = NULL)
+```
 
 A while ago I was building a database of newspaper articles retrieved from LexisNexis for a research project in which I was working as a research assistant.
 At some point we noticed that we seemed to have a lot of duplicates in our database.
