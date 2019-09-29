@@ -119,8 +119,8 @@ chat %>%
   ggtitle("Most often used emojis")
 ```
 
-Looks like we have a clear winner: all of us like the :joy: ("face with tears of joy") most.
-:sweat_smile: ("grinning face with sweat") is also very popular, except with Erika who has a few more flamboyant favourites.
+Looks like we have a clear winner: all of us like the 😂 ("face with tears of joy") most.
+😅 ("grinning face with sweat") is also very popular, except with Erika who has a few more flamboyant favourites.
 I apparently tend to use fewer emojis overall while Erika is leading the field (again).
 
 How does it look if we compare favourite words?

@@ -36,15 +36,15 @@ chat</code></pre>
 <pre><code>## # A tibble: 9 x 6
 ##   time                author   text          source        emoji emoji_name
 ##   &lt;dttm&gt;              &lt;fct&gt;    &lt;chr&gt;         &lt;chr&gt;         &lt;lis&gt; &lt;list&gt;    
-## 1 2017-07-12 22:35:19 &lt;NA&gt;     Messages to … /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 2 2017-07-12 22:35:19 &lt;NA&gt;     &quot;You created… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 3 2017-07-12 22:35:19 Johanne… &lt;Media omitt… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 4 2017-07-12 22:35:19 Johanne… Fruit bread … /home/johann… &lt;chr… &lt;chr [2]&gt; 
-## 5 2017-07-13 09:12:19 Test     &quot;It&#39;s fun do… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 6 2017-07-13 09:16:19 Johanne… Haha it sure… /home/johann… &lt;chr… &lt;chr [1]&gt; 
-## 7 2018-09-28 13:27:19 Johanne… Did you know… /home/johann… &lt;chr… &lt;chr [0]&gt; 
-## 8 2018-09-28 13:28:19 Johanne… 😀😃😄😁😆😅😂🤣☺😊😇🙂… /home/johann… &lt;chr… &lt;chr [242…
-## 9 2018-09-28 13:30:19 Johanne… 🤷‍♀🤷🏻‍♂🙎‍♀🙎‍…     /home/johann… &lt;chr… &lt;chr [87]&gt;</code></pre>
+## 1 2017-07-12 22:35:46 &lt;NA&gt;     Messages to … /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 2 2017-07-12 22:35:46 &lt;NA&gt;     &quot;You created… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 3 2017-07-12 22:35:46 Johanne… &lt;Media omitt… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 4 2017-07-12 22:35:46 Johanne… Fruit bread … /home/johann… &lt;chr… &lt;chr [2]&gt; 
+## 5 2017-07-13 09:12:46 Test     &quot;It&#39;s fun do… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 6 2017-07-13 09:16:46 Johanne… Haha it sure… /home/johann… &lt;chr… &lt;chr [1]&gt; 
+## 7 2018-09-28 13:27:46 Johanne… Did you know… /home/johann… &lt;chr… &lt;chr [0]&gt; 
+## 8 2018-09-28 13:28:46 Johanne… 😀😃😄😁😆😅😂🤣☺😊😇🙂… /home/johann… &lt;chr… &lt;chr [242…
+## 9 2018-09-28 13:30:46 Johanne… 🤷‍♀🤷🏻‍♂🙎‍♀🙎‍…     /home/johann… &lt;chr… &lt;chr [87]&gt;</code></pre>
 <p>This is really all the package does: bring your chat logs into a nice usable format.
 But since this isn’t very intresting, I decided to also show you a few quick analysis steps to illustrate what you can do with data obtained in this way.
 For this, I use one of my own chat logs from a conversation with friends.
@@ -54,16 +54,16 @@ chat</code></pre>
 <pre><code>## # A tibble: 16,816 x 6
 ##    time                author   text             source    emoji emoji_name
 ##    &lt;dttm&gt;              &lt;fct&gt;    &lt;chr&gt;            &lt;chr&gt;     &lt;lis&gt; &lt;list&gt;    
-##  1 2015-12-10 19:57:19 Artur K… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  2 2015-12-10 22:31:19 Erika I… 😂😂😂😂😂😂     /home/jo… &lt;chr… &lt;chr [6]&gt; 
-##  3 2015-12-11 02:13:19 Alexand… 🙈               /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  4 2015-12-11 02:23:19 Johanne… 😂               /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  5 2015-12-11 02:24:19 Johanne… Die Petitionen … /home/jo… &lt;chr… &lt;chr [1]&gt; 
-##  6 2015-12-11 03:51:19 Erika I… Läääuft          /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  7 2015-12-12 07:49:19 Johanne… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  8 2015-12-12 07:53:19 Erika I… was macht ihr h… /home/jo… &lt;chr… &lt;chr [0]&gt; 
-##  9 2015-12-12 07:55:19 Johanne… Alex arbeitet w… /home/jo… &lt;chr… &lt;chr [0]&gt; 
-## 10 2015-12-12 07:55:19 Johanne… und ich spiele … /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  1 2015-12-10 19:57:46 Artur K… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  2 2015-12-10 22:31:46 Erika I… 😂😂😂😂😂😂     /home/jo… &lt;chr… &lt;chr [6]&gt; 
+##  3 2015-12-11 02:13:46 Alexand… 🙈               /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  4 2015-12-11 02:23:46 Johanne… 😂               /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  5 2015-12-11 02:24:46 Johanne… Die Petitionen … /home/jo… &lt;chr… &lt;chr [1]&gt; 
+##  6 2015-12-11 03:51:46 Erika I… Läääuft          /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  7 2015-12-12 07:49:46 Johanne… &lt;Media omitted&gt;  /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  8 2015-12-12 07:53:46 Erika I… was macht ihr h… /home/jo… &lt;chr… &lt;chr [0]&gt; 
+##  9 2015-12-12 07:55:46 Johanne… Alex arbeitet w… /home/jo… &lt;chr… &lt;chr [0]&gt; 
+## 10 2015-12-12 07:55:46 Johanne… und ich spiele … /home/jo… &lt;chr… &lt;chr [0]&gt; 
 ## # … with 16,806 more rows</code></pre>
 <p>You can see from the size of the resulting <code>data.frame</code> that we write a lot in this group!
 Let’s see over how much time we managed to accumulate 16,816 messages.
@@ -78,7 +78,7 @@ chat %&gt;%
   geom_bar(stat = &quot;identity&quot;) +
   ylab(&quot;&quot;) + xlab(&quot;&quot;) +
   ggtitle(&quot;Messages per day&quot;)</code></pre>
-<p><img src="https://i.imgur.com/Q3hVhWl.png" width="672" /></p>
+<p><img src="https://i.imgur.com/vuOwfGJ.png" width="672" /></p>
 <p>The chat has been going on for a while and on some days there were more than a hundred messages!
 Who’s responsible for all of this?</p>
 <pre class="r"><code>chat %&gt;%
@@ -89,7 +89,7 @@ Who’s responsible for all of this?</p>
   ylab(&quot;&quot;) + xlab(&quot;&quot;) +
   coord_flip() +
   ggtitle(&quot;Number of messages&quot;)</code></pre>
-<p><img src="https://i.imgur.com/WSrchwt.png" width="672" /></p>
+<p><img src="https://i.imgur.com/cvK0PbW.png" width="672" /></p>
 <p>Looks like we contributed more or less the same number of messages, with Erika slightly leading the field.</p>
 <p>One thing that is always fun to do is finding out what people’s favourite emojis are:</p>
 <pre class="r"><code>library(&quot;tidyr&quot;)
@@ -105,9 +105,9 @@ chat %&gt;%
   coord_flip() +
   facet_wrap(~author, ncol = 2, scales = &quot;free_y&quot;)  +
   ggtitle(&quot;Most often used emojis&quot;)</code></pre>
-<p><img src="https://i.imgur.com/CENEu0T.png" width="672" /></p>
-<p>Looks like we have a clear winner: all of us like the :joy: (“face with tears of joy”) most.
-:sweat_smile: (“grinning face with sweat”) is also very popular, except with Erika who has a few more flamboyant favourites.
+<p><img src="https://i.imgur.com/yV16Mxe.png" width="672" /></p>
+<p>Looks like we have a clear winner: all of us like the 😂 (“face with tears of joy”) most.
+😅 (“grinning face with sweat”) is also very popular, except with Erika who has a few more flamboyant favourites.
 I apparently tend to use fewer emojis overall while Erika is leading the field (again).</p>
 <p>How does it look if we compare favourite words?
 I use the excellent <code>tidytext</code> package to get this task done:</p>
@@ -125,7 +125,7 @@ chat %&gt;%
   coord_flip() +
   facet_wrap(~author, ncol = 2, scales = &quot;free_y&quot;) +
   ggtitle(&quot;Most often used words&quot;)</code></pre>
-<p><img src="https://i.imgur.com/Cfncor5.png" width="672" /></p>
+<p><img src="https://i.imgur.com/OzumpLX.png" width="672" /></p>
 <p>This doesn’t make much sense.
 First of all, because we write in German which you might not understand :wink:.
 But it also looks weird that Artur and Erika seem to often use the words “media” and “omitted”.
@@ -159,7 +159,7 @@ chat %&gt;%
   coord_flip() +
   facet_wrap(~author, ncol = 2, scales = &quot;free_y&quot;) +
   ggtitle(&quot;Most often used words&quot;)</code></pre>
-<p><img src="https://i.imgur.com/xnokaU7.png" width="672" /></p>
+<p><img src="https://i.imgur.com/ufqr9tg.png" width="672" /></p>
 <p>Still not very informative, but hey, this is just a private conversation, what did you expect?
 It seems though that we agree with each other a lot, as “ja” (yes) and ok are among the top words for all of us.
 The antonym “ne” (nope) is far less common and only on Artur’s and Erika’s top lists.
@@ -186,7 +186,7 @@ Basically, what the measure does, in this case, is to find words that are common
   coord_flip() +
   facet_wrap(~author, ncol = 2, scales = &quot;free_y&quot;) +
   ggtitle(&quot;Important words using tf–idf by author&quot;)</code></pre>
-<p><img src="https://i.imgur.com/I7as1WQ.png" width="672" /></p>
+<p><img src="https://i.imgur.com/9uyAqch.png" width="672" /></p>
 <p>Now the picture changes pretty much entirely.
 First, the top words of the different authors have very little overlap now compared to before—only exceptions being 9gag (platform to share memes) in Alexandra’s and my messages and “grade” (now) which Artur and I use.
 This is due to the tf–idf measure which tries to find only words specific to an author.</p>
@@ -213,7 +213,7 @@ Basically, you just check how many unique words are used by an author.</p>
   xlab(&quot;&quot;) +
   ggtitle(&quot;Lexical Diversity&quot;) +
   coord_flip()</code></pre>
-<p><img src="https://i.imgur.com/mI9Vcky.png" width="672" /></p>
+<p><img src="https://i.imgur.com/zyvhUlo.png" width="672" /></p>
 <p>It appears that I use the most unique words, even though Erika wrote more messages overall.
 Is this because I use some amazing and unique technical terms?
 Let’s find out:</p>
@@ -235,7 +235,7 @@ chat %&gt;%
   ylab(&quot;&quot;) + xlab(&quot;&quot;) +
   coord_flip() +
   ggtitle(&quot;Unique words of Johannes&quot;)</code></pre>
-<p><img src="https://i.imgur.com/H2R7mZq.png" width="672" /></p>
+<p><img src="https://i.imgur.com/UssHsUn.png" width="672" /></p>
 <p>Looking at the top words that are only used by me we see these are words I don’t use very often either.
 There are two technical terms here: “prozessor” and “webseite” which kind of make sense.
 I’m also apparently the only one to share links to the German news site zeit.de.
