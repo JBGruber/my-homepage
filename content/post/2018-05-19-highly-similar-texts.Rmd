@@ -14,7 +14,6 @@ output:
   blogdown::html_page:
     toc: true
     fig_width: 6
-    dev: "svg"
 ---
 
 A while ago I was building a database of newspaper articles retrieved from LexisNexis for a research project in which I was working as a research assistant.
@@ -96,7 +95,7 @@ benchmark <- bench::mark(
   long <- adist(compare2) / max(nchar(compare2)),
   check = FALSE
 )
-dplyr::select(benchmark, mean, mem_alloc)
+dplyr::select(benchmark, median, mem_alloc)
 ```
 
 To get a feel for this, the mean time for the second calculation is `r paste(benchmark$mean[2])` that is miliseconds.

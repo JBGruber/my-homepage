@@ -14,7 +14,6 @@ output:
   blogdown::html_page:
     toc: true
     fig_width: 6
-    dev: "svg"
 ---
 
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
@@ -94,15 +93,15 @@ benchmark &lt;- bench::mark(
   long &lt;- adist(compare2) / max(nchar(compare2)),
   check = FALSE
 )
-dplyr::select(benchmark, mean, mem_alloc)</code></pre>
+dplyr::select(benchmark, median, mem_alloc)</code></pre>
 <pre><code>## # A tibble: 2 x 2
-##       mean mem_alloc
+##     median mem_alloc
 ##   &lt;bch:tm&gt; &lt;bch:byt&gt;
-## 1   15.1µs        0B
-## 2   12.3ms    10.4KB</code></pre>
-<p>To get a feel for this, the mean time for the second calculation is 12.3ms that is miliseconds.
-In the same unit as the first calculation, that would be 12,281 microseconds.
-This is an 811% increase on average.
+## 1   15.2µs        0B
+## 2   12.7ms    10.4KB</code></pre>
+<p>To get a feel for this, the mean time for the second calculation is that is miliseconds.
+In the same unit as the first calculation, that would be microseconds.
+This is an % increase on average.
 The allocated memory can’t even be calculated since the first value is too small to measure while the second calculation uses quite a bit of memory.
 Some testing revealed that around 3500 articles would already bring my 32GB RAM machine to its knees.
 This makes it almost impossible to compare hundreds or thousands of newspaper articles.</p>
@@ -300,10 +299,12 @@ Basically every column is one word and then every row is one text.
 The number in the cell tells us how often a word occurred in a text.
 Comparing the matrices of two texts is a much easier task for a computer and the implementation in <code>quanteda</code> is extra efficient and fast (I use the cosine similarity, as this is, in my opinion, easiest to read and interpret for humans).</p>
 <pre class="r"><code>textstat_simil(dfm, method = &quot;cosine&quot;)</code></pre>
-<pre><code>##           text1     text2     text3
-## text2 0.0000000                    
-## text3 0.0000000 0.0000000          
-## text4 0.0000000 0.0000000 0.9990959</code></pre>
+<pre><code>## textstat_simil object; method = &quot;cosine&quot;
+##       text1 text2 text3 text4
+## text1     1     0     0     0
+## text2     0     1     0     0
+## text3     0     0 1.000 0.999
+## text4     0     0 0.999 1.000</code></pre>
 <p>What we see here is that of the four texts, only text 3 and 4 are similar (more than 99% similar), the other two (“kitten” and “sitting”) are considered completely different from the others.</p>
 <p>However, consider another example:</p>
 <pre class="r"><code>compare3 &lt;- c(
@@ -313,8 +314,10 @@ Comparing the matrices of two texts is a much easier task for a computer and the
 
 dfm2 &lt;- dfm(compare3)
 textstat_simil(dfm2, method = &quot;cosine&quot;)</code></pre>
-<pre><code>##       text1
-## text2     1</code></pre>
+<pre><code>## textstat_simil object; method = &quot;cosine&quot;
+##       text1 text2
+## text1     1     1
+## text2     1     1</code></pre>
 <p>The similarity between “Dog bites man” and “Man bites dog” is 100%.
 But the <em>meaning</em> of the two sentences is arguably very different!
 This mismatch between intuition and results is caused by <code>textstat_simil()</code> ignoring word order and <code>dfm()</code> getting rid of capital letters by the default—which is the main reason behind the performance gain!
@@ -328,12 +331,14 @@ Let’s check this on all three examples I used so far, combined:</p>
 dfm3 &lt;- dfm(texts)
 simil &lt;- textstat_simil(dfm3, method = &quot;cosine&quot;)
 simil</code></pre>
-<pre><code>##           text1     text2     text3     text4     text5
-## text2 0.0000000                                        
-## text3 0.0000000 0.0000000                              
-## text4 0.0000000 0.0000000 0.9990959                    
-## text5 0.0000000 0.0000000 0.0000000 0.0000000          
-## text6 0.0000000 0.0000000 0.0000000 0.0000000 1.0000000</code></pre>
+<pre><code>## textstat_simil object; method = &quot;cosine&quot;
+##       text1 text2 text3 text4 text5 text6
+## text1     1     0     0     0     0     0
+## text2     0     1     0     0     0     0
+## text3     0     0 1.000 0.999     0     0
+## text4     0     0 0.999 1.000     0     0
+## text5     0     0     0     0     1     1
+## text6     0     0     0     0     1     1</code></pre>
 <p>As you can see again, text three and four as well as text five and six are deemed very similar by <code>textstat_simil()</code>.
 We can use this information to do some more in-depth testing, <em>only on the texts already flagged as highly similar</em>.
 I do some data wrangling here to get the distance matrix into a presentable form:</p>

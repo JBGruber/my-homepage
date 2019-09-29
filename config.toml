@@ -18,7 +18,8 @@ footnotereturnlinkcontents = "<sup>^</sup>"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 preserveTaxonomyNames = true
 paginate = 10
-relativeurls = false
+relativeURLs = false
+canonifyURLs = false
 #[permalinks]
 # post = "/:year/:month/:day/:slug/"
 
