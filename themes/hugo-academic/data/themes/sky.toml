@@ -1,0 +1,20 @@
+# Theme metadata
+name = "Sky"
+
+# Is theme light or dark?
+light = true
+
+# Primary
+primary = "#272935"
+primary_light = "#80e27e"
+primary_dark = "#087f23"
+
+# Menu
+menu_primary = "#C7D4F7"
+menu_text = "#272935"
+menu_text_active = "#272935"
+menu_title = "#272935"
+
+# Home sections
+home_section_odd = "rgb(255, 255, 255)"
+home_section_even = "rgb(247, 247, 247)"
