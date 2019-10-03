@@ -24,7 +24,7 @@ canonifyURLs = false
 # post = "/:year/:month/:day/:slug/"
 
 # Enable comments by entering your Disqus shortname
-disqusShortname = "JBGruber"
+disqusShortname = "https-www-johannesbgruber-eu"
 
 # Enable analytics by entering your Google Analytics tracking ID
 googleAnalytics = ""
@@ -61,7 +61,7 @@ defaultContentLanguageInSubdir = false
 
   # Font style.
   #   Choose from `default`, `classic`, or `playfair`.
-  font = "default"
+  font = "playfair"
 
   # Your details.
   name = "Johannes B. Gruber"
@@ -73,7 +73,7 @@ defaultContentLanguageInSubdir = false
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "JBGruber.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
-  email = "j.gruber.1@research.gla.ac.uk"
+  email = "J.Gruber.1@research.gla.ac.uk"
   address = "111, Lilybank House, University of Glasgow, Glasgow G12 8RT, United Kingdom"
   office_hours = ""
   phone = "+44 75 109 37 514"
@@ -106,11 +106,11 @@ defaultContentLanguageInSubdir = false
   #   1: Google Maps
   #   2: OpenStreetMap (Mapnik)
   #   3: OpenStreetMap (Mapbox)
-  map = 0
+  map = 3
   map_api_key = ""
-  latitude = "37.4275"
-  longitude = "-122.1697"
-  zoom = 15
+  latitude = "55.874031"
+  longitude = "-4.290359"
+  zoom = 18
 
   # Date and time format (refer to Go's date format: http://fuckinggodateformat.com )
   #   Examples: "Mon, Jan 2, 2006" or "2006-01-02"
@@ -292,10 +292,10 @@ defaultContentLanguageInSubdir = false
   url = "#slides"
   weight = 4
 
-# [[menu.main]]
-#   name = "Contact"
-#   url = "#contact"
-#   weight = 6
+[[menu.main]]
+  name = "Contact"
+  url = "#contact"
+  weight = 6
 
 # Taxonomies.
 [taxonomies]
