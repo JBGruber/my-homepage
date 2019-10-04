@@ -1,0 +1,25 @@
+---
+title: Test Absolute Links
+author: ''
+date: '2017-10-04'
+slug: test-absolute-links
+categories: []
+tags:
+  - test
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+Just a post to test if relative links still end up in the rss feed.
+
+```{r}
+library(ggplot2)
+ggplot(diamonds) +
+  stat_density_2d(aes(x = x, y = depth, fill = stat(nlevel)), 
+                  geom = "polygon", n = 100, bins = 10, contour = TRUE) +
+  facet_wrap(clarity ~ .) +
+  scale_fill_viridis_c(option = "A")
+```
+

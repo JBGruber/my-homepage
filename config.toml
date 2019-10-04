@@ -18,8 +18,8 @@ footnotereturnlinkcontents = "<sup>^</sup>"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 preserveTaxonomyNames = true
 paginate = 10
-relativeURLs = false
-canonifyURLs = false
+relativeURLs = false  
+canonifyurls = true
 #[permalinks]
 # post = "/:year/:month/:day/:slug/"
 
@@ -34,7 +34,7 @@ defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
 [outputs]
-  home = [ "HTML", "CSS", "RSS", "RFEED" ]
+  home = [ "HTML", "CSS", "RSS", "RFEED", "TEST" ]
   section = [ "HTML", "RSS" ]
 
 [outputFormats]
@@ -45,7 +45,10 @@ defaultContentLanguageInSubdir = false
 [outputFormats.RFEED]
   mediatype = "application/rss"
   baseName = "feed_r"
-  noUgly = true
+  
+[outputFormats.test]
+  mediatype = "application/rss"
+  baseName = "test"
 
 # Configure BlackFriday Markdown rendering.
 #   See: https://gohugo.io/readfiles/bfconfig/
