@@ -10,7 +10,7 @@ title = "Johannes B. Gruber"
 
 # Your copyright notice - appears in site footer.
 # To display a copyright symbol, type `&copy;`.
-copyright = "&copy; 2019"
+copyright = "Licence: <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC BY-SA</a>"
 
 theme = "hugo-academic"
 enableEmoji = true
