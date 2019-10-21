@@ -1,15 +1,12 @@
 ---
-title: A faster unnest
+title: (Much) faster unnesting with data.table
 author: Johannes Gruber
 date: '2019-10-21'
 slug: a-faster-unnest
 categories: []
 tags:
+  - R
   - data.table
-header:
-  caption: ''
-  image: ''
-  preview: yes
 ---
 
 
@@ -43,7 +40,7 @@ unnest(df, list_column)</code></pre>
 ## 8 D     I     H          
 ## 9 E     J     I</code></pre>
 <p>I came across this a lot while working on data from Twitter since individual tweets can contain multiple hashtags, mentions, URLs and so on, which is why they are stored in lists. <code>unnest()</code> is really helpful and very flexible in my experience since it makes creating, for example, a table of top 10 hashtags a piece of cake.</p>
-<p>However, on large datasets, <code>unnest()</code> has its limitations (as I found out today). On a set with 1.8 million tweets, I was barely able to unnest the URL column and it would take forever on my laptop or simply crash at some point. In a completly new environemnt, unnesting the data took half an hour.</p>
+<p>However, on large datasets, <code>unnest()</code> has its limitations (as I found out today). On a set with 1.8 million tweets, I was barely able to unnest the URL column and it would take forever on my laptop or simply crash at some point. In a completely new environment, unnesting the data took half an hour.</p>
 <p>So let’s cut this time down to 10 seconds with <code>data.table</code>. In <code>data.table</code>, you would unlist like this<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>:</p>
 <pre class="r"><code>library(data.table)
 dt &lt;- as.data.table(df)
@@ -66,21 +63,21 @@ dt[, list(list_column = as.character(unlist(list_column))), by = list(a, b)]</co
 ## 
 ##     :=</code></pre>
 <pre class="r"><code>unnest_dt &lt;- function(tbl, col) {
-  
+
   tbl &lt;- as.data.table(tbl)
-  
+
   col &lt;- ensyms(col)
-  
+
   clnms &lt;- syms(setdiff(colnames(tbl), as.character(col)))
-  
+
   tbl &lt;- as.data.table(tbl)
-  
+
   tbl &lt;- eval(
     expr(tbl[, as.character(unlist(!!!col)), by = list(!!!clnms)])
   )
-  
+
   colnames(tbl) &lt;- c(as.character(clnms), as.character(col))
-  
+
   tbl
 }</code></pre>
 <p>On the surface it does the same as <code>unnest</code>:</p>
@@ -95,8 +92,8 @@ dt[, list(list_column = as.character(unlist(list_column))), by = list(a, b)]</co
 ## 7: C H           G
 ## 8: D I           H
 ## 9: E J           I</code></pre>
-<p>But the function is extremely fast and lean. To show this I do some benchmarking on a larger object. Let’s say we randomly sample the <code>data.frame</code> to 10,000 it’s original size.</p>
-<pre class="r"><code>library(&quot;bench&quot;)
+<p>But the function is extremely fast and lean. To show this, I do some benchmarking on a larger object. I scale the example ‘data.frame’ up from 5 to 50,000 rows since the overhead of loading a function will influence runtime much stronger on small-n data.</p>
+<pre class="r"><code>library(bench)
 df_large &lt;- dplyr::sample_frac(df, 10000, replace = TRUE)
 res &lt;- mark(
   tidyr = unnest(df_large, list_column),
@@ -106,15 +103,15 @@ res</code></pre>
 <pre><code>## # A tibble: 2 x 6
 ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
 ##   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-## 1 tidyr         53.3s    53.3s    0.0188    16.7GB     6.27
-## 2 dt           17.9ms   20.8ms   38.9       14.2MB    15.6</code></pre>
+## 1 tidyr         41.3s    41.3s    0.0242    16.7GB     8.03
+## 2 dt             13ms   15.6ms   57.2       14.2MB    21.7</code></pre>
 <pre class="r"><code>summary(res, relative = TRUE)</code></pre>
 <pre><code>## # A tibble: 2 x 6
 ##   expression   min median `itr/sec` mem_alloc `gc/sec`
 ##   &lt;bch:expr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 tidyr      2974.  2566.        1      1203.     1   
-## 2 dt            1      1      2074.        1      2.48</code></pre>
-<p>As you can see, <code>data.table</code> is 2974 times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the <code>data.table</code> function compared to <code>tidyr</code>. When trying to unnest my Twitter dataset with nearly 2 million tweets, my computer would choke on the memory issue and sometimes error if I had some other large objects loaded.</p>
+## 1 tidyr      3184.  2643.        1      1206.     1   
+## 2 dt            1      1      2363.        1      2.70</code></pre>
+<p>As you can see, <code>data.table</code> is 3184 times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the <code>data.table</code> function compared to <code>tidyr</code>. When trying to unnest my Twitter dataset with 1.8 million tweets, my computer would choke on the memory issue and even throw an error if I had some other large objects loaded.</p>
 <p>Admittedly the function is not perfect. It is far less flexible than <code>unnest</code>, especially since it only runs on one variable at the time. However, this covers 95% of my usage of <code>unnest</code> and I would only consider including it in a script if performance is key.</p>
 <div class="footnotes">
 <hr />

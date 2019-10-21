@@ -1,15 +1,12 @@
 ---
-title: A faster unnest
+title: (Much) faster unnesting with data.table
 author: Johannes Gruber
 date: '2019-10-21'
 slug: a-faster-unnest
 categories: []
 tags:
+  - R
   - data.table
-header:
-  caption: ''
-  image: ''
-  preview: yes
 ---
 
 Today I was really struggling with a relatively simple operation: `unnest()` from the `tidyr` package. What it's supposed to do is pretty simple. When you have a `data.frame` where one or multiple columns are lists, you can unlist these columns while duplicating the information in other columns if the length of an element is larger than 1.
@@ -29,7 +26,7 @@ unnest(df, list_column)
 
 I came across this a lot while working on data from Twitter since individual tweets can contain multiple hashtags, mentions, URLs and so on, which is why they are stored in lists. `unnest()` is really helpful and very flexible in my experience since it makes creating, for example, a table of top 10 hashtags a piece of cake.
 
-However, on large datasets, `unnest()` has its limitations (as I found out today). On a set with 1.8 million tweets, I was barely able to unnest the URL column and it would take forever on my laptop or simply crash at some point. In a completly new environemnt, unnesting the data took half an hour.
+However, on large datasets, `unnest()` has its limitations (as I found out today). On a set with 1.8 million tweets, I was barely able to unnest the URL column and it would take forever on my laptop or simply crash at some point. In a completely new environment, unnesting the data took half an hour.
 
 So let's cut this time down to 10 seconds with `data.table`. In `data.table`, you would unlist like this^[Source: this answer from @akrun: https://stackoverflow.com/a/40420690/5028841, which I think should be added to `data.table`'s documentation somewhere.]:
 
@@ -44,21 +41,21 @@ This is quite a bit longer than the `tidyr` code. So I wrapped it in a short fun
 ```{r}
 library(rlang)
 unnest_dt <- function(tbl, col) {
-  
+
   tbl <- as.data.table(tbl)
-  
+
   col <- ensyms(col)
-  
+
   clnms <- syms(setdiff(colnames(tbl), as.character(col)))
-  
+
   tbl <- as.data.table(tbl)
-  
+
   tbl <- eval(
     expr(tbl[, as.character(unlist(!!!col)), by = list(!!!clnms)])
   )
-  
+
   colnames(tbl) <- c(as.character(clnms), as.character(col))
-  
+
   tbl
 }
 ```
@@ -69,10 +66,10 @@ On the surface it does the same as `unnest`:
 unnest_dt(df, list_column)
 ```
 
-But the function is extremely fast and lean. To show this I do some benchmarking on a larger object. Let's say we randomly sample the `data.frame` to 10,000 it's original size.
+But the function is extremely fast and lean. To show this, I do some benchmarking on a larger object. I scale the example 'data.frame' up from 5 to 50,000 rows since the overhead of loading a function will influence runtime much stronger on small-n data.
 
 ```{r warning=FALSE}
-library("bench")
+library(bench)
 df_large <- dplyr::sample_frac(df, 10000, replace = TRUE)
 res <- mark(
   tidyr = unnest(df_large, list_column),
@@ -82,7 +79,7 @@ res
 summary(res, relative = TRUE)
 ```
 
-As you can see, `data.table` is `r round(summary(res, filter_gc = FALSE, relative = TRUE)$min[1])` times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the `data.table` function compared to `tidyr`. When trying to unnest my Twitter dataset with nearly 2 million tweets, my computer would choke on the memory issue and sometimes error if I had some other large objects loaded.
+As you can see, `data.table` is `r round(summary(res, filter_gc = FALSE, relative = TRUE)$min[1])` times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the `data.table` function compared to `tidyr`. When trying to unnest my Twitter dataset with 1.8 million tweets, my computer would choke on the memory issue and even throw an error if I had some other large objects loaded.
 
 Admittedly the function is not perfect. It is far less flexible than `unnest`, especially since it only runs on one variable at the time. However, this covers 95% of my usage of `unnest` and I would only consider including it in a script if performance is key.
 
