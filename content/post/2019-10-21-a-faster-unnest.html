@@ -109,7 +109,7 @@ res</code></pre>
 ## 1 tidyr      3666.  2832.        1      1796.     1   
 ## 2 dt            1      1      2617.        1      1.57</code></pre>
 <p>As you can see, <code>data.table</code> is 3666 times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the <code>data.table</code> function compared to <code>tidyr</code>. When trying to unnest my Twitter dataset with 1.8 million tweets, my computer would choke on the memory issue and even throw an error if I had some other large objects loaded.</p>
-<p>Admittedly the function is not perfect. It is far less flexible than <code>unnest</code>, especially since it only runs on one variable at the time. However, this covers 95% of my usage of <code>unnest</code> and I would only consider including it in a script if performance is key.</p>
+<p>Admittedly the function is not perfect. It is far less flexible than <code>unnest</code>, especially since it only runs on one variable at the time. However, this covers 95% of my usage of <code>unnest</code> and I would only consider including it in a script if performance is key. Or if the great people at <code>data.table</code> <a href="https://github.com/Rdatatable/data.table/issues/2146">write their own <code>unnest</code> some day</a>.</p>
 <div class="footnotes">
 <hr />
 <ol>

@@ -83,5 +83,5 @@ summary(res, relative = TRUE)
 
 As you can see, `data.table` is `r round(summary(res, filter_gc = FALSE, relative = TRUE)$min[1])` times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the `data.table` function compared to `tidyr`. When trying to unnest my Twitter dataset with 1.8 million tweets, my computer would choke on the memory issue and even throw an error if I had some other large objects loaded.
 
-Admittedly the function is not perfect. It is far less flexible than `unnest`, especially since it only runs on one variable at the time. However, this covers 95% of my usage of `unnest` and I would only consider including it in a script if performance is key.
+Admittedly the function is not perfect. It is far less flexible than `unnest`, especially since it only runs on one variable at the time. However, this covers 95% of my usage of `unnest` and I would only consider including it in a script if performance is key. Or if the great people at `data.table` [write their own `unnest` some day](https://github.com/Rdatatable/data.table/issues/2146).
 
