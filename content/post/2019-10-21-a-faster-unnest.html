@@ -11,11 +11,13 @@ tags:
 
 
 
-<p>Today I was really struggling with a relatively simple operation: <code>unnest()</code> from the <code>tidyr</code> package. What it’s supposed to do is pretty simple. When you have a <code>data.frame</code> where one or multiple columns are lists, you can unlist these columns while duplicating the information in other columns if the length of an element is larger than 1.</p>
+<p>Today I was struggling with a relatively simple operation: <code>unnest()</code> from the <code>tidyr</code> package. What it’s supposed to do is pretty simple. When you have a <code>data.frame</code> where one or multiple columns are lists, you can unlist these columns while duplicating the information in other columns if the length of an element is larger than 1.</p>
 <pre class="r"><code>library(tibble)
-df &lt;- tibble(a = LETTERS[1:5],
-             b = LETTERS[6:10],
-             list_column = list(c(LETTERS[1:5]), &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;))
+df &lt;- tibble(
+  a = LETTERS[1:5],
+  b = LETTERS[6:10],
+  list_column = list(c(LETTERS[1:5]), &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;)
+)
 df</code></pre>
 <pre><code>## # A tibble: 5 x 3
 ##   a     b     list_column
@@ -56,13 +58,8 @@ dt[, list(list_column = as.character(unlist(list_column))), by = list(a, b)]</co
 ## 8: D I           H
 ## 9: E J           I</code></pre>
 <p>This is quite a bit longer than the <code>tidyr</code> code. So I wrapped it in a short function (note, that most of the code deals with <a href="https://adv-r.hadley.nz/quasiquotation.html">quasiquotation</a> so we can use it the same way as the original <code>unnest()</code>):</p>
-<pre class="r"><code>library(rlang)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;rlang&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:data.table&#39;:
-## 
-##     :=</code></pre>
-<pre class="r"><code>unnest_dt &lt;- function(tbl, col) {
+<pre class="r"><code>library(rlang)
+unnest_dt &lt;- function(tbl, col) {
 
   tbl &lt;- as.data.table(tbl)
 
@@ -80,7 +77,7 @@ dt[, list(list_column = as.character(unlist(list_column))), by = list(a, b)]</co
 
   tbl
 }</code></pre>
-<p>On the surface it does the same as <code>unnest</code>:</p>
+<p>On the surface, it does the same as <code>unnest</code>:</p>
 <pre class="r"><code>unnest_dt(df, list_column)</code></pre>
 <pre><code>##    a b list_column
 ## 1: A F           A
@@ -103,15 +100,15 @@ res</code></pre>
 <pre><code>## # A tibble: 2 x 6
 ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
 ##   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-## 1 tidyr         41.3s    41.3s    0.0242    16.7GB     8.03
-## 2 dt             13ms   15.6ms   57.2       14.2MB    21.7</code></pre>
+## 1 tidyr         52.4s    52.4s    0.0191   16.77GB     6.38
+## 2 dt           14.3ms   18.5ms   50.0       9.56MB    10.00</code></pre>
 <pre class="r"><code>summary(res, relative = TRUE)</code></pre>
 <pre><code>## # A tibble: 2 x 6
 ##   expression   min median `itr/sec` mem_alloc `gc/sec`
 ##   &lt;bch:expr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 tidyr      3184.  2643.        1      1206.     1   
-## 2 dt            1      1      2363.        1      2.70</code></pre>
-<p>As you can see, <code>data.table</code> is 3184 times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the <code>data.table</code> function compared to <code>tidyr</code>. When trying to unnest my Twitter dataset with 1.8 million tweets, my computer would choke on the memory issue and even throw an error if I had some other large objects loaded.</p>
+## 1 tidyr      3666.  2832.        1      1796.     1   
+## 2 dt            1      1      2617.        1      1.57</code></pre>
+<p>As you can see, <code>data.table</code> is 3666 times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the <code>data.table</code> function compared to <code>tidyr</code>. When trying to unnest my Twitter dataset with 1.8 million tweets, my computer would choke on the memory issue and even throw an error if I had some other large objects loaded.</p>
 <p>Admittedly the function is not perfect. It is far less flexible than <code>unnest</code>, especially since it only runs on one variable at the time. However, this covers 95% of my usage of <code>unnest</code> and I would only consider including it in a script if performance is key.</p>
 <div class="footnotes">
 <hr />

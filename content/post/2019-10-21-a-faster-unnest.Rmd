@@ -9,13 +9,15 @@ tags:
   - data.table
 ---
 
-Today I was really struggling with a relatively simple operation: `unnest()` from the `tidyr` package. What it's supposed to do is pretty simple. When you have a `data.frame` where one or multiple columns are lists, you can unlist these columns while duplicating the information in other columns if the length of an element is larger than 1.
+Today I was struggling with a relatively simple operation: `unnest()` from the `tidyr` package. What it's supposed to do is pretty simple. When you have a `data.frame` where one or multiple columns are lists, you can unlist these columns while duplicating the information in other columns if the length of an element is larger than 1.
 
 ```{r}
 library(tibble)
-df <- tibble(a = LETTERS[1:5],
-             b = LETTERS[6:10],
-             list_column = list(c(LETTERS[1:5]), "F", "G", "H", "I"))
+df <- tibble(
+  a = LETTERS[1:5],
+  b = LETTERS[6:10],
+  list_column = list(c(LETTERS[1:5]), "F", "G", "H", "I")
+)
 df
 ```
 
@@ -38,7 +40,7 @@ dt[, list(list_column = as.character(unlist(list_column))), by = list(a, b)]
 
 This is quite a bit longer than the `tidyr` code. So I wrapped it in a short function (note, that most of the code deals with [quasiquotation](https://adv-r.hadley.nz/quasiquotation.html) so we can use it the same way as the original `unnest()`):
 
-```{r}
+```{r message=FALSE}
 library(rlang)
 unnest_dt <- function(tbl, col) {
 
@@ -60,7 +62,7 @@ unnest_dt <- function(tbl, col) {
 }
 ```
 
-On the surface it does the same as `unnest`:
+On the surface, it does the same as `unnest`:
 
 ```{r}
 unnest_dt(df, list_column)
