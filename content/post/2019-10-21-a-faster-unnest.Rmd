@@ -85,3 +85,6 @@ As you can see, `data.table` is `r round(summary(res, filter_gc = FALSE, relativ
 
 Admittedly the function is not perfect. It is far less flexible than `unnest`, especially since it only runs on one variable at the time. However, this covers 95% of my usage of `unnest` and I would only consider including it in a script if performance is key. Or if the great people at `data.table` [write their own `unnest` some day](https://github.com/Rdatatable/data.table/issues/2146).
 
+## Update 28/10/2019
+
+As [cuttlefish44](https://github.com/cuttlefish44) pointed out in the comments, the rather extreme performance difference was partly caused by an issue specific to `tidyr` version 1.0.0, which has been partly resolved already^[See issue  [#751](https://github.com/tidyverse/tidyr/issues/751)]. When running the same benchmarks as above with `tidyr` 0.8.3, `data.table` was *only* around 13 times faster; when running with the development version of `vctrs`, `data.table` was around 250 times faster.

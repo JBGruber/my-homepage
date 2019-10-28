@@ -110,9 +110,14 @@ res</code></pre>
 ## 2 dt            1      1      2617.        1      1.57</code></pre>
 <p>As you can see, <code>data.table</code> is 3666 times faster. That is pretty insane. But what is often even more important, the memory consumption is negligible with the <code>data.table</code> function compared to <code>tidyr</code>. When trying to unnest my Twitter dataset with 1.8 million tweets, my computer would choke on the memory issue and even throw an error if I had some other large objects loaded.</p>
 <p>Admittedly the function is not perfect. It is far less flexible than <code>unnest</code>, especially since it only runs on one variable at the time. However, this covers 95% of my usage of <code>unnest</code> and I would only consider including it in a script if performance is key. Or if the great people at <code>data.table</code> <a href="https://github.com/Rdatatable/data.table/issues/2146">write their own <code>unnest</code> some day</a>.</p>
+<div id="update-28102019" class="section level2">
+<h2>Update 28/10/2019</h2>
+<p>As <a href="https://github.com/cuttlefish44">cuttlefish44</a> pointed out in the comments, the rather extreme performance difference was partly caused by an issue specific to <code>tidyr</code> version 1.0.0, which has been partly resolved already<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. When running the same benchmarks as above with <code>tidyr</code> 0.8.3, <code>data.table</code> was <em>only</em> around 13 times faster; when running with the development version of <code>vctrs</code>, <code>data.table</code> was around 250 times faster.</p>
+</div>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>Source: this answer from <span class="citation">@akrun</span>: <a href="https://stackoverflow.com/a/40420690/5028841" class="uri">https://stackoverflow.com/a/40420690/5028841</a>, which I think should be added to <code>data.table</code>’s documentation somewhere.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>See issue <a href="https://github.com/tidyverse/tidyr/issues/751">#751</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
