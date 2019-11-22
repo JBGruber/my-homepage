@@ -114,6 +114,50 @@ res</code></pre>
 <h2>Update 28/10/2019</h2>
 <p>As <a href="https://github.com/cuttlefish44">cuttlefish44</a> pointed out in the comments, the rather extreme performance difference was partly caused by an issue specific to <code>tidyr</code> version 1.0.0, which has been partly resolved already<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. When running the same benchmarks as above with <code>tidyr</code> 0.8.3, <code>data.table</code> was <em>only</em> around 13 times faster; when running with the development version of <code>vctrs</code>, <code>data.table</code> was around 250 times faster.</p>
 </div>
+<h2>Update 20/11/2019</h2>
+<p><a href="https://github.com/ismirsehregal">ismirsehregal</a> pointed out that one of the shortcomings of the original function (that it can only deal with one column at a time), can be solved more easily than I thought:</p>
+<pre class="r"><code>unnest_dt2 &lt;- function(tbl, ...) {
+
+  tbl &lt;- as.data.table(tbl)
+
+  col &lt;- ensyms(...)
+
+  clnms &lt;- syms(setdiff(colnames(tbl), as.character(col)))
+
+  tbl &lt;- as.data.table(tbl)
+
+  tbl &lt;- eval(
+    expr(tbl[, lapply(.SD, unlist), by = list(!!!clnms), .SDcols = as.character(col)])
+  )
+  
+  colnames(tbl) &lt;- c(as.character(clnms), as.character(col))
+
+  tbl
+}</code></pre>
+<p>This function can deal with multiple columns at a time:</p>
+<pre class="r"><code>DT &lt;- data.table(
+  a = LETTERS[1:5],
+  b = LETTERS[6:10],
+  list_column1 = list(c(LETTERS[1:5]), &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;),
+  list_column2 = list(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, c(LETTERS[5:9]))
+)
+
+unnest_dt2(DT, list_column1, list_column2)</code></pre>
+<pre><code>##     a b list_column1 list_column2
+##  1: A F            A            A
+##  2: A F            B            A
+##  3: A F            C            A
+##  4: A F            D            A
+##  5: A F            E            A
+##  6: B G            F            B
+##  7: C H            G            C
+##  8: D I            H            D
+##  9: E J            I            E
+## 10: E J            I            F
+## 11: E J            I            G
+## 12: E J            I            H
+## 13: E J            I            I</code></pre>
+</div>
 <div class="footnotes">
 <hr />
 <ol>
