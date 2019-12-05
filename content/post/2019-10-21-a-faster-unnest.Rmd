@@ -88,3 +88,41 @@ Admittedly the function is not perfect. It is far less flexible than `unnest`, e
 ## Update 28/10/2019
 
 As [cuttlefish44](https://github.com/cuttlefish44) pointed out in the comments, the rather extreme performance difference was partly caused by an issue specific to `tidyr` version 1.0.0, which has been partly resolved already^[See issue  [#751](https://github.com/tidyverse/tidyr/issues/751)]. When running the same benchmarks as above with `tidyr` 0.8.3, `data.table` was *only* around 13 times faster; when running with the development version of `vctrs`, `data.table` was around 250 times faster.
+
+## Update 20/11/2019
+
+[ismirsehregal](https://github.com/ismirsehregal) pointed out that one of the shortcomings of the original function (that it can only deal with one column at a time), can be solved more easily than I thought:
+
+```{r message=FALSE}
+unnest_dt2 <- function(tbl, ...) {
+
+  tbl <- as.data.table(tbl)
+
+  col <- ensyms(...)
+
+  clnms <- syms(setdiff(colnames(tbl), as.character(col)))
+
+  tbl <- as.data.table(tbl)
+
+  tbl <- eval(
+    expr(tbl[, lapply(.SD, unlist), by = list(!!!clnms), .SDcols = as.character(col)])
+  )
+  
+  colnames(tbl) <- c(as.character(clnms), as.character(col))
+
+  tbl
+}
+```
+
+This function can deal with multiple columns at a time:
+
+```{r}
+DT <- data.table(
+  a = LETTERS[1:5],
+  b = LETTERS[6:10],
+  list_column1 = list(c(LETTERS[1:5]), "F", "G", "H", "I"),
+  list_column2 = list("A", "B", "C", "D", c(LETTERS[5:9]))
+)
+
+unnest_dt2(DT, list_column1, list_column2)
+```
