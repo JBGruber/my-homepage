@@ -4,7 +4,7 @@
     <title>Troublemakers in the streets?</title>
     <meta charset="utf-8" />
     <meta name="author" content="Johannes B. Gruber" />
-    <meta name="date" content="2019-08-30" />
+    <meta name="date" content="2019-12-05" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <script src="libs/htmlwidgets/htmlwidgets.js"></script>
@@ -29,25 +29,39 @@ class: center, middle, inverse, title-slide
 ## 26 years of UK newspaper coverage of protest<br><br>(Work in progress)
 ### Johannes B. Gruber
 ### University of Glasgow
-### 2019-08-30
+### 2019-12-05
 
 ---
 
 
 
-.content-box-blue[
+
+
 # Motivation
 
-- Accusation: the mainstream news media hinder protests’ messages from spreading to the wider forum of public media debate by focusing (solely) on details about the event (clash with police, the appearance of protesters, etc.) (‘protest paradigm’).
+**Accusation:**
 
-- Protest seems crucial for our understanding of the media and the democratic process itself as protesters are one of few non-elite players who can start or shift media debate about a topic.
+- Protesters: the mainstream news media harm protests with unfair reporting.
+
+- Academia: news media hinder protests’ messages from spreading by focusing on details about the event (**‘protest paradigm’**).
+
+--
+
+**However:**
 
 - The time frame and scope of studies have been limited so far.
 
 - Both media and society have changed quite a lot in recent decades → did that change protest reporting (Cottle, 2008)?
 
 - Methodological and technical advances make broader scope possible.
-]
+
+--
+
+***Research Questions:***
+
+1. *Which frames are used by mainstream news media to cover domestic protest events?*
+2. *How – if at all – did patterns of protest reporting change over time?*
+
 
 ???
 Cottle, S. (2008). Reporting demonstrations: The changing media politics of dissent. Media, Culture &amp; Society, 30(6):853–872, doi: 10.1177/0163443708096097.
@@ -69,46 +83,26 @@ Cottle, S. (2008). Reporting demonstrations: The changing media politics of diss
 
 ---
 
-# Definition of protest
-.Large[
-&lt;center&gt;
-A &lt;strong&gt;joint&lt;/strong&gt; (i.e., collective) overt &lt;strong&gt;public&lt;/strong&gt; expression that either articulates grievances against or support for one or multiple targets (i.e., policies, institutions or behaviours) in order to either directly influence an institution’s decision makers or the knowledge, attitudes, and behaviours of the public.
-&lt;/center&gt;
-
-Also:
-- Excluded foreign protest
-- Excluded institutional protest (i.e., in parliament)
-] 
-
-???
-The definition is heavily influenced by theoretical considerations.
-In practice, especially foreign protests were mentioned quite regularly, however as noted in the literature, the tone of reporting is quite different with these as journalists and news companies do not have any stakes in these protests.
-Especially problematic however is that "protest" and "demonstrations" are very common words in the English language, usually not referring to the practice of protesting as defined here.
-This meant that extensive data cleaning was necessary (see next slide).
-
----
-
-# Data cleaning
-
-
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
-
-???
-Some of the data cleaning was necessary due to problems with the LexisNexis newspaper database (duplicated articles, articles that do not mention any of the keywords) some cleaning was relatively simple, such as removing articles in the sport or the sport or obituaries section.
-More tricky cleaning was necessary due to the theoretically driven definition of protest and the commonness of the selected keywords in other contexts (homonyms).
-
----
-
 # Data
 
 Data downloaded from LexisNexis using "protest" and "demonstration" (plus several variations) before cleaning the data:
 
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
 
 ???
 Full search string in extra slides at the end.
 Now this database includes VERY different protest events: from the fuel protests in 2000 in which mainly truckers contested the rising fuel taxes, over pro- and anti-fox hunting marches, Catholic protesters against Protestant marches in Northern Ireland, protests against the Iraq War, and lately anti Brexit protests to hundreds of small one day demonstrations.
 This poses a problem then because: [next slide]
+
+---
+# Data cleaning
+
+
+&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+Some of the data cleaning was necessary due to problems with the LexisNexis newspaper database (duplicated articles, articles that do not mention any of the keywords) some cleaning was relatively simple, such as removing articles in the sport or the sport or obituaries section.
+More tricky cleaning was necessary due to the theoretically driven definition of protest and the commonness of the selected keywords in other contexts (homonyms).
 
 ---
 
@@ -234,21 +228,6 @@ Supervised Machine Learning (SML)
 
 ---
 
-# Method (1): Finding Frames
-
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
-
-???
-split into two slides, a flow chart of the used method in detail
-
----
-# Method (2): Replicating frames
-
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
-
----
-
-
 # Codebook
 
 .Large[
@@ -278,14 +257,14 @@ I code on basis of the paragraph.
 
 ---
 
-# Application: Codebook
+# Codebook
 
-<div id="htmlwidget-c5bb0b5190a71e050bd2" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c5bb0b5190a71e050bd2">{"x":{"filter":"none","fillContainer":false,"data":[["Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Treatment","Treatment"],["Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Actor","Actor","Actor","Actor","Actor","Actor","Benefit Attribution","Benefit Attribution","Benefit Attribution","Benefit Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Benefit","Benefit","Benefit","Benefit","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Judgement","Judgement"],["Event","Spectacle","Violence/Crime","Clash","Protesters","Confrontation","Public Opinion","Cause","Nuisance","Media*","Protest as Tool*","Other Activism*","Policing Tactics*","Effect of Protest*","Judicial Persecution*","Protesters","Police","Officials","Business","Other Political Elite*","Other*","Police","Protesters","Officials","Other Pol. Elite*","Protesters","Police","Business*","Officials*","Media*","Other Pol. Elite*","Other*","Expression / Entertainment","Reinstating Public Order","(Just) Cause*","Initiated Public Debate*","Public Safety","Property Destruction","Dulling Political Discussion","Decay of Morals or Other Social Norms","Unpatriotic Behaviour/Treason","Nuisance","Costs of Demonstrations","Grievance*","Censorship*","Suppression*","Harm Discussion*","Breaking Laws*","Bad for Business*","Negative","Positive"],["Description of the event (e.g., size, marching route or what protesters did) but not highlighting th...","Highlighting the entertaining or spectacle aspects (emptying protest of its political significance).","Violence, vandalism and destruction of public or private property surrounding a protest.","Confrontation with the police, not necessarily violent.","The appearance, mental ability, visual deviance and oddities of the protesters (including pathologis...","The protests are part of a confrontation between two groups.","The protest represents a minority/majority of public opinion (operationalised through polls, intervi...","The cause of why a protest took place or the goals of the protesters.","The protest caused inconvenience to regular citizens and the government.","Scrutiny of the attention the media spent on a protest.","Discussion of the practice of protest itself (e.g. its legitimacy, tactics or potency) .","Other actions by the same group who initiated protest (like letters or action in courts)","Discussion about how the police or other security forces should deal with protesters","Discussion about the effect a protest had (e.g., starting public debate about a topic or causing dis...","Persecution of protest related actions in court (e.g., court case about violence of protesters or po...","The people engaging in a protest.","Members of the police force engaging with protesters.","Representatives of government organisations.","Representatives of business organisations.","Other political players such as members of the opposition party or regional parliaments","Other non-elite actors (e.g. motorists, local residents, counter-demonstrators or unidetified people...","Police is responsible for the benefit (e.g., by reinstating order).","Protesters are responsible for benefit (e.g., by being entertaining).","Officials are responsible for benefit (e.g. by preventing chaos protesters try to inflict).","Other political elites are responsible for benefit (e.g. by proposing a solution to a problem target...","Protesters are responsible for risk (e.g. vandalism, attacks on police or nuisance).","Police are responsible for risk (e.g. unnecessary clashes with peaceful protesters).","Business actors are responsible for risk.","Officials are responsible for risk (e.g. by signing a bad law).","The media are responsible for risk (e.g. problematic reporting).","Other political players such as members of the opposition party or regional parliaments are responsi...","Other actors are responsible for a risk, often by attacking protesters (e.g. motorists, local reside...","The protest was aesthetic, artistic or emotionally expressive.","Usually attributed to police who reinstate public order after it was strained by the protest.","Usually attributed to protesters when their actions are seen to as struggle for a good cause.","Usually attributed to protesters when their actions have caused a (necessary) public debate.","The protest as a risk for public safety.","Property was destroyed due to protest","The protesters spoil serious political debates with their childish, insane or uninformed arguments o...","The protesters are a fringe group of freaks who set a bad example for others and disturb the general...","The protest is unpatriotic or hurts the nation.","Protest is bothersome to citizens and the government yet impotent as a political tool.","Clear up and police deployment costs of demonstrations burden public budget.","The grievance which the protest is addressing is a risk.","Usually attributed to police or officials who allegedly try to silence or discredit protest.","Usually attributed to police or officials who allegedly try to undermine protest or make it impossib...","The protest or other actions harm the discussion about a topic","Breaking the law but neither destroying anything nor harming anyone (e.g. entering parliament withou...","Protests have negative impact on business revenues.","The protests were/are bad (e.g. protesters should go home).","The protests were/are good (e.g. protests made aware of a problem)."]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Frame Element<\/th>\n      <th>Variable<\/th>\n      <th>Code<\/th>\n      <th>Description<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100],"rowCallback":"function(row, data) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'font-size':'75%'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'font-size':'75%'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'font-size':'75%'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'font-size':'75%'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'font-size':'75%'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<div id="htmlwidget-2e7b5191438b70f0266a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2e7b5191438b70f0266a">{"x":{"filter":"none","fillContainer":false,"data":[["Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Problem Definition","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Causal Attribution","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Moral Evaluation","Treatment","Treatment"],["Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Topic","Actor","Actor","Actor","Actor","Actor","Actor","Benefit Attribution","Benefit Attribution","Benefit Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Risk Attribution","Benefit","Benefit","Benefit","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Risk","Judgement","Judgement"],["Clash","Violence/Crime","Cause","Protesters","Spectacle","Protest tactics*","Policing tactics*","Response*","Confrontation/Showdown","Public opinion","Nuisance","Other activism*","judicial prosecution*","Effect of protest*","Event","Protesters","Police","Officials","Business","Other Political Elite*","Other*","Police","Protesters","Officials","Protesters","Police","Business*","Officials*","Media*","Other Pol. Elite*","Other*","Reinstating public order","(Just) Cause*","Initiated public debate*","Grievance*","Public safety","Property destruction","Harassment*","Breaking laws*","Decay of morals or other social norms","Nuisance","Harm discussion*","Dulling (political) discussion","Bad for business*","Costs of demonstrations","Suppression/Censorship","Negative","Positive"],["Confrontation with the police, not necessarily violent.","Violence, vandalism and destruction of public or private property surrounding a protest.","The cause of why a protest took place or the goals of the protesters.","The appearance, mental ability, visual deviance and oddities of the protesters (including pathologis...","Highlighting the entertaining or spectacle aspects (e.g., stunts or performances by protesters or th...","Discussion about the tactics of protesters and why they were adopted.","Discussion about how the police, security forces or laws should deal with protesters.","Repeating or discussing the response of the target or third party to the protest demands.","The protests are part of a confrontation between two groups (e.g., between political parties). Usual...","The protest represents a minority/majority of public opinion (operationalised through polls, intervi...","The protest caused inconvenience to regular citizens and the government.","Other actions by the same group who initiated protest (like letters or action in courts).","Prosecutionof protest-related actions in court (e.g., court case about violence of protesters or pol...","Discussion about the effect a protest had or lack thereof (e.g., starting a public debate about a to...","Description of the event (e.g., size, marching route or what protesters did) but not highlighting th...","The people engaging in a protest.","Members of the police force engaging with protesters.","Representatives of government organisations.","Representatives of business organisations.","Other political players such as members of the opposition party or regional parliaments.","Other non-elite actors  (e.g., motorists, local residents, counter-demonstrators or unidentified peo...","Police is responsible for the benefit (e.g., by reinstating order).","Protesters are responsible for a benefit (e.g., by being entertaining).","Officials are responsible for a benefit (e.g., by preventing chaos protesters try to inflict).","Protesters are responsible for risk (e.g., vandalism, attacks on police or nuisance).","Police are responsible for risk (e.g., unnecessary clashes with peaceful protesters).","Business actors are responsible for risk.","Officials are responsible for risk (e.g., by signing a bad law).","The media are responsible for risk (e.g., problematic reporting).","Other political actors such as members of the opposition party or regional parliaments are responsib...","Other actors are responsible for a risk, often by attacking protesters  (e.g., motorists, local resi...","The protest was aesthetic, artistic or emotionally expressive.","Usually attributed to police who reinstate public order after it was strained by the protest.","Usually attributed to protesters when their actions are seen as part of a struggle for a good cause.","The grievance which the protest is addressing is the risk.","The protest as a risk for public safety.","Property was destroyed due to protest.","Protesters are harassing people instead of engaging in arguments (e.g., screaming at clients in fami...","Breaking the law but neither destroying anything nor harming anyone (e.g., entering parliament witho...","The protesters are a fringe group of freaks who set a bad example for others and disturb the general...","Protest is bothersome to citizens and the government yet impotent as a political tool.","The protest or actions of protesters harm the discussion about a topic (e.g., by shouting down oppon...","The protesters spoil serious (political) discussions with their childish, insane or uninformed argum...","Protests have a negative impact on business revenues.","The costs of a demonstration (e.g., clear up and police deployment costs of demonstrations) includin...","Usually attributed to police or officials who allegedly try to undermine protest or make it impossib...","The protests were/are bad (e.g., protesters should go home).","The protests were/are good (e.g., protests made aware of a problem)."]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Frame Element<\/th>\n      <th>Variable<\/th>\n      <th>Code<\/th>\n      <th>Description<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100],"rowCallback":"function(row, data) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'font-size':'75%'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'font-size':'75%'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'font-size':'75%'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'font-size':'75%'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'font-size':'75%'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 
 ---
 
-# Application: Coding example
+# Coding example
 
 &lt;center&gt;
 &lt;span style='background-color: #51A8A8'&gt;*«Police worked very hard with the organisers to ensure a peaceful protest and it was a small core of determined troublemakers bent on conflict with the police who I believe were responsible for the violence. There were fireworks and missiles thrown at the police and some people were intent on breaking through the barriers. We were there to ensure that did not take place.»*&lt;/span&gt;
@@ -301,7 +280,7 @@ A quick example of the coding steps which are made relatively easy by splitting 
 
 count: false
 
-# Application: Coding example
+# Coding example
 
 &lt;center&gt;
 &lt;span style='background-color: #51A8A8'&gt;*«Police worked very hard&lt;/span&gt; with the organisers to ensure a peaceful protest and it was a small core of determined troublemakers bent on conflict with the police who I believe were responsible for the violence. There were fireworks and missiles thrown at the police and some people were intent on breaking through the barriers. We were there to ensure that did not take place.»*
@@ -316,7 +295,7 @@ count: false
 
 count: false
 
-# Application: Coding example
+# Coding example
 
 &lt;center&gt;
 *«Police worked very hard with the organisers to &lt;span style='background-color: #AFC131'&gt;ensure a peaceful protest&lt;/span&gt; and it was a small core of determined troublemakers bent on conflict with the police who I believe were responsible for the violence. There were fireworks and missiles thrown at the police and some people were intent on breaking through the barriers. &lt;span style='background-color: #AFC131'&gt;We were there to ensure that did not take place&lt;/span&gt;.»*
@@ -333,7 +312,7 @@ count: false
 count: false
 
 
-# Application: Coding example
+# Coding example
 
 &lt;center&gt;
 *«Police worked very hard with the organisers to ensure a peaceful protest and it was a small core of determined troublemakers bent on conflict with the police who I believe were responsible for the &lt;span style='background-color: #AFC131'&gt;violence. There were fireworks and missiles thrown at the police and some people were intent on breaking through the barriers&lt;/span&gt;. We were there to ensure that did not take place.»*
@@ -350,7 +329,7 @@ count: false
 
 count: false
 
-# Application: Coding example
+# Coding example
 
 &lt;center&gt;
 *«&lt;span style='background-color: #D35126'&gt;Police worked very hard&lt;/span&gt; with the organisers to ensure a peaceful protest and it was a small core of determined troublemakers bent on conflict with the police who I believe were responsible for the violence. There were fireworks and missiles thrown at the police and some people were intent on breaking through the barriers. We were there to ensure that did not take place.»*
@@ -368,7 +347,7 @@ count: false
 
 count: false
 
-# Application: Coding example
+# Coding example
 
 &lt;center&gt;
 *«Police worked very hard with the organisers to ensure a peaceful protest and it was a small core of determined troublemakers bent on conflict with the police who I believe were responsible for the violence. There were fireworks and missiles thrown at the police and &lt;span style='background-color: #D35126'&gt;some people were intent on breaking through the barriers&lt;/span&gt;. We were there to ensure that did not take place.»*
@@ -387,7 +366,7 @@ count: false
 
 count: false
 
-# Application: Coding example
+# Coding example
 
 &lt;center&gt;
 *«Police worked very hard with the organisers to ensure a peaceful protest and it was a small core of determined troublemakers bent on conflict with the police who I believe were responsible for the violence. There were fireworks and missiles thrown at the police and some people were intent on breaking through the barriers. We were there to ensure that did not take place.»*
@@ -405,7 +384,7 @@ count: false
 
 ---
 
-# Application: Coding example (2)
+# Coding example (2)
 
 &lt;div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:250px; overflow-x: scroll; width:100%; "&gt;&lt;table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;
  &lt;thead&gt;
@@ -445,20 +424,104 @@ count: false
 ???
 The coding is turned into a binary matrix with 1 if a code occurs and 0 if it doesn't. 
 
+
+# Intercoder Reliability
+
+- 4 PhD students are coding 100 articles
+- All are provided with the codebook and trained
+- Two coding steps: Code identification &amp; code classification
+
+**Identification:**
+
+&lt;table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Cohen's Kappa &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Krippendorff's alpha &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; F1 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Overall &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.578 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.577 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.679 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+**Classification**
+
+&lt;table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Cohen's Kappa &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Krippendorff's alpha &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; cases &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Overall &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.849 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.849 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 95 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Topic &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.735 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.737 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 48 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Actor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.889 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.892 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Benefit_Attribution &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Risk_Attribution &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Benefit &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.688 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.710 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Risk &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Judgement &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
 ---
 
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+# Clustering Frame Elements
 
-???
-As a reminder where we are in the procedure.
+The R package NbClust (Charrad et al., 2014) combines 26 indices* to determine the optimal cluster solutions:
 
----
-
-# Application: Clustering Frame Elements
-
-The R package NbClust (Charrad et al., 2014) combines many indices* to determine optimal cluster solutions:
-
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-8-1.png" width="2800" /&gt;
+&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-7-1.png" width="3200" /&gt;
 
 .footer-note[.tiny[
 
@@ -503,12 +566,12 @@ Here we can see that 3 is probably the best option.
 
 ---
 
-# Application: Interpreting Clusters as Frames
+# Interpreting Clusters as Frames
 
 Heatmap showing cluster means for codes:
 
 
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-9-1.png" width="2795" /&gt;
+&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-8-1.png" width="2800" /&gt;
 
 ???
 The cluster are interpreted as frames by checking cluster means for each coding variable.
@@ -526,103 +589,67 @@ We see that it is relatively easy to interpret the clusters:
 
 ---
 
-# Application: SML replicating classification
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; model &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Accuracy &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Accuracy Lower &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Accuracy Upper &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Average F1 &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; package &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; SVM &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.75 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.85 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.74 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; quanteda.classifiers &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; NNSEQ &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.67 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.54 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.78 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.60 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; quanteda.classifiers &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Naive Bayes &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.49 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.74 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.54 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; quanteda &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Random Forest &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.49 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.74 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.54 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; caret/ranger &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; LogitBoost &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.55 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.36 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.73 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.47 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; caret/caTools &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; bagging &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.53 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.40 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.66 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.40 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; RTextTools &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Maximum Entropy &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.52 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.39 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.64 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.44 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; RTextTools &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Penalised Multinomial Regression &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.49 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.36 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.41 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; glmnet &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+## Three Frames Characterise Protest Reporting
 
 
-.full-width[.content-box-red[Work in progress (training/test sample n = 340/60)!]]
 
-???
-The next step is now to replicate the classifications made in the training data on the remaining set of over 25,000 articles.
-To do this I rand a number of machine learning algorithms and validate their performance by withholding a small test set from the coded data and see if the algorithms make the same classification as a human did.
-An acceptable level of accuracy would be something over 0.8 and you can see, I'm not quite there yet.
-More importantly, the classification error should not be systematic, i.e., assigning one class less commonly than it actually exists in the data.
-This is represented by the F1-score and the goal here would be to get an average score of 0.8 as well.
-So which are the problematic classes.
+.red[
+Troublemakers
+
+- High values in *Clash* and *Violence/Crime* (combined mean of 0.63).
+- Main Risk: *Public safety* (0.84); *Property destruction* (0.05) still rel. high.
+- Risks Attribution split between protesters (0.39) and police (0.38).
+- no positive judgement whatsoever and almost no mention of *Cause*.
+- Basically the protest paradigm.
+
+]
+
+.green[
+Struggle for (Just) Cause
+
+
+- Most prevalent topic = *Cause* 0.31 and actor =  *Protesters* (0.91).
+- Also common topics: Event (0.31), Spectacle (0.09), and Protesters (0.06).
+- The main *benefit* is *(Just) Cause* (0.08); *risk* is most often *Grievance* (0.27).
+- *Officials* (0.15) and protesters (0.09) are made responsible.
+
+]
+
+.orange[
+Mixed
+
+- It's most distinctive feature is that it has no distinctive feature.
+- None of the top topics or actors have particularly high means.
+- Slightly negative slant towards protesters (Risk Attribution: Protesters: 0.09, negative judgement: 0.05).
+- Manual assessment of articles in this cluster shows that it is **basically a mix of elements from other two clusters**.
+
+]
+
 
 ---
 
-# Application: SML replicating classification: 
+# SML replicating classification: 
 
 ## F1-scores for different algorithms
+
+&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-10-1.png" width="3800" /&gt;
+
+
+???
+We can see that class one is consistently performing worse than the other classes.
+This is the Troublemakers frame and the problem here might be that there is simply not enough available data to train the algorithms.
+In the sample of 400 articles, only 60 are in this class.
+That means more coding has to be done. 
+A general rule of thumb is that 500 articles usually suffices to train the algorithms.
+However, since the Troublemakers frame occurs so relatively seldom, it might be necessary to code a few more.
+
+Once this is done, I can finally show some substantial results.
+
+---
+
+## F1-scores for different algorithms
+
+What happens if we combine class 2 &amp; 3?
 
 &lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-11-1.png" width="3800" /&gt;
 
@@ -639,13 +666,11 @@ Once this is done, I can finally show some substantial results.
 
 ---
 
-# Change over time (very preliminary!)
+# Change over time
 
 &lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
 ???
-Unfortunately though these are still preliminary for the reasons just explained.
-I used the SVM classification here to predict the framing of the remaining set but as you can see, the Troublemakers frame occurs even rarer that in the training sample.
 However, we can still see some things:
 There little systematic change over time.
 While some frames become more prevalent in some years, non seems to become considerably more popular over time.
@@ -654,14 +679,12 @@ Consistently more than a third of the reporting highlights the cause and struggl
 
 ---
 
-# Application: Next Steps
+# Next Steps
 
 .large[
-- Finish training sample
 - &lt;strong&gt;Validation:&lt;/strong&gt;
-  + Agreement between coders on training set (inter-coder reliability)
-  + Agreement between coders and clustering
-  + Agreement between clustering and SML
+  + Resolve inter-coder reliability problems
+  + Improve ML classification for frames 2 &amp; 3
 - Outlook:
   + Explain the framing of protest with event data (size, tactics, time after event, ideological stance, etc.)
 ]
@@ -669,22 +692,30 @@ Consistently more than a third of the reporting highlights the cause and struggl
 
 ---
 
-# Conclusion (preliminary)
+## Conclusion (preliminary)
 
-- Detected frames make sense
+### Which frames are used by mainstream news media?
 
---
-- Classification better than chance already
-
---
-- More control over categories than topicmodels
-- Less abstract coding and category building than dictionary methods
-
---
-- Support for protesters (or at least attention for their cause) is more prevalent expected
+- 3 distinct frames make up the media debate on domestic protest:
+*Troublemakes* (protest paradigm), *Struggle for (Just) Cause* and Mixed
+- The *Troublemakes* frame is less common than expected.
+- Supportive coverage (at least attention to cause) is more prevalent than expected.
+- Many articles don't really do either!
 
 --
-- Despite changes in how newspapers and protesters work and changes in society, I could not find systematic shifts in framing over time
+
+### Did patterns of protest reporting change over time?
+
+- No systematic change over time, despite changes in media, protest behaviour and social acceptance of protest.
+- But protest is covered differently in some years.
+
+--
+
+### Methodologically speaking:
+
+- Clustering approach seems well suited to uncover and code frames (although coding is still complicated).
+- Machine learning works to code frames on large scale (although some frames seem very similar to the machine).
+
 
 ---
 background-image: url(https://live.staticflickr.com/8467/8129232704_c408251a34_k_d.jpg)
@@ -724,23 +755,41 @@ count: false
 ---
 count: false
 
-# Method Alternative
+# Definition of protest
+.Large[
+&lt;center&gt;
+A &lt;strong&gt;joint&lt;/strong&gt; (i.e., collective) overt &lt;strong&gt;public&lt;/strong&gt; expression that either articulates grievances against or support for one or multiple targets (i.e., policies, institutions or behaviours) in order to either directly influence an institution’s decision makers or the knowledge, attitudes, and behaviours of the public.
+&lt;/center&gt;
 
+Also:
+- Excluded foreign protest
+- Excluded institutional protest (i.e., in parliament)
+] 
 
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+???
+The definition is heavily influenced by theoretical considerations.
+In practice, especially foreign protests were mentioned quite regularly, however as noted in the literature, the tone of reporting is quite different with these as journalists and news companies do not have any stakes in these protests.
+Especially problematic however is that "protest" and "demonstrations" are very common words in the English language, usually not referring to the practice of protesting as defined here.
+This meant that extensive data cleaning was necessary (see next slide).
 
 ---
-
 count: false
 
-# Method
+# Method (1): Finding Frames
 
+&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
 
-&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
-
+???
+split into two slides, a flow chart of the used method in detail
 
 ---
+count: false
 
+# Method (2): Replicating frames
+
+&lt;img src="JBGruber_protest_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
 count: false
 
 # Frames in newspapers
@@ -792,7 +841,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 (function() {
