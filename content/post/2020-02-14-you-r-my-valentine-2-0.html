@@ -1,0 +1,67 @@
+---
+title: You R My Valentine 2.0!
+author: ''
+date: '2020-02-14'
+slug: you-r-my-valentine-2-0
+categories: []
+tags: []
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<p>Like <a href="https://www.johannesbgruber.eu/post/you-r-my-valentine/">last year</a> I wanted to make something special for my wonderful R-Lady. This year the main work was done by the very talented Will Chase, who makes wonderful aRt including the <a href="https://www.williamrchase.com/post/2019/07/29/textures-and-geometric-shapes-12-months-of-art-july#animated-color-gradients">animation this post is based on</a>. All I did to change the original animation was to cut it into a heart shape and carve our initials into the center. Enjoy:</p>
+<pre class="r"><code>library(dplyr)
+library(poissoned)
+library(gganimate)
+
+# generate points
+pts &lt;- poisson_disc(ncols = 150, nrows = 400, cell_size = 2, 
+                    xinit = 150, yinit = 750, keep_idx = TRUE) %&gt;%
+  arrange(idx)
+
+# generate heart shape
+hrt_dat &lt;- data.frame(t = seq(0, 2 * pi, by = 0.01)) %&gt;%
+  bind_rows(data.frame(t = rep(max(.$t), 300))) %&gt;% 
+  mutate(xhrt = 16 * sin(t) ^ 3,
+         yhrt = 13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t),
+         frame = seq_along(t)) %&gt;% 
+  mutate(xhrt = scales::rescale(xhrt, c(min(pts$x), max(pts$x))),
+         yhrt = scales::rescale(yhrt, c(min(pts$y), max(pts$y))))
+ 
+# identify points within the heart shape
+inside &lt;- sp::point.in.polygon(point.x = pts$x, 
+                               point.y = pts$y, 
+                               pol.x = hrt_dat$xhrt,
+                               pol.y = hrt_dat$yhrt, 
+                               mode.checked = FALSE)
+
+# animate
+anim &lt;- pts %&gt;% 
+  filter(as.logical(inside)) %&gt;%             # cut out heart shape
+  rbind(.[rep(which.min(.$idx), 100), ]) %&gt;% # keep heart visible longer at the end
+  arrange(idx) %&gt;% 
+  ggplot() +
+  geom_point(aes(x = x, y = y, color = idx, group = idx), size = 4, alpha = 0.9) +
+  scale_color_gradientn(colors = c(&quot;#F37374&quot;, &quot;#F48181&quot;, &quot;#F58D8D&quot;,&quot;#FF9999&quot;, 
+                                   &quot;#FFA3A3&quot;,&quot;#FFA699&quot;, &quot;#FFB399&quot;, &quot;#FFB399&quot;,
+                                   &quot;#FFC099&quot;, &quot;#FFC099&quot;,&quot;#FFCC99&quot;, &quot;#FFCC99&quot;), 
+                        guide = &quot;none&quot;) +
+  theme_void() +
+  geom_text(aes(x = 150, y = 500), label = &quot;A  +  J&quot;, 
+            size = 20, colour = &quot;white&quot;, family = &quot;Pinyon Script&quot;) + # add text
+  transition_reveal(along = rev(idx)) +
+  ease_aes(&quot;cubic-in&quot;) +
+  enter_grow() +
+  enter_fade(alpha = 0.9)
+
+animate(anim, nframes = 300, fps = 30)</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-1"></span>
+<img src="/post/2020-02-14-you-r-my-valentine-2-0_files/figure-html/unnamed-chunk-1-1.gif" alt="Animation of the warm feeling I have when seeing my fiancé"  />
+<p class="caption">
+Figure 1: Animation of the warm feeling I have when seeing my fiancé
+</p>
+</div>
