@@ -3,17 +3,14 @@ title: My first blogdown post
 author: Johannes Gruber
 date: '2018-04-15'
 slug: my-first-blogdown-post
-categories: []
 tags:
   - autobiographical
 header:
   caption: ''
-  image: ''
 output:
   blogdown::html_page:
-    toc: true
+    toc: false
     fig_width: 6
-    dev: "png"
 ---
 
 
@@ -25,16 +22,9 @@ output:
 <pre class="r"><code># Load libraries
 library(&quot;ggplot2&quot;)
 library(&quot;RColorBrewer&quot;)
-library(&quot;dplyr&quot;)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code># Make some data
+library(&quot;dplyr&quot;, warn.conflicts = FALSE)
+
+# Make some data
 set.seed(123)
 df &lt;- data.frame(
   frame = rep(LETTERS[1:5], 20),
@@ -54,7 +44,8 @@ ggplot(df_prop, aes(x = year, y = share, fill = frame)) +
   scale_y_continuous(labels = scales::percent) +
   scale_fill_brewer(palette = &quot;Dark2&quot;) +
   scale_x_continuous(breaks = scales::pretty_breaks()) +
-  theme_bw()</code></pre>
+  theme_bw() +
+  labs(title = &quot;Share each frame occupies in the media discussion&quot;, x = &quot;&quot;, y = &quot;&quot;)</code></pre>
 <p><img src="/post/2018-04-15-my-first-blogdown-post_files/figure-html/unnamed-chunk-1-1.png" width="576" /></p>
 <p>I used it to present my main findings in my dissertation for the MSc and still think it is one of the best to show which frames dominate a discussion. The space each concept fills in a year represents which proportion of all observations belong to it. Independent from the actual amount of observations in a year. Or at least this is the idea of it (the plot above only shows random data).</p>
 <p>So with this post, I start off my page, even though I have no illusions of anyone finding it soon. At least not until I can manage to get a few publications or create some interesting content.</p>

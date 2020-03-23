@@ -3,17 +3,14 @@ title: My first blogdown post
 author: Johannes Gruber
 date: '2018-04-15'
 slug: my-first-blogdown-post
-categories: []
 tags:
   - autobiographical
 header:
   caption: ''
-  image: ''
 output:
   blogdown::html_page:
-    toc: true
+    toc: false
     fig_width: 6
-    dev: "png"
 ---
 
 I have been playing with the idea of getting a personal website for a while now. The concept of personal websites seems to have lost appeal in recent years, due to the omnipresence of social media sites and universities allowing some space on their website for some key points. However, it seems that most self-respecting academics still operate personal websites. After tweaking my [**own profile**](https://www.gla.ac.uk/schools/socialpolitical/research/students/johannesgruber/) I learned what could be one of the reasons: I tried to show it to a friend and failed miserably to find it again in the maze that is the UoG website (which is not worse than most other university's site I've seen).
@@ -28,7 +25,7 @@ One major upside of this approach is that it is quick and easy to share R code a
 # Load libraries
 library("ggplot2")
 library("RColorBrewer")
-library("dplyr")
+library("dplyr", warn.conflicts = FALSE)
 
 # Make some data
 set.seed(123)
@@ -50,7 +47,8 @@ ggplot(df_prop, aes(x = year, y = share, fill = frame)) +
   scale_y_continuous(labels = scales::percent) +
   scale_fill_brewer(palette = "Dark2") +
   scale_x_continuous(breaks = scales::pretty_breaks()) +
-  theme_bw()
+  theme_bw() +
+  labs(title = "Share each frame occupies in the media discussion", x = "", y = "")
 ```
 
 I used it to present my main findings in my dissertation for the MSc and still think it is one of the best to show which frames dominate a discussion. The space each concept fills in a year represents which proportion of all observations belong to it. Independent from the actual amount of observations in a year. Or at least this is the idea of it (the plot above only shows random data).
