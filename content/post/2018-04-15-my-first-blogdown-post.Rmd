@@ -26,25 +26,27 @@ One major upside of this approach is that it is quick and easy to share R code a
 
 ```{r}
 # Load libraries
-library(ggplot2)
-library(RColorBrewer)
+library("ggplot2")
+library("RColorBrewer")
+library("dplyr")
 
 # Make some data
-set.seed(345)
+set.seed(123)
 df <- data.frame(
-  Frame = sample(LETTERS[1:5], 100, replace = TRUE),
-  Year = as.numeric(sample(2000:2010, 100, replace = TRUE)),
-  Value = runif(100,  10, 100)
+  frame = rep(LETTERS[1:5], 20),
+  year = rep(1991:2010, each = 5),
+  value = runif(100,  10, 100)
 )
 
-# Make data proportional
-df$Share <- df$Value / sapply(df$Year, function(y) {
-  sum(df$Value[df$Year == y])
-})
+# Add proportion
+df_prop <- df  %>%
+  group_by(year, frame) %>%
+  summarise(n = sum(value)) %>%
+  mutate(share = n / sum(n))
 
 # Plot proportional stacked area graph
-ggplot(df, aes(x = Year, y = Share, fill = Frame)) + 
-  geom_area(alpha = 0.6 , size = 1, colour = "black") +
+ggplot(df_prop, aes(x = year, y = share, fill = frame)) + 
+  geom_area(position = "stack", alpha = 0.6, size = 1, colour = "black") +
   scale_y_continuous(labels = scales::percent) +
   scale_fill_brewer(palette = "Dark2") +
   scale_x_continuous(breaks = scales::pretty_breaks()) +

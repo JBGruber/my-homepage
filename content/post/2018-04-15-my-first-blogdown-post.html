@@ -23,25 +23,34 @@ output:
 <p>So when I read about blogdown—which is an R package that makes it easy to set up and manage websites—I thought I might give it a try. And in fact, due to Yihui Xie’s wonderful <a href="https://bookdown.org/yihui/bookdown/"><strong>online book</strong></a> setting up a blog or personal website means you just have to execute a couple of commands in <code>R</code> (which is my favourite thing to do anyway) to get a personal site that includes space to share information about myself, my research and have a nice spot to share some of my endeavours in academia or with <code>R</code>.</p>
 <p>One major upside of this approach is that it is quick and easy to share R code and the plots it creates. This, for example, is the code to one of my favourite plots: a proportional stacked area graph.</p>
 <pre class="r"><code># Load libraries
-library(ggplot2)
-library(RColorBrewer)
-
-# Make some data
-set.seed(345)
+library(&quot;ggplot2&quot;)
+library(&quot;RColorBrewer&quot;)
+library(&quot;dplyr&quot;)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code># Make some data
+set.seed(123)
 df &lt;- data.frame(
-  Frame = sample(LETTERS[1:5], 100, replace = TRUE),
-  Year = as.numeric(sample(2000:2010, 100, replace = TRUE)),
-  Value = runif(100,  10, 100)
+  frame = rep(LETTERS[1:5], 20),
+  year = rep(1991:2010, each = 5),
+  value = runif(100,  10, 100)
 )
 
-# Make data proportional
-df$Share &lt;- df$Value / sapply(df$Year, function(y) {
-  sum(df$Value[df$Year == y])
-})
+# Add proportion
+df_prop &lt;- df  %&gt;%
+  group_by(year, frame) %&gt;%
+  summarise(n = sum(value)) %&gt;%
+  mutate(share = n / sum(n))
 
 # Plot proportional stacked area graph
-ggplot(df, aes(x = Year, y = Share, fill = Frame)) + 
-  geom_area(alpha = 0.6 , size = 1, colour = &quot;black&quot;) +
+ggplot(df_prop, aes(x = year, y = share, fill = frame)) + 
+  geom_area(position = &quot;stack&quot;, alpha = 0.6, size = 1, colour = &quot;black&quot;) +
   scale_y_continuous(labels = scales::percent) +
   scale_fill_brewer(palette = &quot;Dark2&quot;) +
   scale_x_continuous(breaks = scales::pretty_breaks()) +
