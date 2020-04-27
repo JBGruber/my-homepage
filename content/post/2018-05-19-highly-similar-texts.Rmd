@@ -9,7 +9,6 @@ tags:
   - media anlysis
 header:
   caption: ''
-  image: 'wordcloud.png'
   preview: yes
 ---
 

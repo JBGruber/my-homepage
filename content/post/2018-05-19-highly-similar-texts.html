@@ -9,7 +9,6 @@ tags:
   - media anlysis
 header:
   caption: ''
-  image: 'wordcloud.png'
   preview: yes
 ---
 
@@ -86,11 +85,11 @@ dplyr::select(benchmark, median, mem_alloc)</code></pre>
 <pre><code>## # A tibble: 2 x 2
 ##     median mem_alloc
 ##   &lt;bch:tm&gt; &lt;bch:byt&gt;
-## 1   15.8µs        0B
-## 2   12.3ms    10.4KB</code></pre>
-<p>To get a feel for this, the mean time for the second calculation is 12.3ms that is miliseconds.
-In the same unit as the first calculation, that would be 12,289 microseconds.
-This is an 776% increase on average.
+## 1   15.8us        0B
+## 2   14.8ms    10.4KB</code></pre>
+<p>To get a feel for this, the mean time for the second calculation is 14.8ms that is miliseconds.
+In the same unit as the first calculation, that would be 14,796 microseconds.
+This is an 936% increase on average.
 The allocated memory can’t even be calculated since the first value is too small to measure while the second calculation uses quite a bit of memory.
 Some testing revealed that around 3500 articles would already bring my 32GB RAM machine to its knees.
 This makes it almost impossible to compare hundreds or thousands of newspaper articles.</p>
