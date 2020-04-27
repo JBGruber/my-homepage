@@ -1,0 +1,91 @@
+---
+title: Get all your packages back on R 4.0.0
+author: JBGruber
+date: '2020-04-27'
+slug: get-all-your-packages-back-on-r-4-0-0
+categories: []
+tags:
+  - R
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+`R 4.0.0` was released on 2020-04-24.
+Among the [many news](https://cran.r-project.org/doc/manuals/r-devel/NEWS.html) two stand out for me:
+First, `R` now uses `stringsAsFactors = FALSE` by default, which is especially welcome when reading in data (e.g., via `read.csv`) and when constructing `data.frame`s.
+The second news that caught my eye was that all packages need to be reinstalled under the new version.
+
+This can be rather cumbersome if you have collected a large number of packages on your machine while using `R 3.6.x` and you don't want to spend the next weeks running into `Error in library(x) : there is no package called ‘x’` errors.
+But there is an easy way to solve this.
+
+After you made the update, first get your old packages:
+
+```{r}
+old_packages <- installed.packages(lib.loc = "/home/johannes/R/x86_64-pc-linux-gnu-library/3.6/")
+head(old_packages[, 1])
+```
+
+```{r}
+##       abind     acepack        ade4         AER   animation   anomalize 
+##     "abind"   "acepack"      "ade4"       "AER" "animation" "anomalize"
+```
+
+
+`lib.loc` should be the location you installed the packages before updating to `R 4.0.0`.
+If unsure, you can call `.libPaths()`.
+The first path is your new `lib.loc` and the previous one should look the same except with `3.6` at the end.
+
+Then you can find the packages previously installed but currently missing:
+
+```{r}
+new_packages <- installed.packages()
+missing_df <- as.data.frame(old_packages[
+  !old_packages[, "Package"] %in% new_packages[, "Package"], 
+  ])
+```
+
+`missing_df` now contains all packages you had previously installed but are not present now.
+In an intermediate step you might want clean up this list a bit, as you might not want all former packages back (I just used `write.csv` to export it, annotated the list and read it back in with `read.csv`).
+
+Once this is done, you can install your packages back:
+
+```{r}
+install.packages(missing_df$Package)
+```
+
+This can run fo a while...
+
+Once the installations are done, you can check the missing packages again:
+
+```{r}
+missing_df <- as.data.frame(old_packages[
+  !old_packages[, 1] %in% installed.packages()[, 1], 
+  ])
+```
+
+If you've got all your packages back, `missing_df` should have zero rows.
+If not, you might have had some packages which are not currently on CRAN.
+For me those are usually packages only available on GitHub so far.
+I used a nice little piece of code I found in the [`available` package](https://github.com/r-lib/available) to find the repositories of these packages:
+
+```{r eval=TRUE}
+library(dplyr, warn.conflicts = FALSE)
+on_gh <- function(pkg) {
+  repo = jsonlite::fromJSON(paste0("http://rpkg-api.gepuro.net/rpkg?q=", pkg))
+  repo[basename(repo$pkg_name) == pkg,]
+}
+gh_pkgs <- lapply(c("quanteda.classifiers", "emo"), on_gh) %>% 
+  bind_rows()
+as_tibble(gh_pkgs)
+```
+
+Check if this grabbed the correct ones, then you can install them using `remotes::install_github(gh_pkgs$pkg_name)`.
+
+For me, that was it.
+Your mileage may vary if some of your packages were removed from CRAN in the meantime or if you use other repos (e.g., Bioconductor).
