@@ -16,37 +16,28 @@ header:
 
 
 <p><code>R 4.0.0</code> was released on 2020-04-24.
-Among the <a href="https://cran.r-project.org/doc/manuals/r-devel/NEWS.html">many news</a> two stand out for me:
-First, <code>R</code> now uses <code>stringsAsFactors = FALSE</code> by default, which is especially welcome when reading in data (e.g., via <code>read.csv</code>) and when constructing <code>data.frame</code>s.
-The second news that caught my eye was that all packages need to be reinstalled under the new version.</p>
-<p>This can be rather cumbersome if you have collected a large number of packages on your machine while using <code>R 3.6.x</code> and you don’t want to spend the next weeks running into <code>Error in library(x) : there is no package called ‘x’</code> errors.
-But there is an easy way to solve this.</p>
+Among the <a href="https://cran.r-project.org/doc/manuals/r-devel/NEWS.html">many news</a> two stand out for me: First, <code>R</code> now uses <code>stringsAsFactors = FALSE</code> by default, which is especially welcome when reading in data (e.g., via <code>read.csv</code>) and when constructing <code>data.frame</code>s. The second news that caught my eye was that all packages need to be reinstalled under the new version.</p>
+<p>This can be rather cumbersome if you have collected a large number of packages on your machine while using <code>R 3.6.x</code> and you don’t want to spend the next weeks running into <code>Error in library(x) : there is no package called ‘x’</code> errors. But there is an easy way to solve this.</p>
 <p>After you made the update, first get your old packages:</p>
 <pre class="r"><code>old_packages &lt;- installed.packages(lib.loc = &quot;/home/johannes/R/x86_64-pc-linux-gnu-library/3.6/&quot;)
 head(old_packages[, 1])</code></pre>
 <pre class="r"><code>##       abind     acepack        ade4         AER   animation   anomalize 
 ##     &quot;abind&quot;   &quot;acepack&quot;      &quot;ade4&quot;       &quot;AER&quot; &quot;animation&quot; &quot;anomalize&quot;</code></pre>
-<p><code>lib.loc</code> should be the location you installed the packages before updating to <code>R 4.0.0</code>.
-If unsure, you can call <code>.libPaths()</code>.
-The first path is your new <code>lib.loc</code> and the previous one should look the same except with <code>3.6</code> at the end.</p>
+<p><code>lib.loc</code> should be the location you installed the packages before updating to <code>R 4.0.0</code>. If unsure, you can call <code>.libPaths()</code>. The first path is your new <code>lib.loc</code> and the previous one should look the same except with <code>3.6</code> at the end.</p>
 <p>Then you can find the packages previously installed but currently missing:</p>
 <pre class="r"><code>new_packages &lt;- installed.packages()
 missing_df &lt;- as.data.frame(old_packages[
   !old_packages[, &quot;Package&quot;] %in% new_packages[, &quot;Package&quot;], 
   ])</code></pre>
-<p><code>missing_df</code> now contains all packages you had previously installed but are not present now.
-In an intermediate step you might want clean up this list a bit, as you might not want all former packages back (I just used <code>write.csv</code> to export it, annotated the list and read it back in with <code>read.csv</code>).</p>
+<p><code>missing_df</code> now contains all packages you had previously installed but are not present now. In an intermediate step you might want to clean up this list a bit, in case not all of the old packages are still useful to you (I just used <code>write.csv</code> to export it, annotated the list and read it back in with <code>read.csv</code>).</p>
 <p>Once this is done, you can install your packages back:</p>
-<pre class="r"><code>install.packages(missing_df$Package)</code></pre>
-<p>This can run fo a while…</p>
-<p>Once the installations are done, you can check the missing packages again:</p>
+<pre class="r"><code>install.packages(missing_df$Package, Ncpus = 3)</code></pre>
+<p>Even on three cores at the same time, this can run fo a while…</p>
+<p>After the installations are done, you can check the missing packages again:</p>
 <pre class="r"><code>missing_df &lt;- as.data.frame(old_packages[
   !old_packages[, 1] %in% installed.packages()[, 1], 
   ])</code></pre>
-<p>If you’ve got all your packages back, <code>missing_df</code> should have zero rows.
-If not, you might have had some packages which are not currently on CRAN.
-For me those are usually packages only available on GitHub so far.
-I used a nice little piece of code I found in the <a href="https://github.com/r-lib/available"><code>available</code> package</a> to find the repositories of these packages:</p>
+<p>If you’ve got all your packages back, <code>missing_df</code> should have zero rows. If not, you might have had some packages which are not currently on CRAN. For me those are usually packages only available on GitHub so far. I used a nice little piece of code I found in the <a href="https://github.com/r-lib/available"><code>available</code> package</a> to find the repositories of these packages:</p>
 <pre class="r"><code>library(dplyr, warn.conflicts = FALSE)
 on_gh &lt;- function(pkg) {
   repo = jsonlite::fromJSON(paste0(&quot;http://rpkg-api.gepuro.net/rpkg?q=&quot;, pkg))
@@ -61,5 +52,4 @@ as_tibble(gh_pkgs)</code></pre>
 ## 1 quanteda/quanteda.… quanteda textmodel extensions … https://github.com/quante…
 ## 2 hadley/emo          Easily insert emoji into R and… https://github.com/hadley…</code></pre>
 <p>Check if this grabbed the correct ones, then you can install them using <code>remotes::install_github(gh_pkgs$pkg_name)</code>.</p>
-<p>For me, that was it.
-Your mileage may vary if some of your packages were removed from CRAN in the meantime or if you use other repos (e.g., Bioconductor).</p>
+<p>For me, that was it. Your mileage may vary though if some of your packages were removed from CRAN in the meantime or if you use other repos like, for example, Bioconductor.</p>
