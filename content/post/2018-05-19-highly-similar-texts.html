@@ -12,7 +12,9 @@ header:
   preview: yes
 ---
 
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
 
 
 <p>A while ago I was building a database of newspaper articles retrieved from LexisNexis for a research project in which I was working as a research assistant.
@@ -28,14 +30,14 @@ In some cases, subtle edits had been made.
 A different word with the same meaning, the title or position of a person added or removed from the article or a new sentence added to the end of an article.
 Strangely, many of those articles were published on the same date and in the same newspaper.</p>
 <p>For some instances, the differences could be explained by taking a look at the editions:
-Many newspapers in the UK have localised editions and the Scottish edition of the Daily Mail might have and extra sentence about how a story affected Scotland or a comment from a Scottish politician was added somewhere in the article.</p>
+Many newspapers in the UK have localised editions and the Scottish edition of the Daily Mail might have an extra sentence about how a story affected Scotland or a comment from a Scottish politician was added somewhere in the article.</p>
 <p>However, this poses a problem to any valid media analysis:
 These articles would be wrongfully counted several times in the sample.
 The introduced bias would mean that there are more articles from newspapers that add several different editions to the LexisNexis database.
 An additional problem was that while the information on editions was available for some outlets, it seemed that LexisNexis did not provide it for others.
 So we needed a computational way to find the duplicates.</p>
-<div id="available-solutions-the-accurate-one" class="section level2">
-<h2>Available solutions: the accurate one</h2>
+<div id="available-solution-1-the-accurate-one" class="section level2">
+<h2>Available solution 1: the accurate one</h2>
 <p>Comparing chunks of text is more complicated than we initially thought.
 The most accurate solution available would be the so-called Levensthein or edit distance.</p>
 <p>Consider this example that I pulled off Wikipedia:</p>
@@ -58,8 +60,8 @@ adist(compare[1], compare[2]) / max(nchar(compare))</code></pre>
 ## [1,] 0.4285714</code></pre>
 <p>The relative distance of 0.43 means that the texts are very different, which is intuitively right.</p>
 <p>However, there is a second problem when using the edit distance:
-Although Vladimir Levenshtein publish his paper about the algorithm to calculate the distance more than 50 years ago, it is still extremely computational demanding, even for modern machines.</p>
-<p>The main reason for this is that the demand for calculation scales up extremely quickly when comparing more than one text:</p>
+Although Vladimir Levenshtein published his paper about the algorithm to calculate the distance more than 50 years ago, it is still extremely computational demanding, even for modern machines.</p>
+<p>There are two factors which make the computation more demanding: firstly, the demand for calculation scales up extremely quickly when comparing more than one text:</p>
 <pre class="r"><code>compare &lt;- c(&quot;kitten&quot;, &quot;sitting&quot;, &quot;knitting&quot;, &quot;omitting&quot;)
 adist(compare) / max(nchar(compare))</code></pre>
 <pre><code>##       [,1]  [,2]  [,3] [,4]
@@ -67,9 +69,9 @@ adist(compare) / max(nchar(compare))</code></pre>
 ## [2,] 0.375 0.000 0.250 0.25
 ## [3,] 0.375 0.250 0.000 0.25
 ## [4,] 0.500 0.250 0.250 0.00</code></pre>
-<p>For the four words above, 12 calculations are necessary, since each text needs to be compared to each other text in the sample (i.e. n*(n-1) calculation with n = number of texts to compare).
-The longer a text, the more computationally expensive a calculation will be.</p>
-<p>Consider the following.
+<p>For the four words above, 12 calculations are necessary, since each text needs to be compared to each other text in the sample (i.e. n*(n-1) calculation with n = number of texts to compare).</p>
+<p>Secondly, comparing longer texts is computationally more expensive.
+Consider the following:
 I measure time and resources needed to calculate the difference between two words (“kitten” and “sitting”) and between two chunks of Lorem Ipsum, 651 and 650 characters long.</p>
 <pre class="r"><code>compare &lt;- c(&quot;kitten&quot;, &quot;sitting&quot;)
 compare2 &lt;- c(
@@ -85,20 +87,20 @@ dplyr::select(benchmark, median, mem_alloc)</code></pre>
 <pre><code>## # A tibble: 2 x 2
 ##     median mem_alloc
 ##   &lt;bch:tm&gt; &lt;bch:byt&gt;
-## 1   15.8us        0B
-## 2   14.8ms    10.4KB</code></pre>
-<p>To get a feel for this, the mean time for the second calculation is 14.8ms that is miliseconds.
-In the same unit as the first calculation, that would be 14,796 microseconds.
-This is an 936% increase on average.
+## 1   16.4µs        0B
+## 2   12.4ms    10.4KB</code></pre>
+<p>To get a feel for this, the mean time for the second calculation is 12.4ms that is milliseconds.
+In the same unit as the first calculation, that would be 12,365 microseconds.
+This is an 753% increase on average.
 The allocated memory can’t even be calculated since the first value is too small to measure while the second calculation uses quite a bit of memory.
 Some testing revealed that around 3500 articles would already bring my 32GB RAM machine to its knees.
 This makes it almost impossible to compare hundreds or thousands of newspaper articles.</p>
 </div>
-<div id="available-solutions-the-fast-one" class="section level2">
-<h2>Available solutions: the fast one</h2>
+<div id="available-solution-2-the-efficient-one" class="section level2">
+<h2>Available solution 2: the efficient one</h2>
 <p>While the edit distance is the most accurate method for comparing texts, there are others which are much more efficient.
 Instead of comparing character for character, it is also possible to chop up each text into its elements and then compare which elements are shared by two or more texts.</p>
-<p>I use the excellent <code>quanteda</code> package to do this.</p>
+<p>I use the excellent <code>quanteda</code> package to turn the texts into a matrix (referred to as document-feature matrix or dfm):</p>
 <pre class="r"><code>library(quanteda)
 dfm &lt;- dfm(c(compare, compare2))
 as.matrix(dfm)</code></pre>
@@ -282,10 +284,11 @@ text4
 </tr>
 </tbody>
 </table>
-<p>I’m only displaying the first 10 columns of the document feature matrix (dfm) here.
+<p>I’m only displaying the first 10 columns of the dfm here.
 Basically every column is one word and then every row is one text.
 The number in the cell tells us how often a word occurred in a text.
-Comparing the matrices of two texts is a much easier task for a computer and the implementation in <code>quanteda</code> is extra efficient and fast (I use the cosine similarity, as this is, in my opinion, easiest to read and interpret for humans).</p>
+Comparing the matrices of two texts is a much easier task for a computer.
+Since the data is in a matrix form, cosine similarity can be calculated (other similarity measures are available in <code>quanteda</code> but the cosine similarity is, in my opinion, the easiest to read and interpret).</p>
 <pre class="r"><code>textstat_simil(dfm, method = &quot;cosine&quot;)</code></pre>
 <pre><code>## textstat_simil object; method = &quot;cosine&quot;
 ##       text1 text2 text3 text4
@@ -328,7 +331,7 @@ simil</code></pre>
 ## text5     0     0     0     0     1     1
 ## text6     0     0     0     0     1     1</code></pre>
 <p>As you can see again, text three and four as well as text five and six are deemed very similar by <code>textstat_simil()</code>.
-We can use this information to do some more in-depth testing, <em>only on the texts already flagged as highly similar</em>.
+We can use this information to do some more in-depth testing without making the task overly expensive by <em>only calculating the relative distance on the texts already flagged as highly similar</em>.
 I do some data wrangling here to get the distance matrix into a presentable form:</p>
 <pre class="r"><code>library(dplyr)
 simil_clean &lt;- simil %&gt;%

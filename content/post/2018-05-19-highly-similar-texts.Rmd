@@ -32,7 +32,7 @@ A different word with the same meaning, the title or position of a person added 
 Strangely, many of those articles were published on the same date and in the same newspaper.
 
 For some instances, the differences could be explained by taking a look at the editions:
-Many newspapers in the UK have localised editions and the Scottish edition of the Daily Mail might have and extra sentence about how a story affected Scotland or a comment from a Scottish politician was added somewhere in the article.
+Many newspapers in the UK have localised editions and the Scottish edition of the Daily Mail might have an extra sentence about how a story affected Scotland or a comment from a Scottish politician was added somewhere in the article.
 
 However, this poses a problem to any valid media analysis:
 These articles would be wrongfully counted several times in the sample.
@@ -40,7 +40,7 @@ The introduced bias would mean that there are more articles from newspapers that
 An additional problem was that while the information on editions was available for some outlets, it seemed that LexisNexis did not provide it for others.
 So we needed a computational way to find the duplicates.
 
-## Available solutions: the accurate one
+## Available solution 1: the accurate one
 
 Comparing chunks of text is more complicated than we initially thought.
 The most accurate solution available would be the so-called Levensthein or edit distance.
@@ -70,9 +70,9 @@ adist(compare[1], compare[2]) / max(nchar(compare))
 The relative distance of 0.43 means that the texts are very different, which is intuitively right.
 
 However, there is a second problem when using the edit distance:
-Although Vladimir Levenshtein publish his paper about the algorithm to calculate the distance more than 50 years ago, it is still extremely computational demanding, even for modern machines.
+Although Vladimir Levenshtein published his paper about the algorithm to calculate the distance more than 50 years ago, it is still extremely computational demanding, even for modern machines.
 
-The main reason for this is that the demand for calculation scales up extremely quickly when comparing more than one text:
+There are two factors which make the computation more demanding: firstly, the demand for calculation scales up extremely quickly when comparing more than one text:
 
 ```{r}
 compare <- c("kitten", "sitting", "knitting", "omitting")
@@ -80,9 +80,9 @@ adist(compare) / max(nchar(compare))
 ```
 
 For the four words above, 12 calculations are necessary, since each text needs to be compared to each other text in the sample (i.e. n*(n-1) calculation with n = number of texts to compare).
-The longer a text, the more computationally expensive a calculation will be.
 
-Consider the following.
+Secondly, comparing longer texts is computationally more expensive.
+Consider the following:
 I measure time and resources needed to calculate the difference between two words ("kitten" and "sitting") and between two chunks of Lorem Ipsum, 651 and 650 characters long.
 
 ```{r}
@@ -99,19 +99,19 @@ benchmark <- bench::mark(
 dplyr::select(benchmark, median, mem_alloc)
 ```
 
-To get a feel for this, the mean time for the second calculation is `r paste(benchmark$median[2])` that is miliseconds.
+To get a feel for this, the mean time for the second calculation is `r paste(benchmark$median[2])` that is milliseconds.
 In the same unit as the first calculation, that would be `r scales::comma(as.numeric(benchmark$median[2]) * 1000000)` microseconds.
 This is an `r scales::comma(as.numeric(benchmark$median[2]) / as.numeric(benchmark$median[1]))`% increase on average.
 The allocated memory can't even be calculated since the first value is too small to measure while the second calculation uses quite a bit of memory.
 Some testing revealed that around 3500 articles would already bring my 32GB RAM machine to its knees.
 This makes it almost impossible to compare hundreds or thousands of newspaper articles.
 
-## Available solutions: the fast one
+## Available solution 2: the efficient one
 
 While the edit distance is the most accurate method for comparing texts, there are others which are much more efficient.
 Instead of comparing character for character, it is also possible to chop up each text into its elements and then compare which elements are shared by two or more texts.
 
-I use the excellent `quanteda` package to do this.
+I use the excellent `quanteda` package to turn the texts into a matrix (referred to as document-feature matrix or dfm):
 
 ```{r eval=FALSE}
 library(quanteda)
@@ -128,10 +128,11 @@ as.matrix(dfm)[, 1:10] %>%
   kable_styling()
 ```
 
-I'm only displaying the first 10 columns of the document feature matrix (dfm) here.
+I'm only displaying the first 10 columns of the dfm here.
 Basically every column is one word and then every row is one text.
 The number in the cell tells us how often a word occurred in a text.
-Comparing the matrices of two texts is a much easier task for a computer and the implementation in `quanteda` is extra efficient and fast (I use the cosine similarity, as this is, in my opinion, easiest to read and interpret for humans).
+Comparing the matrices of two texts is a much easier task for a computer.
+Since the data is in a matrix form, cosine similarity can be calculated (other similarity measures are available in `quanteda` but the cosine similarity is, in my opinion, the easiest to read and interpret).
 
 ```{r}
 textstat_simil(dfm, method = "cosine")
@@ -169,7 +170,7 @@ simil
 ```
 
 As you can see again, text three and four as well as text five and six are deemed very similar by `textstat_simil()`.
-We can use this information to do some more in-depth testing, *only on the texts already flagged as highly similar*.
+We can use this information to do some more in-depth testing without making the task overly expensive by *only calculating the relative distance on the texts already flagged as highly similar*.
 I do some data wrangling here to get the distance matrix into a presentable form:
 
 ```{r eval=FALSE}
@@ -222,7 +223,6 @@ simil_clean %>%
   kable() %>%
   kable_styling()
 ```
-
 
 Now this is a little confusing, so let me explain:
 ID 3 and 4 are the Lorem Ipsum texts, 5 and 6 are "Dog bites man" and "Man bites dog".
