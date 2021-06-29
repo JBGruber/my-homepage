@@ -15,4 +15,4 @@ weight = 60
 
 +++
 
-Download my [academic CV](cv/CV_JohannesGruber.pdf) (last update: 03 January 2021).
+Download my [academic CV](cv/CV_JohannesGruber.pdf) (last update: 29 June 2021).

@@ -43,10 +43,10 @@ weight = 5
 
 # Background
 
-I am currently a PhD researcher in Politics at the University of Glasgow.
+I have submitted my PhD in Politics at the University of Glasgow at the start of June and will be a Post-Doc Researcher at the Chair of Political Theory and Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder) soon.
 
-In my PhD project, I’m trying to find out how the media in the UK portrays protest events. Most literature about the topic assumes that the messages of protests are marginalised by the media through routinized framing, i.e. a focus on disruption by and deviance of protesters. 
-In my project, I collected all newspaper articles published in selected UK newspaper outlets that mention a protest over the last 26 years (1992-2017) and analyse the content via framing analysis and supervised methods of computational text analysis.
+In my PhD project, I scrutinised how the media in the UK portrays protest events. Most literature about the topic assumes that the messages of protests are marginalised by the media through routinised framing, i.e. a focus on disruption by and deviance of protesters. 
+In my project, I collected all newspaper articles published in selected UK newspaper outlets that mention a protest over the last 26 years (1992-2017) and analysed the content using an innovative approach to framing analysis that combines best-practice manual coding techniques with supervised machine learning.
 
-After a detour that included a Master on Political Theory, I realised during my Master in Political Communication---which was originally planned as a semester abroad---how much I love working with data. 
-Especially **R**, the free software environment for statistical computing and graphics, is captivating much of my attention nowadays and has helped me to combine my two most long-standing passions: Political Science and fiddling with computers. I'm using **R** to do nearly everything (including writing this website).
+After a detour that included a Master on Political Theory, I realised during my Master in Political Communication --- which was originally planned as a semester abroad --- how much I love working with data. 
+Especially **R**, the free software environment for statistical computing and graphics, is captivating much of my attention nowadays and has helped me to combine my two most long-standing passions: Political Science and fiddling with computers. I'm using **R** to do nearly everything (including writing my thesis and this website).
