@@ -43,7 +43,7 @@ weight = 5
 
 # Background
 
-I have submitted my PhD in Politics at the University of Glasgow at the start of June and will be a Post-Doc Researcher at the Chair of Political Theory and Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder) soon.
+I am a Post-Doc Researcher at the Chair of Political Theory and Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder) and have submitted my PhD in Politics at the University of Glasgow at the start of June.
 
 In my PhD project, I scrutinised how the media in the UK portrays protest events. Most literature about the topic assumes that the messages of protests are marginalised by the media through routinised framing, i.e. a focus on disruption by and deviance of protesters. 
 In my project, I collected all newspaper articles published in selected UK newspaper outlets that mention a protest over the last 26 years (1992-2017) and analysed the content using an innovative approach to framing analysis that combines best-practice manual coding techniques with supervised machine learning.
