@@ -1,0 +1,84 @@
+---
+title: Let users choose which plot you want to show
+author: JBGruber
+date: '2021-07-28'
+slug: []
+categories: []
+tags:
+  - Blogdown
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+<script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
+
+
+<p>If you have build your homepage using blogdown, it’s actually quite simple to integrate Javascript snippets in it.
+While this is mentioned in the book <a href="https://bookdown.org/yihui/blogdown/javascript.html">“blogdown: Creating Websites with R Markdown”</a>, it still took me a little bit to undertstand how it works.</p>
+<p>As an example, let’s make different versions of a simple plot and let the user decide which one to display.
+First I make the plots and save them in a sub-directory:</p>
+<pre class="r"><code>library(ggplot2)
+df &lt;- data.frame(trt = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;), outcome = c(2.3, 1.9, 3.2))
+dir.create(&quot;./plots&quot;)
+simple &lt;- ggplot(df, aes(trt, outcome)) +
+  geom_col() + 
+  ggtitle(&quot;Simple&quot;)
+ggsave(&quot;./plots/simple.png&quot;, simple)
+
+minimal &lt;- ggplot(df, aes(trt, outcome)) +
+  geom_col() + 
+  theme_minimal() +
+  ggtitle(&quot;Minimal Theme&quot;)
+ggsave(&quot;./plots/minimal.png&quot;, minimal)
+
+minimal &lt;- ggplot(df, aes(trt, outcome, fill = trt)) +
+  geom_col() + 
+  theme_minimal() +
+  ggtitle(&quot;Minimal Theme&quot;)
+ggsave(&quot;./plots/colors.png&quot;, minimal)</code></pre>
+<p>First, you have to include a bit of HTML code into the .Rmd file.
+This adds the image and dropdown menu:</p>
+<pre><code>&lt;select id=&quot;imgList&quot;&gt;
+  &lt;option value=&quot;./plots/simple.png&quot;&gt;Simple&lt;/option&gt;
+  &lt;option value=&quot;./plots/minimal.png&quot;&gt;Minimal Theme&lt;/option&gt;
+  &lt;option value=&quot;./plots/colors.png&quot;&gt;With Colours&lt;/option&gt;
+&lt;/select&gt;
+&lt;img id=&quot;image&quot; width=&quot;100%&quot; src=&quot;./plots/simple.png&quot; /&gt;</code></pre>
+<p>Simply paste this into your .Rmd file and blogdown will do the rest.</p>
+<p>Now we need to add the JavaScript code.
+Otherwise the dropdown menu will do nothing.
+Again simply paste this script into your .Rmd file:</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;             
+var img = document.getElementById(&quot;image&quot;);
+
+function setClass(e) {
+  var select = e.target;
+  img.src = select.options[select.selectedIndex].value;
+  return false;
+}
+
+document.getElementById(&quot;imgList&quot;).onchange = setClass;
+&lt;/script&gt;</code></pre>
+<p>If you find JavaScript on, for example, <a href="https://stackoverflow.com/a/39176549/5028841">stackoverflow.com</a>, remember to wrap the code in <code>&lt;script&gt;</code> tags as above.</p>
+<p>The result can be seen below:</p>
+<p><select id="imgList">
+<option value="./plots/simple.png">Simple</option>
+<option value="./plots/minimal.png">Minimal Theme</option>
+<option value="./plots/colors.png">With Colours</option>
+</select>
+<img id="image" width="100%" src="plots/simple.png" /></p>
+<script type="text/javascript">             
+var img = document.getElementById("image");
+
+function setClass(e) {
+  var select = e.target;
+  img.src = select.options[select.selectedIndex].value;
+  return false;
+}
+
+document.getElementById("imgList").onchange = setClass;
+</script>
+<p>Do you have a more automated way to get this done or have ideas how to improve the code above?
+Let me know in the comments (on my website, if you’re reading this on R-bloggers).</p>
