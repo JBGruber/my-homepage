@@ -109,6 +109,7 @@
   {{ range where $.Site.Params.social ".icon" "twitter" }}
   <meta property="twitter:site" content="@{{ replaceRE "^//twitter.com/([^/]+)" "$1" .link }}">
   <meta property="twitter:creator" content="@{{ replaceRE "^//twitter.com/([^/]+)" "$1" .link  }}">
+  <meta property="twitter:image" content="{{ .Params.twitter.image }}">
   {{ end }}
   <meta property="og:site_name" content="{{ .Site.Title }}">
   <meta property="og:url" content="{{ .Permalink }}">
