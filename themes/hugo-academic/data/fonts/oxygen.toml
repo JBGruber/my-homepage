@@ -1,0 +1,15 @@
+# Font style metadata
+name = "Oxygen"
+
+# Optional Google font URL
+google_fonts = "Oxygen:400,700|Oxygen:400,400italic,700|Oxygen+Mono"
+
+# Font families
+heading_font = "Oxygen"
+body_font = "Oxygen"
+nav_font = "Oxygen"
+mono_font = "Oxygen Mono"
+
+# Font size
+font_size = "20"
+font_size_small = "16"

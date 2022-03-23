@@ -16,7 +16,7 @@ copyright = "Licence: <a href='https://creativecommons.org/licenses/by-sa/2.0/'>
 theme = "hugo-academic"
 enableEmoji = true
 footnotereturnlinkcontents = "<sup>^</sup>"
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$", "_drafts$"]
 preserveTaxonomyNames = true
 paginate = 10
 relativeURLs = false
@@ -65,7 +65,7 @@ defaultContentLanguageInSubdir = false
 
   # Font style.
   #   Choose from `default`, `classic`, or `playfair`.
-  font = "playfair"
+  font = "oxygen"
 
   # Your details.
   name = "Johannes B. Gruber"
