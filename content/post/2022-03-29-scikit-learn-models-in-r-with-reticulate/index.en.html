@@ -1,0 +1,202 @@
+---
+title: scikit-learn models in R with reticulate
+author: JBGruber
+date: '2022-03-29'
+slug: []
+categories: []
+tags:
+  - R
+  - text-analysis
+  - machine-learning
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<p>I have tried to venture into Python several times over the years.
+The language itself seems simple enough to learn but as someone who has only ever used <code>R</code> (and a bit of Stata), there were two things that held me back:</p>
+<ol style="list-style-type: decimal">
+<li><p>I never really found an IDE that I liked.
+I tried a few different ones including Spyder and Jupyter Notebook (not technically an IDE) and compared to RStudio and R Markdown they felt rather limited.
+Most Python users I met seem to think IDEs are not really important, which confuses me even further.
+That’s what you look at the entire time while programming!
+<!-- Did you try PyCharm? Anyhow, we are at the same page, if you're accustomed to RStudio it feels like diving into some 80s madness of programming using Python - and the support from the community is not as big as for R, I feel. --></p></li>
+<li><p>I could never really wrap my head around installing and updating Python packages.
+Whenever I set up doing a Python course, I struggled with incompatible packages, my IDE or pip grabbing the wrong version of Python or both.
+At one point I nuked my entire Linux installation and had to format my drive all because I wanted to install <code>spaCy</code>.</p></li>
+</ol>
+<p>The good news is: the great people over at <code>RStudio</code> solved both these problems at some point during the last years and I only noticed now.
+So here I wanted to quickly share what I’ve learned venturing into Python using RStudio, <code>reticulate</code> and R Markdown.</p>
+<div id="setting-up-python" class="section level2">
+<h2>Setting up Python</h2>
+<p>Unlike in R, installing and managing packages in Python is a flaming pile of garbage.
+Maybe that is an exaggeration and it only looks like that for a beginner, but every Python programmer I asked had at least a couple of problems installing packages (while this is relatively rare with R).
+Consequently, the Python community seems to be moving towards a workaround (instead of fixing this poor state of affairs), which consists of installing Python and the corresponding library of packages into a separate folder for each project, called a “virtual environment”.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+This is what the developers of <code>reticulate</code> suggest:
+&gt; “When installing Python packages it’s typically a good practice to isolate them within a Python environment (a named Python installation that exists for a specific project or purpose). This provides a measure of isolation, so that updating a Python package for one project doesn’t impact other projects” <a href="https://rstudio.github.io/reticulate/articles/python_packages.html">source</a>.</p>
+<p>Okay…
+Then let’s do that; we can set up a conda environment inside our working directory using <code>reticulate::conda_create</code>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>reticulate::conda_create(&quot;./python-env-test/&quot;)</code></pre>
+<p>You only have to do this once for a new project, so I would suggest you create an RStudio project and in the first script of the project, you use the following code to check if the environment exists and install it if it’s not there yet.
+As far as I can see it does not cause any problems if you delete this folder manually later and start from scratch.</p>
+<pre class="r"><code>if (!dir.exists(&quot;./python-env-test/&quot;)) {
+  reticulate::conda_create(&quot;./python-env-test/&quot;)
+}</code></pre>
+<p>Next, we need to tell RStudio to use this installation of Python rather than a different one it might find somewhere on your computer.
+I found the easiest way to do so is to set an environment variable in <code>R</code>:</p>
+<pre class="r"><code># search for a Python installation in your working directory
+py_bin &lt;- grep(getwd(), reticulate::conda_list()$python, value = TRUE)
+Sys.setenv(RETICULATE_PYTHON = py_bin)</code></pre>
+<p>You can run this code every time you use reticulate or make the cofiguration persistent using an <code>.Rprofile</code> file (for example, with <code>usethis::edit_r_environ()</code>).
+If you are in a new project and have no <code>.Rprofile</code> file yet, you can simply use the following chunk to create one:</p>
+<pre class="r"><code>writeLines(
+  paste0(&quot;RETICULATE_PYTHON = &quot;, paste0(getwd(), &quot;/python-env-test/bin/python&quot;)), 
+  paste0(here::here(), &quot;.Rprofile&quot;)
+)</code></pre>
+</div>
+<div id="installing-python-packages" class="section level2">
+<h2>Installing Python Packages</h2>
+<p>Now you’re all set with your virtual environment, RStudio project, and .Rprofile, we can install some packages through <code>reticulate</code>.
+<code>reticulate</code> offers two functions: one for packages from Anaconda, one for packages from pip.
+<code>reticulate::conda_install</code> also manages system dependencies (unlike pip), which is why this is my first choice.
+Only if packages are not available on conda, I turn to <code>reticulate::py_install</code>:</p>
+<pre class="r"><code>reticulate::conda_install(
+    packages = c(&quot;scikit-learn&quot;, &quot;pandas&quot;),
+    envname = &quot;./python-env-test/&quot;
+)
+reticulate::py_install(
+  packages = c(&quot;tmtoolkit&quot;, &quot;gensim&quot;),
+  envname = &quot;./python-env-test/&quot;,
+  pip = TRUE
+)</code></pre>
+</div>
+<div id="using-python-in-rstudio" class="section level2">
+<h2>Using Python in RStudio</h2>
+<p>Now we are finally all set to play around with Python itself.
+There are two ways in which you can use Python in an R Markdown document (that I know of).
+The first is to use Python chunks instead of R chunks.
+So where you would usually write:</p>
+<pre><code>```{r}
+text &lt;- &quot;Hello World! From R&quot;
+print(text)
+```</code></pre>
+<pre><code>## [1] &quot;Hello World! From R&quot;</code></pre>
+<p>you now write</p>
+<pre><code>```{python}
+text = &quot;Hello World! From Python&quot;
+print(text)
+```</code></pre>
+<pre><code>## Hello World! From Python</code></pre>
+<p>You can even set a new keyboard shortcut to create these chunks (Tools -&gt; “Modify Keyboard Shortcuts…”):</p>
+<p><img src="shortcut.png" /></p>
+<p>What is super cool about <code>reticulate</code> (which is working in the backgroud here) is that it seems to know quite well how to translate Python objects into R and the other way around:</p>
+<pre class="r"><code>library(reticulate)
+# In R
+print(py$text)</code></pre>
+<pre><code>## [1] &quot;Hello World! From Python&quot;</code></pre>
+<pre class="python"><code># In Python
+print(r.text)</code></pre>
+<pre><code>## Hello World! From R</code></pre>
+<p>If you use a newer version of RStudio, you can even see the Python objects in your Environment Pane:</p>
+<p><img src="rstudio.png" /></p>
+<p>The second way to use Python code is from R directly:</p>
+<pre class="r"><code>pd &lt;- import(&quot;pandas&quot;)
+pd$DataFrame(1:5)</code></pre>
+<pre><code>##   0
+## 1 1
+## 2 2
+## 3 3
+## 4 4
+## 5 5</code></pre>
+<p>Here we import the package <code>pandas</code> as an object called <code>pd</code>.
+To call functions from the package, you use the <code>$</code> operator.
+Then, we create a data frame in Python.
+To find help on a function, you can use <code>py_help(pd$DataFrame)</code>.</p>
+</div>
+<div id="case-study---nmf-topic-models-from-scikit-learn" class="section level2">
+<h2>Case Study - NMF topic models from scikit-learn</h2>
+<p>This makes the <code>reticulate</code> + RStudio + R Markdown setup incredibly powerful.
+Let’s say you want to try out Non-Negative Matrix Factorization (NMF) from <code>scikit-learn</code> for doing topic modelling.
+You can do all your preprocessing in <code>R</code>s <code>quanteda</code> and then use scikit-learn to run the model.
+Afterwards, you can switch back to <code>R</code> to visualise the outcome with <code>ggplot2</code>.
+So let’s do that!</p>
+<p>I first create a <code>dfm</code> from some made up text:</p>
+<pre class="r"><code>library(quanteda)</code></pre>
+<pre><code>## Package version: 3.2.1
+## Unicode version: 14.0
+## ICU version: 70.1</code></pre>
+<pre><code>## Parallel computing: 12 of 12 threads used.</code></pre>
+<pre><code>## See https://quanteda.io for tutorials and examples.</code></pre>
+<pre class="r"><code>test_dfm &lt;- c(&quot;A&quot;, &quot;A&quot;, &quot;A B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;C&quot;) %&gt;% 
+  tokens() %&gt;% 
+  dfm()
+test_dfm</code></pre>
+<pre><code>## Document-feature matrix of: 6 documents, 3 features (61.11% sparse) and 0 docvars.
+##        features
+## docs    a b c
+##   text1 1 0 0
+##   text2 1 0 0
+##   text3 1 1 0
+##   text4 0 1 0
+##   text5 0 1 0
+##   text6 0 0 1</code></pre>
+<p>Now, we can use this <code>dfm</code> with scikit-learn and train a model with two topics:</p>
+<pre class="r"><code>sklearn &lt;- import(&quot;sklearn&quot;)
+model &lt;- sklearn$decomposition$NMF(
+  n_components = 2L,  # number of topics
+  random_state  =  5L # equivalent of seed for reproducibility
+)$fit(test_dfm)</code></pre>
+<p>Note, that to load <code>scikit-learn</code> you need to import <code>"sklearn"</code>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+Also note, that you set the parameters inside <code>NMF</code> and then add the data in <code>fit</code> as the <code>$</code> (which represents the <code>.</code> in Python) basically acts as a pipe.</p>
+<p>We can evaluate this model in R like so:</p>
+<pre class="r"><code>beta &lt;- model$components_
+colnames(beta) &lt;- featnames(test_dfm)
+rownames(beta) &lt;- paste0(&quot;topic_&quot;, seq_len(nrow(beta)))
+beta</code></pre>
+<pre><code>##                    a        b c
+## topic_1 8.467551e-06 1.317551 0
+## topic_2 1.084476e+00 0.000000 0</code></pre>
+<pre class="r"><code>gamma &lt;- model$transform(test_dfm)
+colnames(gamma) &lt;- paste0(&quot;topic_&quot;, seq_len(ncol(gamma)))
+rownames(gamma) &lt;- paste0(&quot;text_&quot;, seq_len(nrow(gamma)))
+gamma</code></pre>
+<pre><code>##             topic_1   topic_2
+## text_1 2.014668e-16 0.9221041
+## text_2 2.014668e-16 0.9221041
+## text_3 7.589839e-01 0.9220981
+## text_4 7.589839e-01 0.0000000
+## text_5 7.589839e-01 0.0000000
+## text_6 0.000000e+00 0.0000000</code></pre>
+<p>And as promised, here is a quick ggplot based off these data:</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5          ✓ purrr   0.3.4     
+## ✓ tibble  3.1.6          ✓ dplyr   1.0.8     
+## ✓ tidyr   1.2.0          ✓ stringr 1.4.0.9000
+## ✓ readr   2.1.2          ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>beta %&gt;% 
+  as_tibble(rownames = &quot;topic&quot;) %&gt;% 
+  pivot_longer(cols = -topic) %&gt;% 
+  ggplot(aes(x = value, y = name)) +
+  geom_col() +
+  facet_wrap(~topic) +
+  theme_minimal() +
+  labs(x = NULL, y = NULL, title = &quot;Top-features per topic&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Not very impressive, but if you had real data, you could easily reproduce Julia Silge’s plot from her <a href="https://www.tidytextmining.com/topicmodeling.html#word-topic-probabilities">book about text mining</a>, which means I can work with this model as I would with any other topic model implementation in R!</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>See <a href="https://docs.python.org/3/library/venv.html#:~:text=A%20virtual%20environment%20is%20a,part%20of%20your%20operating%20system." class="uri">https://docs.python.org/3/library/venv.html#:~:text=A%20virtual%20environment%20is%20a,part%20of%20your%20operating%20system.</a> for more information.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>
+This creates a conda environment. You can also create a vanilla Python environment with <code>reticulate::virtualenv_create</code>, but I found these harder to manage.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>I spent 3 hours to find that the “-” causes trouble…<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
