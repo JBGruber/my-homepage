@@ -14,6 +14,8 @@ header:
   preview: yes
 ---
 
+<meta name="twitter:image" content="ttps://johannesbgruber.eu/img/rstudio.png">
+
 I have tried to venture into Python several times over the years.
 The language itself seems simple enough to learn but as someone who has only ever used `R` (and a bit of Stata), there were two things that held me back:
 
@@ -34,7 +36,7 @@ So here I wanted to quickly share what I've learned venturing into Python using 
 
 Unlike in R, installing and managing packages in Python is a flaming pile of garbage.
 Maybe that is an exaggeration and it only looks like that for a beginner, but every Python programmer I asked had at least a couple of problems installing packages (while this is relatively rare with R).
-Consequently, the Python community seems to be moving towards a workaround (instead of fixing this poor state of affairs), which consists of installing Python and the corresponding library of packages into a separate folder for each project, called a "virtual environment".^[See <https://docs.python.org/3/library/venv.html#:~:text=A%20virtual%20environment%20is%20a,part%20of%20your%20operating%20system.> for more information.]
+Consequently, the Python community seems to be moving towards a workaround (instead of fixing this poor state of affairs), which consists of installing Python and the corresponding library of packages into a separate folder for each project, called a "virtual environment".^[See <https://docs.python.org/3/library/venv.html> for more information.]
 This is what the developers of `reticulate` suggest:
 > "When installing Python packages it’s typically a good practice to isolate them within a Python environment (a named Python installation that exists for a specific project or purpose). This provides a measure of isolation, so that updating a Python package for one project doesn’t impact other projects" [source](https://rstudio.github.io/reticulate/articles/python_packages.html).
 
