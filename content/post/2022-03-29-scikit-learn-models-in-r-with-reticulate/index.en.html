@@ -50,7 +50,7 @@ I found the easiest way to do so is to set an environment variable in <code>R</c
 <pre class="r"><code># search for a Python installation in your working directory
 py_bin &lt;- grep(getwd(), reticulate::conda_list()$python, value = TRUE)
 Sys.setenv(RETICULATE_PYTHON = py_bin)</code></pre>
-<p>You can run this code every time you use reticulate or make the cofiguration persistent using an <code>.Rprofile</code> file (for example, with <code>usethis::edit_r_environ()</code>).
+<p>You can run this code every time you use reticulate or make the configuration persistent using an <code>.Rprofile</code> file (for example, with <code>usethis::edit_r_environ()</code>).
 If you are in a new project and have no <code>.Rprofile</code> file yet, you can simply use the following chunk to create one:</p>
 <pre class="r"><code>writeLines(
   paste0(&quot;RETICULATE_PYTHON = &quot;, paste0(getwd(), &quot;/python-env-test/bin/python&quot;)), 
@@ -92,7 +92,7 @@ print(text)
 <pre><code>## Hello World! From Python</code></pre>
 <p>You can even set a new keyboard shortcut to create these chunks (Tools -&gt; “Modify Keyboard Shortcuts…”):</p>
 <p><img src="shortcut.png" /></p>
-<p>What is super cool about <code>reticulate</code> (which is working in the backgroud here) is that it seems to know quite well how to translate Python objects into R and the other way around:</p>
+<p>What is super cool about <code>reticulate</code> (which is working in the background here) is that it seems to know quite well how to translate Python objects into R and the other way around:</p>
 <pre class="r"><code>library(reticulate)
 # In R
 print(py$text)</code></pre>
@@ -124,13 +124,8 @@ You can do all your preprocessing in <code>R</code>s <code>quanteda</code> and t
 Afterwards, you can switch back to <code>R</code> to visualise the outcome with <code>ggplot2</code>.
 So let’s do that!</p>
 <p>I first create a <code>dfm</code> from some made up text:</p>
-<pre class="r"><code>library(quanteda)</code></pre>
-<pre><code>## Package version: 3.2.1
-## Unicode version: 14.0
-## ICU version: 70.1</code></pre>
-<pre><code>## Parallel computing: 12 of 12 threads used.</code></pre>
-<pre><code>## See https://quanteda.io for tutorials and examples.</code></pre>
-<pre class="r"><code>test_dfm &lt;- c(&quot;A&quot;, &quot;A&quot;, &quot;A B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;C&quot;) %&gt;% 
+<pre class="r"><code>library(quanteda)
+test_dfm &lt;- c(&quot;A&quot;, &quot;A&quot;, &quot;A B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;C&quot;) %&gt;% 
   tokens() %&gt;% 
   dfm()
 test_dfm</code></pre>
@@ -150,7 +145,7 @@ model &lt;- sklearn$decomposition$NMF(
   random_state  =  5L # equivalent of seed for reproducibility
 )$fit(test_dfm)</code></pre>
 <p>Note, that to load <code>scikit-learn</code> you need to import <code>"sklearn"</code>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
-Also note, that you set the parameters inside <code>NMF</code> and then add the data in <code>fit</code> as the <code>$</code> (which represents the <code>.</code> in Python) basically acts as a pipe.</p>
+Also note, that you set the parameters inside <code>NMF</code> and then add the data in <code>fit</code> as the <code>$</code> (which represents the <code>.</code> in Python) basically acts like a pipe.</p>
 <p>We can evaluate this model in R like so:</p>
 <pre class="r"><code>beta &lt;- model$components_
 colnames(beta) &lt;- featnames(test_dfm)
@@ -171,16 +166,8 @@ gamma</code></pre>
 ## text_5 7.589839e-01 0.0000000
 ## text_6 0.000000e+00 0.0000000</code></pre>
 <p>And as promised, here is a quick ggplot based off these data:</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5          ✓ purrr   0.3.4     
-## ✓ tibble  3.1.6          ✓ dplyr   1.0.8     
-## ✓ tidyr   1.2.0          ✓ stringr 1.4.0.9000
-## ✓ readr   2.1.2          ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>beta %&gt;% 
+<pre class="r"><code>library(tidyverse)
+beta %&gt;% 
   as_tibble(rownames = &quot;topic&quot;) %&gt;% 
   pivot_longer(cols = -topic) %&gt;% 
   ggplot(aes(x = value, y = name)) +

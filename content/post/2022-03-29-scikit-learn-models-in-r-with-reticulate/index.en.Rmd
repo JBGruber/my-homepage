@@ -166,7 +166,7 @@ So let's do that!
 
 I first create a `dfm` from some made up text:
 
-```{r}
+```{r message=FALSE}
 library(quanteda)
 test_dfm <- c("A", "A", "A B", "B", "B", "C") %>% 
   tokens() %>% 
@@ -205,7 +205,7 @@ gamma
 
 And as promised, here is a quick ggplot based off these data:
 
-```{r}
+```{r message=FALSE}
 library(tidyverse)
 beta %>% 
   as_tibble(rownames = "topic") %>% 
