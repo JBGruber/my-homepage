@@ -12,9 +12,9 @@ header:
   caption: ''
   image: ''
   preview: yes
+twitter:
+  image: 'rstudio.png'
 ---
-
-<meta name="twitter:image" content="ttps://johannesbgruber.eu/img/rstudio.png">
 
 I have tried to venture into Python several times over the years.
 The language itself seems simple enough to learn but as someone who has only ever used `R` (and a bit of Stata), there were two things that held me back:
