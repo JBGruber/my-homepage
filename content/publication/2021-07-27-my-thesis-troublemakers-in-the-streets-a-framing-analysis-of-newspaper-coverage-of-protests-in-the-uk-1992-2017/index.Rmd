@@ -33,13 +33,14 @@ publication_types:
 selected: no
 url_code: ''
 url_dataset: ''
-url_pdf: 'https://doi.org/10.5525/gla.thesis.82346'
+url_pdf: 'https://theses.gla.ac.uk/82346/7/2021gruberphd.pdf'
 url_poster: ''
 url_preprint: ''
 url_project: ''
 url_slides: ''
 url_source: ''
 url_video: ''
+url_custom: [{name: 'DOI: 10.5525/gla.thesis.82346', url: 'https://doi.org/10.1177/1940161220925023'}]
 ---
 
 See the accompanying [blog post](/post/2021-08-02-thesis-published/) for a summary of the main findings of the thesis.

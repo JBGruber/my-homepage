@@ -25,13 +25,14 @@ publication_types:
 selected: no
 url_code: ''
 url_dataset: ''
-url_pdf: 'https://doi.org/10.1177/1940161220925023'
+url_pdf: 'https://journals.sagepub.com/doi/pdf/10.1177/1940161220925023'
 url_poster: ''
 url_preprint: ''
 url_project: ''
 url_slides: ''
 url_source: ''
 url_video: ''
+url_custom: [{name: 'DOI: 10.1177/1940161220925023', url: 'https://doi.org/10.1177/1940161220925023'}]
 ---
 
 The article is open access and can be downloaded directly from the publisher.
