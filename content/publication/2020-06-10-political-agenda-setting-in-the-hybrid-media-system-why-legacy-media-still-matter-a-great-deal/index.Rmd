@@ -1,0 +1,52 @@
+---
+title: 'Political Agenda Setting in the Hybrid Media System: Why Legacy Media Still Matter a Great Deal'
+author: JBGruber
+date: '2020-06-10'
+slug: []
+categories: []
+tags: []
+abstract: 'This article examines the roles of the media in the process of political agenda setting. There is a long tradition of studies on this topic, but they have mostly focused on legacy news media, thus overlooking the role of other actors and the complex hybrid dynamics that characterize contemporary political communication. In contrast, through an in-depth case study using mixed-methods and multiplatform data, this article provides a detailed analysis of the roles and interactions between different types of media and how they were used by political and advocacy elites. It explores what happened in the different parts of the system, and thus the paths to attention that led to setting this issue in the political and media agendas. The analysis of the case, a partial policy reversal in the United Kingdom provoked by an immigration scandal known as the “Windrush scandal” reveals that the issue was pushed into the agenda by a campaign assemblage of investigative journalism, political and advocacy elites, and digitally enabled leaders. The legacy news media came late but were crucial. They greatly amplified the salience of the issue and, once in “storm mode,” they were key for sustaining attention and pressure, eventually compelling the government to respond. It shows that they often remain at the core of the “national conversation” and certainly in the eye of a media storm. In the contemporary context, characterized by fierce battles for attention, shortening attention spans and fractured audiences, this is key and has important implications for agenda setting and beyond.'
+abstract_short: 'This article provides a detailed analysis of the roles and interactions between different types of media and how they were used by political and advocacy elites. It explores what happened in the different parts of the system, and thus the paths to attention that led to setting this issue in the political and media agendas. The analysis of the case, a partial policy reversal in the United Kingdom provoked by an immigration scandal known as the “Windrush scandal” reveals that the issue was pushed into the agenda by a campaign assemblage of investigative journalism, political and advocacy elites, and digitally enabled leaders. The legacy news media came late but were crucial..'
+authors:
+  - 'Ana Ines Langer'
+  - 'Johannes B. Gruber'
+draft: no
+header:
+  caption: ''
+  image: 'Figure_1.svg'
+highlight: yes
+image_preview: ''
+math: no
+projects: []
+publication: ''
+publication_short: ''
+publication_types:
+  - '0'
+selected: no
+url_code: ''
+url_dataset: ''
+url_pdf: 'https://doi.org/10.1177/1940161220925023'
+url_poster: ''
+url_preprint: ''
+url_project: ''
+url_slides: ''
+url_source: ''
+url_video: ''
+---
+
+The article is open access and can be downloaded directly from the publisher.
+When it came out, Ana posted a nice little summary on Twitter.
+See below:
+
+<center>
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">We use a multi-platform approach (inc. newspaper coverage, Twitter, and e-petitions). Our analysis uncovers three key roles of legacy news media orgs. in political agenda-setting: initiating, amplifying &amp; sustaining attention. We also reveal the importance of other actors. 2/4</p>&mdash; Dr. Ana Ines Langer (@AnaInesLanger) 
+<a href="https://twitter.com/AnaInesLanger/status/1270752812041998336?ref_src=twsrc%5Etfw">June 10, 2020</a>
+</blockquote> 
+
+
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">The <a href="https://twitter.com/guardian?ref_src=twsrc%5Etfw">@guardian</a> was clearly crucial. But the persistent attention of other news media was also critical. They greatly amplified the salience of the issue and, once in ‘storm mode’, they were key for sustaining attention and pressure, eventually compelling the government to respond.</p>&mdash; Dr. Ana Ines Langer (@AnaInesLanger) 
+<a href="https://twitter.com/AnaInesLanger/status/1270752815611338753?ref_src=twsrc%5Etfw">June 10, 2020</a></blockquote>
+</center>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
