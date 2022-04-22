@@ -1,0 +1,65 @@
+{{ $page := .page }}
+
+<!-- CV widget -->
+<div class="row animate__animated animate__fadeInLeft">
+  {{ if $page.Title }}
+  <div class="col-xs-12 col-md-4 section-heading">
+    <h1>{{ with $page.Title }}{{ . | markdownify }}{{ end }}</h1><br>
+    {{ with $page.Params.subtitle }}<p>{{ . | markdownify }}</p>{{ end }}
+  </div>
+  {{ end }}
+  <div class="col-xs-12">
+    <!-- Slideshow container -->
+    <div class="slideshow-container">
+    
+      <!-- Full-width images with number and caption text -->
+      {{- range $page.Params.png -}}
+        <div class="mySlides">
+          {{ with $page.Params.pdf }}
+          <a href="{{ . }}">
+          {{ end }}
+          <img src="{{ . }}" style="width:100%">
+          </a>
+        </div>
+      {{- end }}
+    
+      <!-- Next and previous buttons -->
+      <a class="prev" onclick="plusSlides(-1)" style="text-decoration : none">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)" style="text-decoration : none">&#10095;</a>
+    </div>
+    <br>
+    
+    <script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+    
+    // Next/previous controls
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+    
+    // Thumbnail image controls
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+    
+    function showSlides(n) {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+      if (n > slides.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " active";
+    }
+    </script>
+    {{ $page.Content }}
+  </div>
+
+</div>
