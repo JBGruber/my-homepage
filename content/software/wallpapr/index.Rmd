@@ -1,0 +1,28 @@
+---
+title: 'wallpapr'
+author: JBGruber
+date: '2022-01-01'
+slug: []
+categories: []
+tags: []
+abstract: '`wallpapr` is a little toy `R` package to make desktop and phone backgrounds using `ggplot2`. The design is inspired (aka copied one-to-one) by the beautiful calender wallpapers of [Emma](http://emmastudies.com). You can check out her wallpapers at:  [emmastudies.com/tagged/download](http://emmastudies.com/tagged/download). With this package you can create your own calender wallpapers using an input image.'
+authors:
+  - 'Johannes B. Gruber'
+draft: no
+header:
+  caption: ''
+  image: 'https://github.com/JBGruber/wallpapr/raw/master/man/figures/README-4.jpg'
+highlight: yes
+image_preview: ''
+math: no
+projects: []
+publication: ''
+publication_short: ''
+publication_types:
+  - '0'
+selected: no
+url_code: 'https://github.com/JBGruber/wallpapr'
+buttons:
+  - https://img.shields.io/badge/lifecycle-experimental-orange.svg
+---
+

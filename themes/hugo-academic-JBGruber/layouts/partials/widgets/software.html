@@ -1,0 +1,84 @@
+{{ $ := .root }}
+{{ $page := .page }}
+{{ $pubs_len := len (where $.Site.RegularPages "Type" "software") }}
+
+<!-- Publications widget -->
+<div class="row animate__animated animate__fadeInRight">
+    <h1>{{ with $page.Title }}{{ . | markdownify }}{{ end }}</h1>
+    {{ with $page.Params.subtitle }}<p>{{ . | markdownify }}</p>{{ end }}
+    {{ if gt $pubs_len $page.Params.count }}
+    <p class="view-all">
+      <a href="{{ "/software/" | relLangURL }}">
+        {{ i18n "more_publications" | markdownify }}
+        <i class="fa fa-angle-double-right"></i>
+      </a>
+    </p>
+    {{ end }}
+    <br>
+    {{ with $page.Content }}<p>{{ . | markdownify }}</p>{{ end }}
+
+    {{ if and ($page.Params.publication_type) (ne $page.Params.publication_type "-1") }}
+      {{ $.Scratch.Set "recent_pubs" (where (where $.Site.RegularPages "Type" "publication") ".Params.publication_types" "intersect" (slice $page.Params.publication_type)) }}
+    {{ else }}
+      {{ $.Scratch.Set "recent_pubs" (where $.Site.RegularPages "Type" "software") }}
+    {{ end }}
+
+    {{ if $page.Params.exclude_selected }}
+      {{ $.Scratch.Set "recent_pubs" ( ($.Scratch.Get "recent_pubs") | intersect (where (where $.Site.RegularPages "Type" "software") ".Params.selected" "!=" true) ) }}
+    {{ end }}
+
+    {{ $recent_pubs := $.Scratch.Get "recent_pubs" }}
+    {{ range first $page.Params.count $recent_pubs }}
+      <div class="pub-list-item card-simple" itemscope itemtype="http://schema.org/CreativeWork">
+      
+        <h3 class="article-title" itemprop="name">
+          <a href="{{ .Params.url_code | absURL }}" target="_blank" itemprop="url">{{ .Title }}</a>
+        </h3>
+        <div class="col-md-12 col-md-3">
+        {{ if .Params.image_preview }}
+          {{ .Scratch.Set "image" .Params.image_preview }}
+        {{ else if .Params.header.image }}
+          {{ .Scratch.Set "image" .Params.header.image }}
+        {{ end }}
+        {{ if .Scratch.Get "image" }}
+        <div>
+          <a href="{{ .Params.url_code | absURL }}" target="_blank" >
+            {{ $img_src := urls.Parse (.Scratch.Get "image") }}
+            {{ if $img_src.Scheme }}
+              <img src="{{ .Scratch.Get "image" }}" class="article-banner" itemprop="image">
+            {{ else }}
+              <img src="{{ "/img/" | relURL }}{{ .Scratch.Get "image" }}" class="article-banner" itemprop="image"      >
+            {{ end }}
+          </a>
+        </div>
+        {{ end }}
+        </div>
+        <div class="col-md-12 col-md-9">
+      
+        <div class="pub-abstract" itemprop="text">
+          {{ if .Params.abstract_short }}
+          {{ .Params.abstract_short | markdownify }}
+          {{ else }}
+          {{ .Params.abstract | markdownify}}
+          {{ end }}
+        </div>
+      
+        <div class="pub-publication">
+          {{ if .Params.publication_short }}
+          {{- .Params.publication_short | markdownify -}},
+          {{ else if .Params.publication }}
+          {{- .Params.publication | markdownify -}},
+          {{- end -}}
+        </div>
+        </div>
+        <div class="pub-links row">
+          {{ range .Params.buttons }}
+          <img src="{{ . }}" style="float:left; padding-right: 3px">
+          {{ end }}
+        </div>
+      
+      </div>
+    {{ end }}
+
+  
+</div>

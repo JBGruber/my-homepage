@@ -275,11 +275,21 @@ defaultContentLanguageInSubdir = false
   name = "Publications"
   url = "#publications"
   weight = 2
+  
+[[menu.main]]
+  name = "Software"
+  url = "#software"
+  weight = 3
+  
+[[menu.main]]
+  name = "CV"
+  url = "#cv"
+  weight = 4
 
 [[menu.main]]
   name = "Posts"
   url = "#posts"
-  weight = 4
+  weight = 5
 
 #[[menu.main]]
 #  name = "Projects"
@@ -290,11 +300,6 @@ defaultContentLanguageInSubdir = false
 #  name = "Teaching"
 #  url = "#teaching"
 #  weight = 5
-
-[[menu.main]]
-  name = "CV"
-  url = "#cv"
-  weight = 3
   
 #[[menu.main]]
 #  name = "Presentations"

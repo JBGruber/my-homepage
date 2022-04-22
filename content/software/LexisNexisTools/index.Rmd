@@ -1,0 +1,58 @@
+---
+title: 'LexisNexisTools'
+author: JBGruber
+date: '2022-01-02'
+slug: []
+categories: []
+tags: []
+abstract: 'My PhD supervisor once told me that everyone doing newspaper analysis starts by writing code to read in files from the "LexisNexis" newspaper archive. However, while I do recommend this exercise, not everyone has the time. This package provides functions to read in TXT, RTF, DOC and PDF files downloaded from the old "LexisNexis" or DOCX from the new Nexis Uni, Lexis Advance and similar services. The package also comes with a few other features that should be useful while working with data from the popular newspaper archive.'
+authors:
+  - 'Johannes B. Gruber'
+draft: no
+header:
+  caption: ''
+  image: 'newspaper.jpg'
+highlight: yes
+image_preview: ''
+math: no
+projects: []
+publication: ''
+publication_short: ''
+publication_types:
+  - '0'
+selected: no
+url_code: 'https://github.com/JBGruber/LexisNexisTools'
+url_dataset: ''
+url_pdf: ''
+url_poster: ''
+url_preprint: ''
+url_project: ''
+url_slides: ''
+url_source: ''
+url_video: ''
+url_custom: [{name: 'DOI: 10.1177/1940161220925023', url: 'https://doi.org/10.1177/1940161220925023'}]
+status: 'published'
+buttons:
+  - https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg
+  - 'https://www.r-pkg.org/badges/version-ago/LexisNexisTools'
+  - 'https://github.com/JBGruber/LexisNexisTools/workflows/R-CMD-check/badge.svg'
+  - 'https://cranlogs.r-pkg.org/badges/grand-total/LexisNexisTools'
+  - 'https://codecov.io/gh/JBGruber/LexisNexisTools/branch/master/graph/badge.svg'
+---
+
+The article is open access and can be downloaded directly from the publisher.
+When it came out, Ana posted a nice little summary on Twitter.
+See below:
+
+<center>
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">We use a multi-platform approach (inc. newspaper coverage, Twitter, and e-petitions). Our analysis uncovers three key roles of legacy news media orgs. in political agenda-setting: initiating, amplifying &amp; sustaining attention. We also reveal the importance of other actors. 2/4</p>&mdash; Dr. Ana Ines Langer (@AnaInesLanger) 
+<a href="https://twitter.com/AnaInesLanger/status/1270752812041998336?ref_src=twsrc%5Etfw">June 10, 2020</a>
+</blockquote> 
+
+
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">The <a href="https://twitter.com/guardian?ref_src=twsrc%5Etfw">@guardian</a> was clearly crucial. But the persistent attention of other news media was also critical. They greatly amplified the salience of the issue and, once in ‘storm mode’, they were key for sustaining attention and pressure, eventually compelling the government to respond.</p>&mdash; Dr. Ana Ines Langer (@AnaInesLanger) 
+<a href="https://twitter.com/AnaInesLanger/status/1270752815611338753?ref_src=twsrc%5Etfw">June 10, 2020</a></blockquote>
+</center>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
