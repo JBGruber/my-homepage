@@ -68,5 +68,5 @@
 </a>
 {{ end }}
 {{ with $.Params.status }}
-<div class="btn {{ if eq . "published" }}btn-success{{ else }}btn-warning{{ end }} btn-outline btn-xs">status: {{ . }}</div>
+<a  class="btn {{ if eq . "published" }}btn-success{{ else }}btn-warning{{ end }} btn-outline btn-xs" href="{{ $.Permalink }}" >status: {{ . }}</a>
 {{ end }}
