@@ -13,6 +13,10 @@
     <div class="article-style" itemprop="articleBody">
       {{ .Content }}
     </div>
+    
+    {{ if not .Site.Params.comments_disabled }}
+      {{ partial "comments.html" . }}
+    {{ end }}
 
     {{ partial "tags.html" . }}
 
