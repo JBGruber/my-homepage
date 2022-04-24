@@ -109,7 +109,6 @@
   {{with .Params.twitter.image}}
     <meta property="twitter:image" content="{{ printf "/img/%s" . | absURL}}">
   {{else}}
-    {{.Title}}
     <meta property="twitter:image" content="{{ printf "/img/%s" .Site.Params.twitter_default_image | absURL}}">
   {{end}}
   
