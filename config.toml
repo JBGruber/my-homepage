@@ -83,6 +83,8 @@ defaultContentLanguageInSubdir = false
   phone = ""
   skype = ""
   telegram = ""
+  twitter_default_image = "twitter_preview.png"
+  
 
   # Enable Keybase in Contact widget by entering your keybase.io username.
   keybase = ""
@@ -237,7 +239,7 @@ defaultContentLanguageInSubdir = false
   [[params.social]]
     icon = "twitter"
     icon_pack = "fa"
-    link = "https://twitter.com/JohannesBGruber"
+    link = "JohannesBGruber"
 
   [[params.social]]
     icon = "google-scholar"
