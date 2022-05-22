@@ -15,7 +15,9 @@ weight = 5
     "Protest and Democracy",
     "News Media",
     "Hiking",
-    "Motorcycling"
+    "Photography",
+    "Motorcycling",
+    "Linux"
 ]
 
 # List your qualifications (such as academic degrees).
