@@ -1,0 +1,65 @@
+---
+title: 'Troublemakers in the Streets? A Framing Analysis of Newspaper Coverage
+  of Protests in the UK 1992-2017'
+author: Johannes B. Gruber
+date: '2022-05-23'
+slug: []
+categories: []
+tags: []
+abstract: 'Research indicates that when mainstream news media report about demonstrations, protesters often face delegitimising coverage. This phenomenon, known as the "(journalistic) protest paradigm", is thought to be a default mindset that leads journalists to emphasize the method of protesters over their message. However, empirical work has so far limited itself to specific protest movements or events and only covers brief periods. This study first identifies and then codes the main frames in all reports about domestic protest in the United Kingdom.  Analysing data that covers eight national newspapers during a 26 year period (*N* = 27,496), I provide a more systematic understanding of how mainstream news media in liberal democracies report about protests. The analysis shows that a stable majority of articles uses frames linked to the *protest paradigm* throughout the time period. However, a substantial and growing number of articles employ legitimising frames --- either on their own or co-existing with delegitimising framing.'
+abstract_short: 'This study first identifies and then codes the main frames in all reports about domestic protest in the United Kingdom. '
+authors:
+  - 'Johannes B. Gruber'
+draft: no
+header:
+  caption: ''
+  image: 'Troublemakers-in-the-Streets-c.png'
+highlight: yes
+image_preview: ''
+math: no
+projects: []
+publication: 'The International Journal of Press/Politics'
+publication_short: 'IJPP'
+publication_types:
+  - '0'
+selected: no
+url_code: ''
+url_dataset: ''
+url_pdf: 'https://theses.gla.ac.uk/82346/7/2021gruberphd.pdf'
+url_poster: ''
+url_preprint: ''
+url_project: ''
+url_slides: ''
+url_source: ''
+url_video: 'https://youtu.be/uA4rs2at-bc'
+url_custom: [{name: 'DOI: 10.1177/19401612221102058', url: 'https://doi.org/10.1177/19401612221102058'}]
+status: 'published'
+---
+
+At the heart of this article stands the question: how do the media report about protest?
+A regularly made allegation is that the press treat protesters unfairly and scandalise the bad behaviour of small parts of the protest group.
+And indeed, this is was many researchers have found as well!
+
+Labelled the "protest paradigm", research has uncovered a pattern of reporting that favours clashes between protesters and police, disruption of public life and appearance of protesters, crowding out reporting about protests' messages.
+
+In this article, I examine whether this is what happens in reporting by UK mainstream news media on domestic protest. Since the theoretical foundation of the “protest paradigm”-literature was laid decades ago, I wanted to identify the frames from the news material rather than coding a pre-defined set of frames.
+
+Coding frame elements from the literature and the material and then combining them using factor analysis, I identify seven distinct frames. Higher factor loadings show content analysis codes which are more important in a frame.
+
+![](factorloadplot.svg)
+
+What becomes clear is that while four of the frames resemble the delegitimising patterns in the "protest paradigm" literature closely, I also find two frames which legitimise protesters' actions or their message.
+
+I use the factor scores to determine the presence of one or multiple frames in 500 manually coded articles and then use the results as training data for machine learning classification of the remaining 26,613 newspaper articles about protest that I collected.
+
+The results show that the two legitimising frames were present in a substantial part of the reporting on domestic protest of the 26-year time frame I studied, while the frames linked to the "protest paradigm" are present in the majority of articles. A linear regression shows, however, that legitimising framing becomes more common over time, while none of the other frames show a significant change in frequency.
+
+![](framestime.svg)
+
+This means that protesters still face an uphill battle when it comes to getting their messages heard through the media - but the situation is slowly improving! This might not be meaningful for individual protests and it might favour some protest issues over others, but by and large, protest is not vilified.
+
+Overall, I think that my results show that protest can be a powerful tool for formally powerless groups to make their voices heard. Even through mainstream media. And even in the famously partisan right-wing press in the UK by the way (I show this in the Supplemental Material).
+
+Coincidentally, the article was published just a week before the 72nd Annual ICA Conference for which I recorded a video summary of the paper
+
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/uA4rs2at-bc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
