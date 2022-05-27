@@ -103,7 +103,7 @@ text.f1 {font-family:cmr10;font-size:9.96264px}
 <text class='f1' x='145.209858' y='-72.000004' transform='matrix(1 0 0 1 56.694 96.8947)'>Moral<tspan x='134.638356' y='-60.044836'>Ev</tspan><tspan x='146.123108'>aluation</tspan></text>
 <path d='M327.508 13.2383H272.145C269.945 13.2383 268.16 15.0234 268.16 17.2266V37.602C268.16 39.801 269.945 41.586 272.145 41.586H327.508C329.711 41.586 331.496 39.801 331.496 37.602V17.2266C331.496 15.0234 329.711 13.2383 327.508 13.2383Z' fill='#fff'/>
 <path d='M327.508 13.2383H272.145C269.945 13.2383 268.16 15.0234 268.16 17.2266V37.602C268.16 39.801 269.945 41.586 272.145 41.586H327.508C329.711 41.586 331.496 39.801 331.496 37.602V17.2266C331.496 15.0234 329.711 13.2383 327.508 13.2383Z' stroke='#000' fill='none' stroke-width='.3985' stroke-miterlimit='10'/>
-<text class='f1' x='135.385599' y='-72.000004' transform='matrix(1 0 0 1 141.734 102.817)'>T<tspan x='141.750629'>reatmen</tspan><tspan x='176.92439'>t</tspan></text>
+<text class='f1' x='135.385599' y='-72.000004' transform='matrix(1 0 0 1 141.734 102.817)'>T<tspan x='141.750629'>reatment</tspan></text>
 <path d='M-72.004 62.555H-8.668V13.2383H-72.004Z' fill='#fff'/>
 <text class='f1' x='139.121589' y='-72.000004' transform='matrix(1 0 0 1 -198.4277 95.3681)'>2.<tspan x='151.851657'>Op</tspan><tspan x='165.41197'>er-</tspan><tspan x='137.585662' y='-60.044836'>ationalise</tspan><tspan x='144.448841' y='-48.089668'>F</tspan><tspan x='150.122029'>rame</tspan><tspan x='138.208342' y='-36.1345'>Elemen</tspan><tspan x='170.171895'>ts</tspan></text>
 <path d='M13.039 126.629H331.496V98.281H13.039Z' fill='#fff'/>
@@ -131,7 +131,7 @@ text.f1 {font-family:cmr10;font-size:9.96264px}
 <path d='M327.508 268.359H272.145C269.945 268.359 268.16 270.145 268.16 272.348V292.723C268.16 294.922 269.945 296.707 272.145 296.707H327.508C329.711 296.707 331.496 294.922 331.496 292.723V272.348C331.496 270.145 329.711 268.359 327.508 268.359Z' stroke='#000' fill='none' stroke-width='.3985' stroke-miterlimit='10'/>
 <text class='f1' x='138.637458' y='-72.000004' transform='matrix(1 0 0 1 141.734 357.938)'>F<tspan x='144.310646'>rame</tspan><tspan x='169.244637'>...</tspan></text>
 <path d='M-72.004 305.723H-8.668V268.359H-72.004Z' fill='#fff'/>
-<text class='f1' x='138.083809' y='-72.000004' transform='matrix(1 0 0 1 -198.4277 350.49)'>5.<tspan x='150.813877'>F</tspan><tspan x='156.487064'>rame</tspan><tspan x='140.934235' y='-60.044836'>Iden</tspan><tspan x='159.752597'>tiﬁ-</tspan><tspan x='142.317931' y='-48.089668'>cation*</tspan></text>
+<text class='f1' x='138.083809' y='-72.000004' transform='matrix(1 0 0 1 -198.4277 350.49)'>5.<tspan x='150.813877'>F</tspan><tspan x='156.487064'>rame</tspan><tspan x='140.934235' y='-60.044836'>Identiﬁ-</tspan><tspan x='142.317931' y='-48.089668'>cation*</tspan></text>
 <path d='M13.039 381.75H331.496V353.402H13.039Z' fill='#fff'/>
 <path d='M13.039 381.75H331.496V353.402H13.039Z' stroke='#000' fill='none' stroke-width='.3985' stroke-miterlimit='10'/>
 <text class='f1' x='247.83478' y='-72.000004' transform='matrix(1 0 0 1 -113.3873 442.066)'>T<tspan x='254.19981'>rained</tspan><tspan x='284.668619'>Mo</tspan><tspan x='299.059148'>del(s)</tspan></text>
