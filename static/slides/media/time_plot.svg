@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' width='720.00pt' height='432.00pt' viewBox='0 0 720.00 432.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #F0F1EB;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3MjAuMDB8MC4wMHw0MzIuMDA='>
+    <rect x='0.00' y='0.00' width='720.00' height='432.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw0MzIuMDA=)'>
+<rect x='0.00' y='0.000000000000057' width='720.00' height='432.00' style='stroke-width: 1.07; stroke: none; fill: #F0F1EB;' />
+</g>
+<defs>
+  <clipPath id='cpMjIuODN8NzE0LjUyfDIzLjU0fDQxMy4xOQ=='>
+    <rect x='22.83' y='23.54' width='691.69' height='389.64' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMjIuODN8NzE0LjUyfDIzLjU0fDQxMy4xOQ==)'>
+<rect x='22.83' y='23.54' width='691.69' height='389.64' style='stroke-width: 1.07; fill: #F0F1EB;' />
+<polyline points='22.83,395.48 714.52,395.48 ' style='stroke-width: 0.43; stroke: #CCC1B7; stroke-linecap: butt;' />
+<polyline points='22.83,305.69 714.52,305.69 ' style='stroke-width: 0.43; stroke: #CCC1B7; stroke-linecap: butt;' />
+<polyline points='22.83,215.91 714.52,215.91 ' style='stroke-width: 0.43; stroke: #CCC1B7; stroke-linecap: butt;' />
+<polyline points='22.83,126.13 714.52,126.13 ' style='stroke-width: 0.43; stroke: #CCC1B7; stroke-linecap: butt;' />
+<polyline points='22.83,36.35 714.52,36.35 ' style='stroke-width: 0.43; stroke: #CCC1B7; stroke-linecap: butt;' />
+<polygon points='54.27,382.21 85.71,395.48 117.15,395.48 148.59,368.37 180.03,382.78 211.47,351.93 242.91,204.25 274.35,160.08 305.79,209.44 337.24,276.26 368.68,247.77 400.12,306.75 431.56,290.23 463.00,288.91 494.44,261.68 525.88,360.79 557.32,340.50 588.76,288.82 620.20,210.52 651.64,303.35 683.08,41.26 683.08,395.48 651.64,395.48 620.20,395.48 588.76,395.48 557.32,395.48 525.88,395.48 494.44,395.48 463.00,395.48 431.56,395.48 400.12,395.48 368.68,395.48 337.24,395.48 305.79,395.48 274.35,395.48 242.91,395.48 211.47,395.48 180.03,395.48 148.59,395.48 117.15,395.48 85.71,395.48 54.27,395.48 ' style='stroke-width: 0.00; stroke: none; fill: #F8766D; fill-opacity: 0.60;' />
+<polyline points='54.27,382.21 85.71,395.48 117.15,395.48 148.59,368.37 180.03,382.78 211.47,351.93 242.91,204.25 274.35,160.08 305.79,209.44 337.24,276.26 368.68,247.77 400.12,306.75 431.56,290.23 463.00,288.91 494.44,261.68 525.88,360.79 557.32,340.50 588.76,288.82 620.20,210.52 651.64,303.35 683.08,41.26 ' style='stroke-width: 2.13;' />
+</g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw0MzIuMDA=)'>
+<text x='17.90' y='398.62' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>0.0</text>
+<text x='17.90' y='308.84' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>0.1</text>
+<text x='17.90' y='219.05' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>0.2</text>
+<text x='17.90' y='129.27' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>0.3</text>
+<text x='17.90' y='39.49' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='12.42px' lengthAdjust='spacingAndGlyphs'>0.4</text>
+<text x='148.59' y='424.40' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='25.13px' lengthAdjust='spacingAndGlyphs'>Jan 25</text>
+<text x='368.68' y='424.40' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='27.29px' lengthAdjust='spacingAndGlyphs'>Feb 01</text>
+<text x='588.76' y='424.40' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='27.29px' lengthAdjust='spacingAndGlyphs'>Feb 08</text>
+<text x='22.83' y='14.90' style='font-size: 13.20px; font-family: "Liberation Sans";' textLength='200.46px' lengthAdjust='spacingAndGlyphs'>Robin Hood controversy in news</text>
+</g>
+</svg>
