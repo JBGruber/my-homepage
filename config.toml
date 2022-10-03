@@ -73,11 +73,11 @@ defaultContentLanguageInSubdir = false
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
-  organizations = [ { name = "European New School of Digital Studies", url = "https://www.europeannewschool.eu/digital-democracy.html" } ]
+  organizations = [ { name = "Vrije Universiteit Amsterdam", url = "https://opted.eu/team/wp7-pre-processing-storage-and-data-sharing/johannes-b-gruber/" } ]
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "JBGruber.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
-  email = "Gruber@Europa-Uni.de"
+  email = "J.B.Gruber@vu.nl"
   address = ""
   office_hours = ""
   phone = ""
@@ -234,7 +234,7 @@ defaultContentLanguageInSubdir = false
   [[params.social]]
     icon = "envelope"
     icon_pack = "fa"
-    link = "mailto:Gruber@Europa-Uni.de"
+    link = "mailto:J.B.Gruber@vu.nl"
 
   [[params.social]]
     icon = "twitter"
