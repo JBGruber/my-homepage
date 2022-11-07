@@ -240,7 +240,7 @@ defaultContentLanguageInSubdir = false
     icon = "mastodon"
     icon_pack = "fa"
     cat = "-brands"
-    link = "JBGruber@fosstodon.org"
+    link = "https://fosstodon.org/@JBGruber"
 
   [[params.social]]
     icon = "twitter"
