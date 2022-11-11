@@ -238,6 +238,7 @@ defaultContentLanguageInSubdir = false
 
   [[params.social]]
     icon = "mastodon"
+    rel = "me"
     icon_pack = "fa"
     cat = "-brands"
     link = "https://fosstodon.org/@JBGruber"
