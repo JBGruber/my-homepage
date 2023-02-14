@@ -1,0 +1,56 @@
+---
+title: You R My Valentine 3.0!
+author: ''
+date: '2023-02-14'
+slug: you-r-my-valentine-3-0
+categories: []
+tags: []
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+After a hiatus of three years already(!) I wanted to make another Valentine's post.
+Like [in 2019](https://www.johannesbgruber.eu/post/you-r-my-valentine/) and [2020](https://www.johannesbgruber.eu/post/you-r-my-valentine-2-0/) I wanted to make something special for my wonderful R-Lady.
+I tried to figure `rayshader` out for a while now and tried to make a heart shape map first.
+After some failed attempts I noticed you can also turn `ggplot2` objects into 3-D objects, which is absolutely amazing.
+So without further ado, here is some code:
+
+```{r, message=FALSE, eval=FALSE}
+library(rayshader)
+library(tidyverse)
+
+# make data for one heart
+hrt_dat <- data.frame(t = seq(0, 2 * pi, by = 0.01)) %>%
+  mutate(xhrt = 16 * sin(t) ^ 3,
+         yhrt = 13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t))
+
+# replicate the same 50 times, decreasing radius each time
+hrt_dat_all <- map2_df(seq(from = 1, to = 0.05, length.out = 50),
+                       seq_len(50),
+                       function(x, i) {
+                         hrt_dat %>% 
+                           mutate(xhrt = xhrt * x,
+                                  yhrt = yhrt * x,
+                                  run = log10(i))
+                       })
+
+# make plot in ggplot
+hrt <- ggplot(hrt_dat_all, aes(xhrt, yhrt, colour = run)) +
+  geom_point(size = 4, alpha = 0.9, show.legend = FALSE) +
+  scale_color_gradientn(colors = c("#F37374", "#F48181", "#F58D8D","#FF9999",
+                                   "#FFA3A3","#FFA699", "#FFB399", "#FFB399",
+                                   "#FFC099", "#FFC099","#FFCC99", "#FFCC99"),
+                                   guide = "none") +
+  labs(x = NULL, y = NULL, colour = NULL) +
+  theme_light()
+
+# transform to rayshader plot and render out as video
+plot_gg(hrt, width = 4, height = 4, scale = 300, multicore = TRUE, shadowcolor = "#3a4f70")
+render_movie("heart3d.mp4", frames = 180, fps = 15)
+```
+
+
+![](/img/heart3d.mp4){fig-align="center"}
+

@@ -1,0 +1,52 @@
+---
+title: You R My Valentine 3.0!
+author: ''
+date: '2023-02-14'
+slug: you-r-my-valentine-3-0
+categories: []
+tags: []
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<p>After a hiatus of three years already(!) I wanted to make another Valentine’s post.
+Like <a href="https://www.johannesbgruber.eu/post/you-r-my-valentine/">in 2019</a> and <a href="https://www.johannesbgruber.eu/post/you-r-my-valentine-2-0/">2020</a> I wanted to make something special for my wonderful R-Lady.
+I tried to figure <code>rayshader</code> out for a while now and tried to make a heart shape map first.
+After some failed attempts I noticed you can also turn <code>ggplot2</code> objects into 3-D objects, which is absolutely amazing.
+So without further ado, here is some code:</p>
+<pre class="r"><code>library(rayshader)
+library(tidyverse)
+
+# make data for one heart
+hrt_dat &lt;- data.frame(t = seq(0, 2 * pi, by = 0.01)) %&gt;%
+  mutate(xhrt = 16 * sin(t) ^ 3,
+         yhrt = 13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t))
+
+# replicate the same 50 times, decreasing radius each time
+hrt_dat_all &lt;- map2_df(seq(from = 1, to = 0.05, length.out = 50),
+                       seq_len(50),
+                       function(x, i) {
+                         hrt_dat %&gt;% 
+                           mutate(xhrt = xhrt * x,
+                                  yhrt = yhrt * x,
+                                  run = log10(i))
+                       })
+
+# make plot in ggplot
+hrt &lt;- ggplot(hrt_dat_all, aes(xhrt, yhrt, colour = run)) +
+  geom_point(size = 4, alpha = 0.9, show.legend = FALSE) +
+  scale_color_gradientn(colors = c(&quot;#F37374&quot;, &quot;#F48181&quot;, &quot;#F58D8D&quot;,&quot;#FF9999&quot;,
+                                   &quot;#FFA3A3&quot;,&quot;#FFA699&quot;, &quot;#FFB399&quot;, &quot;#FFB399&quot;,
+                                   &quot;#FFC099&quot;, &quot;#FFC099&quot;,&quot;#FFCC99&quot;, &quot;#FFCC99&quot;),
+                                   guide = &quot;none&quot;) +
+  labs(x = NULL, y = NULL, colour = NULL) +
+  theme_light()
+
+# transform to rayshader plot and render out as video
+plot_gg(hrt, width = 4, height = 4, scale = 300, multicore = TRUE, shadowcolor = &quot;#3a4f70&quot;)
+render_movie(&quot;heart3d.mp4&quot;, frames = 180, fps = 15)</code></pre>
+<p><video src="/img/heart3d.mp4" fig-align="center" controls=""><a href="/img/heart3d.mp4">Video</a></video></p>
