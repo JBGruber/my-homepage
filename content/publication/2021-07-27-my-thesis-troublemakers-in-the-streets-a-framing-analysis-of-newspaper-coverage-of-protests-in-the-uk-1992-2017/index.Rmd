@@ -33,7 +33,7 @@ publication_types:
 selected: no
 url_code: ''
 url_dataset: ''
-url_pdf: 'https://theses.gla.ac.uk/82346/7/2021gruberphd.pdf'
+url_pdf: 'https://theses.gla.ac.uk/82346/13/2021GruberPhD.pdf'
 url_poster: ''
 url_preprint: ''
 url_project: ''
