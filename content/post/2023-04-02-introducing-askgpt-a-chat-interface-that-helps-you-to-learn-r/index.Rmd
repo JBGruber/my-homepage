@@ -29,6 +29,18 @@ It's advantages for learning `R` (or any programming languages) are rather obvio
 So I got to work implementing a few of the functionalities I wish I had available when I first started with R.
 The resulting package was just released on CRAN and I wanted to write this post to highlight a few of the way you can use it to make learning or teaching easier.
 
+You can install it now like so
+
+``` r
+install.packages("askgpt")
+```
+
+Or get the development version:
+
+``` r
+remotes::install_github("JBGruber/askgpt")
+```
+
 # A Simple Chat Interface Directly in `R`
 
 ![](/img/askgpt.png)
