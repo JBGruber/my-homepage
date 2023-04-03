@@ -1,0 +1,273 @@
+---
+title: 'Introducing `askgpt`: a chat interface that helps you to learn R!'
+author: JBGruber
+date: '2023-04-02'
+slug: []
+categories: []
+tags:
+  - R
+draft: no
+header:
+  caption: ''
+  image: 'askgpt.png'
+  preview: yes
+---
+
+
+
+<p>Everyone is talking about AI at the moment.
+So when I talked to my collogues <a href="https://twitter.com/MarikenVelden">Mariken</a> and <a href="https://twitter.com/KasperWelbers">Kasper</a> the other day about how to make teaching <code>R</code> more engaging and how to help students overcome their problems, it is no big surprise that the conversation eventually found it’s way to the large language model GPT-3.5 by OpenAI and the chat interface ChatGPT.
+It’s advantages for learning <code>R</code> (or any programming languages) are rather obvious:</p>
+<ul>
+<li>you get help on exactly your path to learning – which is different for everyone of us</li>
+<li>you can ask the model anything without anxiety about what it might think of you</li>
+<li>it can answer instantaneously</li>
+</ul>
+<p>So I got to work implementing a few of the functionalities I wish I had available when I first started with R.
+The resulting package was just released on CRAN and I wanted to write this post to highlight a few of the way you can use it to make learning or teaching easier.</p>
+<div id="a-simple-chat-interface-directly-in-r" class="section level1">
+<h1>A Simple Chat Interface Directly in <code>R</code></h1>
+<p><img src="/img/askgpt.png" /></p>
+<p>The main function, <code>askgpt()</code>, is very similar to ChatGPT, only directly in <code>R</code>:</p>
+<pre class="r"><code>library(askgpt)</code></pre>
+<pre class="r"><code>askgpt(&quot;Can you explain how functions work in R?&quot;)</code></pre>
+<pre><code>#&gt; Functions in R are a set of pre-defined or user-defined set of instructions that can take inputs, perform specific calculations or operations, and return outputs. Functions can be used to automate repetitive tasks, combine multiple operations into a single step, and create more complex programs.
+#&gt; 
+#&gt; In R, function definitions can be created using the `function()` keyword. The basic syntax of a function definition in R is as follows:
+#&gt; 
+#&gt; ```
+#&gt; function_name &lt;- function(argument1, argument2, ...) {
+#&gt;   # Function code goes here
+#&gt;   return(output)
+#&gt; }
+#&gt; ```
+#&gt; 
+#&gt; Here, `function_name` is the name you choose for your function, `argument1`, `argument2`, etc. are the inputs to the function (also called parameters), and `output` is the value that the function returns.
+#&gt; 
+#&gt; To use a function in R, you simply call it by its name and supply any necessary arguments:
+#&gt; 
+#&gt; ```
+#&gt; function_name(argument1, argument2, ...)
+#&gt; ```
+#&gt; 
+#&gt; R has a large number of built-in functions that perform a wide variety of tasks. For example, the `sum()` function adds up all the values of a given vector, while the `mean()` function calculates the average.
+#&gt; 
+#&gt; In addition to using pre-defined functions in R, you can also create your own custom functions based on your specific needs. By combining multiple functions and operations in a single custom function, you can create powerful tools for data analysis and modeling.</code></pre>
+<pre class="r"><code>askgpt(&quot;How do you make a histogram with ggplot2?&quot;)</code></pre>
+<pre><code>#&gt; To make a histogram with ggplot2, follow these steps:
+#&gt; 
+#&gt; 1. Load the ggplot2 library using the `library()` function.
+#&gt; ```
+#&gt; library(ggplot2)
+#&gt; ```
+#&gt; 
+#&gt; 2. Prepare your data. Create a vector or data frame that contains the values you want to plot.
+#&gt; 
+#&gt; 3. Create a ggplot object using the `ggplot()` function. Pass in the name of the data frame as an argument.
+#&gt; 
+#&gt; ```
+#&gt; ggplot(data = your_data_frame)
+#&gt; ```
+#&gt; 
+#&gt; 4. Add a histogram layer to the plot using the `geom_histogram()` function. Pass in the name of the column you want to use for your histogram as the `mapping` argument.
+#&gt; 
+#&gt; ```
+#&gt; ggplot(data = your_data_frame,
+#&gt;        mapping = aes(x = your_column_name)) +
+#&gt;   geom_histogram()
+#&gt; ```
+#&gt; 
+#&gt; 5. Customize the plot as desired using various ggplot2 functions, such as `labs()` for axis labels and titles, `theme()` for plot themes, and `scale_x_continuous()` and `scale_y_continuous()` for adjusting the axis limits and tick marks.
+#&gt; 
+#&gt; ```
+#&gt; ggplot(data = your_data_frame,
+#&gt;        mapping = aes(x = your_column_name)) +
+#&gt;   geom_histogram() +
+#&gt;   labs(x = &quot;X axis label&quot;,
+#&gt;        y = &quot;Y axis label&quot;,
+#&gt;        title = &quot;Histogram Title&quot;) +
+#&gt;   theme_bw() +
+#&gt;   scale_x_continuous(limits = c(0, 100),
+#&gt;                      breaks = seq(0, 100, 10),
+#&gt;                      expand = c(0, 0)) +
+#&gt;   scale_y_continuous(limits = c(0, 20),
+#&gt;                      breaks = seq(0, 20, 2),
+#&gt;                      expand = c(0, 0))
+#&gt; ```
+#&gt; 
+#&gt; 6. Use the `ggsave()` function to save the plot to a file.
+#&gt; 
+#&gt; ```
+#&gt; ggsave(file = &quot;path/to/save/file.png&quot;, width = 6, height = 4, dpi = 300)
+#&gt; ```
+#&gt; 
+#&gt; Note: Replace `your_data_frame` and `your_column_name` with the actual names of your data frame and column, respectively. Adjust the axis limits and tick marks according to your needs.</code></pre>
+<p>To make setting things up as easily as possible, the above lines will prompt you to log into your OpenAI account and generate an API key that is automatically saved for the future once entered into RStudio.</p>
+<p><img src="/img/askgpt_login.png" /></p>
+<p>The chat also remembers the previous conversation, so you can always ask it to elaborate or explain something differently.</p>
+<pre class="r"><code>askgpt(&quot;I don&#39;t understand what you mean. Can you explain this for beginners?&quot;)</code></pre>
+<pre><code>#&gt; Sure, let&#39;s break down the steps to create a histogram using ggplot2 in R for beginners:
+#&gt; 
+#&gt; 1. First, you need to load the ggplot2 package in your R session. You can do this by running the following command:
+#&gt; 
+#&gt; ```
+#&gt; library(ggplot2)
+#&gt; ```
+#&gt; 
+#&gt; 2. Next, you need to import or create a data frame that contains the data you want to plot. For example, let&#39;s create a vector of random numbers using the `rnorm()` function:
+#&gt; 
+#&gt; ```
+#&gt; my_data &lt;- rnorm(1000, mean = 10, sd = 2)
+#&gt; ```
+#&gt; 
+#&gt; This creates a vector of 1000 normal-distributed random numbers with a mean of 10 and a standard deviation of 2.
+#&gt; 
+#&gt; 3. Now, you can create a basic ggplot object using the `ggplot()` function, passing in the name of the data frame as an argument:
+#&gt; 
+#&gt; ```
+#&gt; my_plot &lt;- ggplot(data = my_data)
+#&gt; ```
+#&gt; 
+#&gt; 4. Then, you can add a histogram layer on top of the ggplot object using the `geom_histogram()` function:
+#&gt; 
+#&gt; ```
+#&gt; my_plot &lt;- ggplot(data = my_data) + geom_histogram(binwidth = 0.5)
+#&gt; ```
+#&gt; 
+#&gt; Here, `binwidth` is an argument that specifies the size of each histogram bin - we&#39;ve set it to 0.5, but you can adjust it depending on your data.
+#&gt; 
+#&gt; 5. Finally, you can customize the histogram by adding axis labels, a title, changing the bin width, etc. Here&#39;s an example:
+#&gt; 
+#&gt; ```
+#&gt; my_plot &lt;- ggplot(data = my_data, aes(x = my_data)) + 
+#&gt;            geom_histogram(binwidth = 0.5, fill = &quot;blue&quot;, 
+#&gt;                           alpha = 0.5, colour = &quot;black&quot;) + 
+#&gt;            labs(title = &quot;My Histogram&quot;, x = &quot;Values&quot;, y = &quot;Frequency&quot;)
+#&gt; ```
+#&gt; 
+#&gt; In this example, we&#39;ve added axis labels and a title to the plot, set the bin width to 0.5, filled the histogram bars with blue and made them semi-transparent with `alpha`, and set the border color to black.
+#&gt; 
+#&gt; 6. You can then display the plot using `print(my_plot)` or simply `my_plot`.
+#&gt; 
+#&gt; ```
+#&gt; print(my_plot)
+#&gt; ```
+#&gt; 
+#&gt; 7. If you want to save the plot to your computer, you can use the `ggsave()` function:
+#&gt; 
+#&gt; ```
+#&gt; ggsave(&quot;my_histogram.png&quot;, my_plot)
+#&gt; ```
+#&gt; 
+#&gt; Here, we&#39;re saving the histogram as a PNG file named &quot;my_histogram.png&quot;. You can specify the path where you want to save the file, and adjust the height and width using the `width` and `height` arguments.
+#&gt; 
+#&gt; Hope this helps!</code></pre>
+</div>
+<div id="error-explanation" class="section level1">
+<h1>Error Explanation</h1>
+<p>One thing that endlessly frustrated me when I first learned R were the sometimes rather cryptic error messages.
+<code>askgpt</code> solved this problem by logging your errors and sending them to the OpenAI API when prompted.
+This works by default for <code>tidyverse</code> errors, but you need to enable logging first for other error messages:</p>
+<pre class="r"><code>log_init()
+mean[1]
+askgpt(&quot;What is wrong with my last command?&quot;)</code></pre>
+<pre><code>#&gt; The error message &quot;object of type &#39;closure&#39; is not subsettable&quot; occurs when you try to subset or extract a portion of an R function or a closure object, which is not allowed.
+#&gt; 
+#&gt; For example, if you try to index a function by using the `[ ]` operator, the error message will appear. This is because functions are not indexable or subsettable objects in R. 
+#&gt; 
+#&gt; Here&#39;s an example code that produces this error:
+#&gt; 
+#&gt; ```r
+#&gt; # defining a function
+#&gt; myFun &lt;- function(x) { 
+#&gt;   x^2 
+#&gt; }
+#&gt; 
+#&gt; # trying to subset the function with index
+#&gt; myFun[1:3]
+#&gt; ```
+#&gt; 
+#&gt; When you run this code, you&#39;ll get the error message:
+#&gt; 
+#&gt; ```
+#&gt; Error in myFun[1:3] : object of type &#39;closure&#39; is not subsettable
+#&gt; ```
+#&gt; 
+#&gt; The error message is telling you that you can&#39;t subset the `myFun` function since it is not a data object with indexable elements. 
+#&gt; 
+#&gt; To fix this error, you need to make sure that you are not trying to subset or extract a portion of a function or closure object. Instead, you should use the function or closure as it was intended to be used. If you want to extract some value or output from the function, you can assign it to a variable or use it as an argument in another function call.</code></pre>
+<p>“What is wrong with my last command?” in this case is a special trigger that sends your last error message and the code that produced it.
+<code>"help!"</code> is a short alias and does the same thing.</p>
+</div>
+<div id="addin-for-teaching" class="section level1">
+<h1>Addin for Teaching</h1>
+<p>The package also comes with several RStudio addins that solve some common functions for leaning or teaching <code>R</code> and for developing packages.
+The biggest one is the <em>Tutorialise</em> adding.
+Let’s say, you have the code for a tutorial ready and a general plan on how to proceed.
+Now the final step is to make this into a class with explanations for the code and some examples.
+Highlight the code and select <em>Tutorialise Code</em> from the <em>Addins</em> menu:</p>
+<p><img src="/img/askgpt_tutorial.png" /></p>
+</div>
+<div id="other-addins" class="section level1">
+<h1>Other Addins</h1>
+<p>At the moment, there are four more addins.
+2 targeted at people learning <code>R</code>, two for <code>R</code> developers:</p>
+<ul>
+<li><em>Explain Code</em> sends the highlighted code to the API and returns the answer in the Console</li>
+<li><em>Annotate Code</em> adds comments to the highlighted code directly in the R script</li>
+<li><em>Document Code</em> documents functions using <code>roxygen2</code> syntax</li>
+<li><em>Write Test</em> creates a <code>testthat</code> style unit test for a highlighted function</li>
+</ul>
+</div>
+<div id="configuration" class="section level1">
+<h1>Configuration</h1>
+<p>You can configure how <code>askgpt</code> sends API requests by using options that start with <code>askgpt_*</code>.
+For example, to use a different model to use in <code>askgpt()</code> use <code>options(askgpt_chat_model = "gpt-3.5-turbo-0301")</code>.
+If you use the completions instead of the chat API (<code>chat = FALSE</code> in <code>askgpt()</code>) use <code>options(askgpt_completions_model = "text-curie-001")</code>.
+It does not matter if the API parameter is listed in the function or not.
+All are used.
+See the complete list <a href="https://platform.openai.com/docs/api-reference/chat">here</a> and <a href="https://platform.openai.com/docs/api-reference/completions">here</a>.</p>
+<p>The most important setting, however, is <code>askgpt_config</code>.
+This can be used to configure the chat using plain English:</p>
+<pre class="r"><code>options(askgpt_config = &quot;I&#39;m 8 years old, please explain things easily&quot;)
+askgpt(&quot;What is an R function?&quot;)</code></pre>
+<pre class="r"><code>#&gt; 
+#&gt; ── Answer ──────────────────────────────────────────────────────────────────────
+#&gt; An R function is like giving your friend a set of instructions to perform a
+#&gt; particular task. In R programming, a function is a set of instructions or steps
+#&gt; that is given a name, and when you call that name, the function will perform
+#&gt; those instructions. A function can take information or inputs, do something
+#&gt; with those inputs (like adding or subtracting), and then give the result back
+#&gt; as output.
+#&gt; 
+#&gt; For example, think about giving your friend the instructions to make a peanut
+#&gt; butter sandwich. The instructions might be:
+#&gt; 
+#&gt; 1. Take two slices of bread 2. Spread peanut butter on one slice 3. Spread
+#&gt; jelly on the other slice 4. Put the two slices together
+#&gt; 
+#&gt; In R, a function might take a number (like 5) and add 1 to it, and then return
+#&gt; the result (which would be 6).
+#&gt; 
+#&gt; Functions in R are used to make code easier to use, understand, and reuse. They
+#&gt; can also help programmers write complex and efficient programs.</code></pre>
+</div>
+<div id="technical-details-on-the-conversation-history" class="section level1">
+<h1>Technical Details on the Conversation History</h1>
+<p>One more rather technical detail about the package is that the conversation history is not kept locally (I mean OpenAI is definitly storing your requests somewhere, but it is not used inside the conversation).
+Rather, the questions and answers are stored in the <code>R</code> environment. You can access it using the function <code>prompt_history()</code> and <code>response_history()</code>:</p>
+<pre class="r"><code>prompt_history()</code></pre>
+<pre><code>#&gt; [1] &quot;Can you explain how functions work in R?&quot;                                                     
+#&gt; [2] &quot;How do you make a histogram with ggplot2?&quot;                                                    
+#&gt; [3] &quot;I don&#39;t understand what you mean. Can you explain this for beginners?&quot;                        
+#&gt; [4] &quot;explain why this R code does not work:\nNULL\n\&quot;object of type &#39;closure&#39; is not subsettable\&quot;&quot;</code></pre>
+<pre class="r"><code>response_history()</code></pre>
+<pre><code>#&gt; [1] &quot;Yes, of course! \n\nFunctions in R are like self-contained units of code that perform a specific task. They are used to create reusable code to avoid writing the same task again and again. In R, we use pre-defined inbuilt functions or we create our own functions as per our requirement. \n\nHere&#39;s how a simple function works in R:\n\n```r\n# Creating a function:\nmy_function &lt;- function(param1, param2) {\n   # Body of the function - this is where the actual work is done\n   result &lt;- param1 + param2\n   return(result)\n}\n\n# Calling the function:\noutput &lt;- my_function(2, 3)\nprint(output)\n```\n\nIn this example, we defined a function named `my_function` that takes two parameters `param1` and `param2`. Inside the function, we added these two parameters and stored the result in a variable named `result`. Finally, the result is returned from the function using the `return()` statement.\n\nAfter we define the function, we can call it like any other R function. In this case, we passed the values `2` and `3` as the parameters for `param1` and `param2`, respectively. The function then returns the sum of these two values, which is `5`.\n\nThis is a simple example, but in practice, functions in R can be used to carry out complex tasks, handle large amounts of data, and automate various workflows.&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+#&gt; [2] &quot;To make a histogram with ggplot2 in R, you can use the `geom_histogram()` function which is used to create histograms. \n\nHere is an example code to create a histogram with ggplot2:\n\n```r\n# Load ggplot2 library\nlibrary(ggplot2)\n\n# Create a dataframe\ndf &lt;- data.frame(x = rnorm(1000))\n\n# Create a histogram using ggplot2\nggplot(data=df, aes(x=x)) +\n  geom_histogram(binwidth=0.2, fill=\&quot;blue\&quot;, color=\&quot;black\&quot;) +\n  labs(title=\&quot;Histogram of Random Data\&quot;, x=\&quot;Value\&quot;, y=\&quot;Frequency\&quot;)\n```\n\nIn the above code, we first load the ggplot2 library using the `library()` function. Then, we create a dataframe named `df` with 1000 random numbers using `rnorm()`. \n\nNext, we create a histogram using ggplot2 by specifying the dataframe `df` and mapping the variable `x` to the `x` aesthetic using `aes()`. We use `geom_histogram()` to actually create the histogram. We also set the binwidth, fill color, and border color using the `binwidth`, `fill`, and `color` arguments inside `geom_histogram()`. Finally, we add a title and label the x and y-axis using `labs()`.\n\nRunning this code will create a histogram of the random data with binwidth of 0.2, blue fill color, and black border color. The resulting plot should be similar to this: \n\n![Histogram with ggplot2](https://i.imgur.com/IjJnRmR.png) \n\nNote that you can adjust the binwidth and other parameters as per your requirement to create histograms with different appearance and granularity.&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+#&gt; [3] &quot;Of course, I&#39;m sorry if my previous answer was not clear enough. Here&#39;s a more beginner-friendly explanation.\n\nIn R, a histogram is a graphical representation of the distribution of a set of numerical data. It is used to visualize the frequency distribution of a continuous variable. \n\nWith ggplot2, you can easily create histogram charts with just a few lines of code. Here&#39;s how:\n\n1. First, you need to install and load the `ggplot2` library in R by running `install.packages(\&quot;ggplot2\&quot;)` and `library(ggplot2)`.\n2. Next, you need to create a dataframe with your data. For example, `df &lt;- data.frame(x = rnorm(1000))` creates a dataframe `df` with 1000 random numbers.\n3. Then, you use the `ggplot()` function to create a ggplot object and specify the dataframe and mapping using the `aes()` function. For example, `ggplot(data=df, aes(x=x))` creates a ggplot object that uses the `df` dataframe and maps the `x` variable to the `x` aesthetic. \n4. Next, you use the `geom_histogram()` function to create a histogram using the ggplot object. For example, `geom_histogram(binwidth=0.2, fill=\&quot;blue\&quot;, color=\&quot;black\&quot;)` creates a histogram with a binwidth of 0.2, blue fill color, and black border color. You can adjust the `binwidth` and other parameters as per your requirement to create histograms with different appearance and granularity.\n5. Finally, you can add a title and axis labels to the plot using the `labs()` function. For example, `labs(title=\&quot;Histogram of Random Data\&quot;, x=\&quot;Value\&quot;, y=\&quot;Frequency\&quot;)` sets the title of the plot as \&quot;Histogram of Random Data\&quot;, and labels the x and y axis respectively.\n\nOnce you have written the code, running it will create a histogram chart of the data that you have provided. You can customize the chart by adjusting the parameters of `geom_histogram` function, such as binwidth, fill color, and border color, etc. \n\nI hope this explanation is more helpful.&quot;
+#&gt; [4] &quot;The error message \&quot;object of type &#39;closure&#39; is not subsettable\&quot; occurs when you try to subset or extract a portion of an R function or a closure object, which is not allowed.\n\nFor example, if you try to index a function by using the `[ ]` operator, the error message will appear. This is because functions are not indexable or subsettable objects in R. \n\nHere&#39;s an example code that produces this error:\n\n```r\n# defining a function\nmyFun &lt;- function(x) { \n  x^2 \n}\n\n# trying to subset the function with index\nmyFun[1:3]\n```\n\nWhen you run this code, you&#39;ll get the error message:\n\n```\nError in myFun[1:3] : object of type &#39;closure&#39; is not subsettable\n```\n\nThe error message is telling you that you can&#39;t subset the `myFun` function since it is not a data object with indexable elements. \n\nTo fix this error, you need to make sure that you are not trying to subset or extract a portion of a function or closure object. Instead, you should use the function or closure as it was intended to be used. If you want to extract some value or output from the function, you can assign it to a variable or use it as an argument in another function call.&quot;</code></pre>
+<p>Each time a request is send via the chat API, the entire history is sent as well.
+This means that at some point, you will get an error as prompt + response would exceed the token limit of 4,096 tokens.
+If this happens, you can start a fresh conversation with <code>new_conversation()</code>.
+(I only ran into the limitation a day after submitting to CRAN, so this is only available in the development version right now).</p>
+</div>

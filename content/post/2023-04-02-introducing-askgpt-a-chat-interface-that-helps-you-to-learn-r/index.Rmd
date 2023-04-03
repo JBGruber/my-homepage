@@ -1,0 +1,194 @@
+---
+title: 'Introducing `askgpt`: a chat interface that helps you to learn R!'
+author: JBGruber
+date: '2023-04-02'
+slug: []
+categories: []
+tags:
+  - R
+draft: no
+header:
+  caption: ''
+  image: 'askgpt.png'
+  preview: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE, comment = "#>")
+```
+
+
+Everyone is talking about AI at the moment.
+So when I talked to my collogues [Mariken](https://twitter.com/MarikenVelden) and [Kasper](https://twitter.com/KasperWelbers) the other day about how to make teaching `R` more engaging and how to help students overcome their problems, it is no big surprise that the conversation eventually found it's way to the large language model GPT-3.5 by OpenAI and the chat interface ChatGPT.
+It's advantages for learning `R` (or any programming languages) are rather obvious:
+
+- you get help on exactly your path to learning -- which is different for everyone of us
+- you can ask the model anything without anxiety about what it might think of you
+- it can answer instantaneously 
+
+So I got to work implementing a few of the functionalities I wish I had available when I first started with R.
+The resulting package was just released on CRAN and I wanted to write this post to highlight a few of the way you can use it to make learning or teaching easier.
+
+# A Simple Chat Interface Directly in `R`
+
+![](/img/askgpt.png)
+
+The main function, `askgpt()`, is very similar to ChatGPT, only directly in `R`:
+
+```{r}
+library(askgpt)
+```
+
+```{r eval=FALSE}
+askgpt("Can you explain how functions work in R?")
+```
+
+```{r echo=FALSE, results='markup'}
+answer <- askgpt("Can you explain how functions work in R?", progress = FALSE, return_answer = TRUE)
+cat(answer)
+```
+
+```{r eval=FALSE}
+askgpt("How do you make a histogram with ggplot2?")
+```
+
+```{r echo=FALSE, results='markup'}
+answer <- askgpt("How do you make a histogram with ggplot2?", progress = FALSE, return_answer = TRUE)
+cat(answer)
+```
+
+To make setting things up as easily as possible, the above lines will prompt you to log into your OpenAI account and generate an API key that is automatically saved for the future once entered into RStudio.
+
+![](/img/askgpt_login.png)
+
+The chat also remembers the previous conversation, so you can always ask it to elaborate or explain something differently.
+
+```{r eval=FALSE}
+askgpt("I don't understand what you mean. Can you explain this for beginners?")
+```
+
+```{r echo=FALSE, results='markup'}
+answer <- askgpt("I don't understand what you mean. Can you explain this for beginners?", progress = FALSE, return_answer = TRUE)
+cat(answer)
+```
+
+# Error Explanation
+
+One thing that endlessly frustrated me when I first learned R were the sometimes rather cryptic error messages.
+`askgpt` solved this problem by logging your errors and sending them to the OpenAI API when prompted.
+This works by default for `tidyverse` errors, but you need to enable logging first for other error messages:
+
+```{r eval=FALSE}
+log_init()
+mean[1]
+askgpt("What is wrong with my last command?")
+```
+
+```{r echo=FALSE, results='markup'}
+err <- rlang::error_cnd(message = "object of type 'closure' is not subsettable", 
+                 error = structure(list(
+                   message = "object of type 'closure' is not subsettable",
+                   call = "mean[1]", object = function(x, ...) {
+                     UseMethod("mean")
+                   }
+                 ), class = c(
+                   "notSubsettableError",
+                   "error", "condition"
+                 )), 
+                 trace = structure(
+                   list(
+                     call = list(), parent = integer(0),
+                     visible = logical(0), namespace = character(0), scope = character(0)
+                   ),
+                   row.names = integer(0), version = 2L, class = c(
+                     "rlang_trace",
+                     "rlib_trace", "tbl", "data.frame"
+                   )
+                 ), 
+                 parent = NULL)
+
+
+rlang:::poke_last_error(err)
+answer <- askgpt("What is wrong with my last command?", progress = FALSE, return_answer = TRUE)
+cat(answer)
+```
+
+"What is wrong with my last command?" in this case is a special trigger that sends your last error message and the code that produced it.
+`"help!"` is a short alias and does the same thing.
+
+# Addin for Teaching
+
+The package also comes with several RStudio addins that solve some common functions for leaning or teaching `R` and for developing packages.
+The biggest one is the *Tutorialise* adding.
+Let's say, you have the code for a tutorial ready and a general plan on how to proceed.
+Now the final step is to make this into a class with explanations for the code and some examples.
+Highlight the code and select *Tutorialise Code* from the *Addins* menu:
+
+![](/img/askgpt_tutorial.png)
+
+# Other Addins
+
+At the moment, there are four more addins.
+2 targeted at people learning `R`, two for `R` developers:
+
+- *Explain Code* sends the highlighted code to the API and returns the answer in the Console
+- *Annotate Code* adds comments to the highlighted code directly in the R script
+- *Document Code* documents functions using `roxygen2` syntax
+- *Write Test* creates a `testthat` style unit test for a highlighted function
+
+
+# Configuration
+
+You can configure how `askgpt` sends API requests by using options that start with `askgpt_*`.
+For example, to use a different model to use in `askgpt()` use `options(askgpt_chat_model = "gpt-3.5-turbo-0301")`.
+If you use the completions instead of the chat API (`chat = FALSE` in `askgpt()`) use `options(askgpt_completions_model = "text-curie-001")`.
+It does not matter if the API parameter is listed in the function or not. 
+All are used.
+See the complete list [here](https://platform.openai.com/docs/api-reference/chat) and [here](https://platform.openai.com/docs/api-reference/completions).
+
+The most important setting, however, is `askgpt_config`.
+This can be used to configure the chat using plain English:
+
+```{r eval=FALSE}
+options(askgpt_config = "I'm 8 years old, please explain things easily")
+askgpt("What is an R function?")
+```
+
+```{r eval=FALSE}
+#> 
+#> ── Answer ──────────────────────────────────────────────────────────────────────
+#> An R function is like giving your friend a set of instructions to perform a
+#> particular task. In R programming, a function is a set of instructions or steps
+#> that is given a name, and when you call that name, the function will perform
+#> those instructions. A function can take information or inputs, do something
+#> with those inputs (like adding or subtracting), and then give the result back
+#> as output.
+#> 
+#> For example, think about giving your friend the instructions to make a peanut
+#> butter sandwich. The instructions might be:
+#> 
+#> 1. Take two slices of bread 2. Spread peanut butter on one slice 3. Spread
+#> jelly on the other slice 4. Put the two slices together
+#> 
+#> In R, a function might take a number (like 5) and add 1 to it, and then return
+#> the result (which would be 6).
+#> 
+#> Functions in R are used to make code easier to use, understand, and reuse. They
+#> can also help programmers write complex and efficient programs.
+```
+
+# Technical Details on the Conversation History
+
+One more rather technical detail about the package is that the conversation history is not kept locally (I mean OpenAI is definitly storing your requests somewhere, but it is not used inside the conversation).
+Rather, the questions and answers are stored in the `R` environment. You can access it using the function `prompt_history()` and `response_history()`:
+
+```{r, results='markup'}
+prompt_history()
+response_history()
+```
+
+Each time a request is send via the chat API, the entire history is sent as well.
+This means that at some point, you will get an error as prompt + response would exceed the token limit of 4,096 tokens.
+If this happens, you can start a fresh conversation with `new_conversation()`. 
+(I only ran into the limitation a day after submitting to CRAN, so this is only available in the development version right now).
+
