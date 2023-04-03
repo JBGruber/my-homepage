@@ -47,8 +47,9 @@ weight = 5
 
 # Background
 
-I am a Post-Doc Researcher at the  Department of Communication Science at Vrije Universiteit Amsterdam and the [OPTED project](https://opted.eu/team/wp7-pre-processing-storage-and-data-sharing/johannes-b-gruber/) with a focus on text as data methods and creating open source software tools to make these methods easily accessible and reproducible.
-Previously, I worked as Post-Doc Researche at the Chair for Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder).
+I am a Post-Doc Researcher at the  Department of Communication Science at Vrije Universiteit Amsterdam working on the [OPTED project](https://opted.eu/team/wp7-pre-processing-storage-and-data-sharing/johannes-b-gruber/) with a focus on text as data methods and creating open source software tools to make these methods easily accessible and reproducible.
+Since April, I also started to work on the [NEWSFLOWS project](https://newsflows.eu/) at the Department of Communication Science at the University of Amsterdam.
+Previously, I worked as Post-Doc Researcher at the Chair for Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder).
 In 2021, I passed my PhD in Politics at the University of Glasgow.
 
 In my PhD project, I scrutinised how the media in the UK portrays protest events. Most literature about the topic assumes that the messages of protests are delegitimised by the media through routinised framing, i.e. a focus on disruption by and deviance of protesters. 
