@@ -49,6 +49,7 @@ But just for the future and in case I forget something, I solve the issue with <
   pull(Package) |&gt; 
   cran_downloads(from = &quot;2018-04-09&quot;, to = Sys.Date()) |&gt; 
   filter(count &gt; 0) |&gt; 
+  group_by(package) |&gt; 
   mutate(count_total = cumsum(count))</code></pre>
 <p>Using <code>cran_downloads</code> from the package <code>cranlogs</code>, I get the downloads of my packages by day from the time my first package was released.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>Now let’s visualise this:</p>
@@ -78,6 +79,7 @@ download_own_data &lt;- my_own_pkgs |&gt;
   pull(Package) |&gt; 
   cran_downloads(from = &quot;2018-04-09&quot;, to = Sys.Date()) |&gt; 
   filter(count &gt; 0) |&gt; 
+  group_by(package) |&gt; 
   mutate(count_total = cumsum(count))
 
 ggplot(download_own_data, aes(x = date, y = count_total, colour = package)) +
@@ -87,6 +89,8 @@ ggplot(download_own_data, aes(x = date, y = count_total, colour = package)) +
   labs(x = NULL, y = NULL, colour = NULL, titletitle = &quot;Package Downloads over time&quot;,
        caption = paste0(&quot;Data source: cranlogs.r-pkg.org; Updated: &quot;, Sys.Date()))</code></pre>
 <p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>And that’s it.
+Just replace my name with yours if you want to use the code above.</p>
 <div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>

@@ -45,6 +45,7 @@ download_data <- my_pkgs |>
   pull(Package) |> 
   cran_downloads(from = "2018-04-09", to = Sys.Date()) |> 
   filter(count > 0) |> 
+  group_by(package) |> 
   mutate(count_total = cumsum(count))
 ```
 
@@ -87,6 +88,7 @@ download_own_data <- my_own_pkgs |>
   pull(Package) |> 
   cran_downloads(from = "2018-04-09", to = Sys.Date()) |> 
   filter(count > 0) |> 
+  group_by(package) |> 
   mutate(count_total = cumsum(count))
 
 ggplot(download_own_data, aes(x = date, y = count_total, colour = package)) +
@@ -97,3 +99,5 @@ ggplot(download_own_data, aes(x = date, y = count_total, colour = package)) +
        caption = paste0("Data source: cranlogs.r-pkg.org; Updated: ", Sys.Date()))
 ```
 
+And that's it.
+Just replace my name with yours if you want to use the code above.
