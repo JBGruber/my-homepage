@@ -1,0 +1,96 @@
+---
+title: CRAN Download counts
+author: JBGruber
+date: '2023-09-06'
+slug: []
+categories: []
+tags:
+  - R
+header:
+  caption: ''
+  image: ''
+  preview: yes
+---
+
+
+
+<p>I really like developing software and making my own life and work easier with it.
+But what I enjoy even more is to see others actually use it!
+So every now and then I look at CRAN download counts of my <code>R</code> packages.
+I’m not in any top-10 rankings or anything.
+But that was also never the point.
+I just like sharing my knowledge and see others use it!</p>
+<p>So I’m not sure who the target is for this post.
+Other developers who want to use the code below to check their download numbers maybe?
+Mostly I just want to come here to have a quick look myself.</p>
+<pre class="r"><code>library(tidyverse, quietly = TRUE)
+library(cranlogs)
+theme_set(theme_minimal() + 
+            theme(legend.position = &quot;bottom&quot;))
+
+my_pkgs &lt;- tools::CRAN_package_db() |&gt; 
+  filter(str_detect(Author, &quot;Johannes Gruber&quot;))
+my_pkgs |&gt; 
+  as_tibble() |&gt; 
+  select(Package, Version, Author)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##   Package             Version Author                                            
+##   &lt;chr&gt;               &lt;chr&gt;   &lt;chr&gt;                                             
+## 1 askgpt              0.1.2   &quot;Johannes Gruber [aut, cre]&quot;                      
+## 2 LexisNexisTools     0.3.7   &quot;Johannes Gruber [aut, cre]&quot;                      
+## 3 quanteda.textmodels 0.9.6   &quot;Kenneth Benoit [cre, aut, cph]\n    (&lt;https://or…
+## 4 rtoot               0.3.2   &quot;David Schoch [aut, cre] (&lt;https://orcid.org/0000…
+## 5 rwhatsapp           0.2.4   &quot;Johannes Gruber [aut, cre]&quot;                      
+## 6 stringdist          0.9.10  &quot;Mark van der Loo [aut, cre] (&lt;https://orcid.org/…</code></pre>
+<p>As the first step, I load the packages I need and filter the CRAN DB for packages I was involved with.
+There aren’t that many, so I could also recall them.
+But just for the future and in case I forget something, I solve the issue with <code>R</code>.</p>
+<pre class="r"><code>download_data &lt;- my_pkgs |&gt; 
+  pull(Package) |&gt; 
+  cran_downloads(from = &quot;2018-04-09&quot;, to = Sys.Date()) |&gt; 
+  filter(count &gt; 0) |&gt; 
+  mutate(count_total = cumsum(count))</code></pre>
+<p>Using <code>cran_downloads</code> from the package <code>cranlogs</code>, I get the downloads of my packages by day from the time my first package was released.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Now let’s visualise this:</p>
+<pre class="r"><code>ggplot(download_data, aes(x = date, y = count, colour = package)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_manual(values = wesanderson::wes_palette(&quot;Royal1&quot;)) +
+  labs(x = NULL, y = NULL, colour = NULL, title = &quot;Package Downloads per Day&quot;,
+       caption = paste0(&quot;Data source: cranlogs.r-pkg.org; Updated: &quot;, Sys.Date()))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>That are the numbers by day.
+Here is the same for total counts:</p>
+<pre class="r"><code>ggplot(download_data, aes(x = date, y = count_total, colour = package)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_manual(values = wesanderson::wes_palette(&quot;Royal1&quot;)) +
+  labs(x = NULL, y = NULL, colour = NULL, titletitle = &quot;Package Downloads over time&quot;,
+       caption = paste0(&quot;Data source: cranlogs.r-pkg.org; Updated: &quot;, Sys.Date()))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Now this visualisation is honestly a little silly, since I contributed only a single function to <code>stringdist</code> and some of the others and I don’t want to take credit for the success of these packages.
+So let’s have a look at the ones where I was actually the main author:</p>
+<pre class="r"><code>my_own_pkgs &lt;- tools::CRAN_package_db() |&gt; 
+  filter(str_detect(Author, fixed(&quot;Johannes Gruber [aut, cre]&quot;)))
+
+download_own_data &lt;- my_own_pkgs |&gt; 
+  filter(str_detect(Author, &quot;Johannes Gruber&quot;)) |&gt; 
+  pull(Package) |&gt; 
+  cran_downloads(from = &quot;2018-04-09&quot;, to = Sys.Date()) |&gt; 
+  filter(count &gt; 0) |&gt; 
+  mutate(count_total = cumsum(count))
+
+ggplot(download_own_data, aes(x = date, y = count_total, colour = package)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_manual(values = wesanderson::wes_palette(&quot;Royal1&quot;)) +
+  labs(x = NULL, y = NULL, colour = NULL, titletitle = &quot;Package Downloads over time&quot;,
+       caption = paste0(&quot;Data source: cranlogs.r-pkg.org; Updated: &quot;, Sys.Date()))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>
+I looked this up via <code>httr::content(httr::GET(paste0("http://crandb.r-pkg.org/LexisNexisTools/all")))$versions[[1]]$date</code>, but it didn’t seem neccesary to include it in the code<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
