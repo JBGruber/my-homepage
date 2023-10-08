@@ -73,11 +73,11 @@ defaultContentLanguageInSubdir = false
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
-  organizations = [ { name = "Vrije Universiteit Amsterdam", url = "https://opted.eu/team/wp7-pre-processing-storage-and-data-sharing/johannes-b-gruber/" } ]
+  organizations = [ { name = "ASCoR | University of Amsterdam", url = "https://www.uva.nl/en/profile/g/r/j.b.gruber/j.b.gruber.html" } ]
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "JBGruber.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
-  email = "J.B.Gruber@vu.nl"
+  email = "J.B.Gruber@uva.nl"
   address = ""
   office_hours = ""
   phone = ""
@@ -234,7 +234,14 @@ defaultContentLanguageInSubdir = false
   [[params.social]]
     icon = "envelope"
     icon_pack = "fa"
-    link = "mailto:J.B.Gruber@vu.nl"
+    link = "mailto:J.B.Gruber@uva.nl"
+
+  [[params.social]]
+    icon = "square"
+    rel = "fa-"
+    icon_pack = "fa"
+    cat = "-solid"
+    link = "https://bsky.app/profile/jbgruber.bsky.social"
 
   [[params.social]]
     icon = "mastodon"
@@ -242,12 +249,6 @@ defaultContentLanguageInSubdir = false
     icon_pack = "fa"
     cat = "-brands"
     link = "https://fosstodon.org/@JBGruber"
-
-  [[params.social]]
-    icon = "twitter"
-    icon_pack = "fa"
-    cat = "-brands"
-    link = "JohannesBGruber"
 
   [[params.social]]
     icon = "google-scholar"
