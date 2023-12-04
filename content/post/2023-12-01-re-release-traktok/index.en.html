@@ -1,0 +1,167 @@
+---
+title: 'Re-Release: `traktok`'
+author: ''
+date: '2023-12-04'
+slug: []
+categories: []
+tags:
+  - R
+  - social media
+  - web-scraping
+header:
+  caption: ''
+  image: 'traktok.png'
+  preview: yes
+---
+
+
+
+<p>I’m happy to announce that <code>traktok</code>, my package to get content from TikTok, has returned from the dead.
+That’s slightly exaggerated, because it actually always worked in some shape or form, but up until about September, the most recent state on Github had very limited functionality.
+Now I extended the package substantially and also gave it an appealing home on a <code>pkgdown</code> site here: <a href="https://jbgruber.github.io/traktok/" class="uri">https://jbgruber.github.io/traktok/</a>.</p>
+<p>The main issue I had before, <a href="https://github.com/JBGruber/traktok/issues/5">namely that some requests to the unofficial TikTok API need to be signed</a>, still remains unresolved.
+But the remaining functions are now much more stable.
+I have also moved the ’authentication’for the unofficial API to a separate package, <code>cookiemonster</code>, since it seemed silly to maintain two different code bases for using cookies in <code>R</code> (the other place being in <a href="https://github.com/JBGruber/paperboy/"><code>paperboy</code></a>, which I will discuss here soon).</p>
+<p>However, what is new is that <code>traktok</code> now supports the Research API!
+This was actually also an issue because it required me to decide on a new naming scheme.
+I landed on keeping most of the functions, but writing separate version for whether you have Research API access or not.
+But I think the most analysis projects will profit from being able to mix and match functions from both APIs:</p>
+<table>
+<colgroup>
+<col width="31%" />
+<col width="19%" />
+<col width="21%" />
+<col width="27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Description</th>
+<th align="left">Shorthand</th>
+<th align="left">Research API</th>
+<th align="left">Hidden API</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">search videos</td>
+<td align="left">tt_search</td>
+<td align="left">tt_search_api</td>
+<td align="left">tt_search_hidden</td>
+</tr>
+<tr class="even">
+<td align="left">get video detail (+file)</td>
+<td align="left">tt_videos</td>
+<td align="left">-</td>
+<td align="left">tt_videos_hidden</td>
+</tr>
+<tr class="odd">
+<td align="left">get user videos</td>
+<td align="left">tt_user_info</td>
+<td align="left">tt_user_info_api</td>
+<td align="left">-</td>
+</tr>
+<tr class="even">
+<td align="left">get comments under a video</td>
+<td align="left">tt_comments</td>
+<td align="left">tt_comments_api</td>
+<td align="left">-</td>
+</tr>
+<tr class="odd">
+<td align="left">get who follows a user</td>
+<td align="left">tt_get_follower</td>
+<td align="left">-</td>
+<td align="left">tt_get_follower_hidden</td>
+</tr>
+<tr class="even">
+<td align="left">get who a user is following</td>
+<td align="left">tt_get_following</td>
+<td align="left">-</td>
+<td align="left">tt_get_following_hidden</td>
+</tr>
+<tr class="odd">
+<td align="left">get raw video data</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">tt_request_hidden</td>
+</tr>
+<tr class="even">
+<td align="left">authenticate a session</td>
+<td align="left">-</td>
+<td align="left">auth_research</td>
+<td align="left">auth_hidden</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>To get started with the unofficial/hidden API, you can have a look here: <a href="https://jbgruber.github.io/traktok/articles/unofficial-api.html" class="uri">https://jbgruber.github.io/traktok/articles/unofficial-api.html</a></li>
+<li>If you have access to the Research API or want to apply for it, have a look at this: <a href="https://jbgruber.github.io/traktok/articles/research-api.html" class="uri">https://jbgruber.github.io/traktok/articles/research-api.html</a></li>
+</ul>
+<p>You can install the package from GitHub.
+I’m not sure if it will ever be released on CRAN, since I’m not entirely sure they would be happy with the reverse engineering of a hidden API (but let me know if you think otherwise).</p>
+<pre><code>pak::pak(&quot;JBGruber/traktok&quot;)</code></pre>
+<p>For a very quick demonstration, let’s look up some videos about <code>R</code> on TikTok (this will only work after authenticating):</p>
+<pre class="r"><code>library(traktok)
+rstats_vids_urls &lt;- tt_search(&quot;#rstats&quot;, max_pages = 1L, verbose = FALSE)
+rstats_vids_urls</code></pre>
+<pre><code>## # A tibble: 12 × 20
+##    video_id            video_timestamp     video_url    video_length video_title
+##    &lt;chr&gt;               &lt;dttm&gt;              &lt;glue&gt;              &lt;int&gt; &lt;chr&gt;      
+##  1 7115114419314560298 2022-06-30 19:17:53 https://www…          135 &quot;R for Beg…
+##  2 7213413598998056234 2023-03-22 16:49:12 https://www…            6 &quot;R and me …
+##  3 7252226153828584731 2023-07-05 07:01:45 https://www…           36 &quot;Wow!!! TH…
+##  4 7306893853297052960 2023-11-29 14:40:06 https://www…           36 &quot;Don&#39;t Mak…
+##  5 7242068680484408581 2023-06-07 22:05:16 https://www…           34 &quot;R GRAPHIC…
+##  6 7257689890245201153 2023-07-20 00:23:40 https://www…           56 &quot;Pie chart…
+##  7 7302970667907992850 2023-11-19 00:56:09 https://www…          163 &quot;What is c…
+##  8 7249335886255738158 2023-06-27 12:05:54 https://www…            5 &quot;#CapCut #…
+##  9 7278304897911491872 2023-09-13 13:40:21 https://www…           36 &quot;Quick R Q…
+## 10 7293317457035431210 2023-10-24 00:36:48 https://www…            9 &quot;#CapCut #…
+## 11 7274045053889285419 2023-09-02 02:10:05 https://www…           91 &quot;Easily cr…
+## 12 7167010863784693035 2022-11-17 15:42:56 https://www…           58 &quot;Here’s an…
+## # ℹ 15 more variables: video_diggcount &lt;int&gt;, video_sharecount &lt;int&gt;,
+## #   video_commentcount &lt;int&gt;, video_playcount &lt;int&gt;, video_is_ad &lt;lgl&gt;,
+## #   author_name &lt;chr&gt;, author_nickname &lt;chr&gt;, author_followercount &lt;int&gt;,
+## #   author_followingcount &lt;int&gt;, author_heartcount &lt;int&gt;,
+## #   author_videocount &lt;int&gt;, author_diggcount &lt;int&gt;, music &lt;list&gt;,
+## #   challenges &lt;list&gt;, download_url &lt;chr&gt;</code></pre>
+<p>If you want to download these videos as well:</p>
+<pre class="r"><code>dir.create(&quot;videos&quot;, showWarnings = FALSE)
+tt_videos(rstats_vids_urls$video_url, dir = &quot;videos&quot;, verbose = FALSE)</code></pre>
+<pre><code>## # A tibble: 12 × 19
+##    video_id            video_url    video_timestamp     video_length video_title
+##    &lt;glue&gt;              &lt;chr&gt;        &lt;dttm&gt;                     &lt;int&gt; &lt;chr&gt;      
+##  1 7115114419314560298 https://www… 2022-06-30 19:17:53          135 &quot;R for Beg…
+##  2 7213413598998056234 https://www… 2023-03-22 16:49:12            6 &quot;R and me …
+##  3 7252226153828584731 https://www… 2023-07-05 07:01:45           36 &quot;Wow!!! TH…
+##  4 7306893853297052960 https://www… 2023-11-29 14:40:06           36 &quot;Don&#39;t Mak…
+##  5 7242068680484408581 https://www… 2023-06-07 22:05:16           34 &quot;R GRAPHIC…
+##  6 7257689890245201153 https://www… 2023-07-20 00:23:40           56 &quot;Pie chart…
+##  7 7302970667907992850 https://www… 2023-11-19 00:56:09          163 &quot;What is c…
+##  8 7249335886255738158 https://www… 2023-06-27 12:05:54            5 &quot;#CapCut #…
+##  9 7278304897911491872 https://www… 2023-09-13 13:40:21           36 &quot;Quick R Q…
+## 10 7293317457035431210 https://www… 2023-10-24 00:36:48            9 &quot;#CapCut #…
+## 11 7274045053889285419 https://www… 2023-09-02 02:10:05           91 &quot;Easily cr…
+## 12 7167010863784693035 https://www… 2022-11-17 15:42:56           58 &quot;Here’s an…
+## # ℹ 14 more variables: video_locationcreated &lt;chr&gt;, video_diggcount &lt;int&gt;,
+## #   video_sharecount &lt;int&gt;, video_commentcount &lt;int&gt;, video_playcount &lt;int&gt;,
+## #   author_username &lt;chr&gt;, author_nickname &lt;chr&gt;, author_bio &lt;chr&gt;,
+## #   download_url &lt;chr&gt;, html_status &lt;int&gt;, music &lt;list&gt;, challenges &lt;list&gt;,
+## #   is_classified &lt;lgl&gt;, video_fn &lt;chr&gt;</code></pre>
+<pre class="r"><code>tibble::tibble(file = list.files(&quot;videos&quot;),
+               size_Mb = file.size(list.files(&quot;videos&quot;, full.names = TRUE)) / 1000000)</code></pre>
+<pre><code>## # A tibble: 12 × 2
+##    file                                            size_Mb
+##    &lt;chr&gt;                                             &lt;dbl&gt;
+##  1 learningcast_video_7167010863784693035.mp4        8.64 
+##  2 learningcast_video_7249335886255738158.mp4        0.312
+##  3 learningcast_video_7293317457035431210.mp4        0.598
+##  4 mattdancho_video_7115114419314560298.mp4          2.60 
+##  5 mrpecners_video_7274045053889285419.mp4           2.07 
+##  6 sillysciencelady_video_7213413598998056234.mp4    0.612
+##  7 smooth.learning.c_video_7257689890245201153.mp4   1.78 
+##  8 smooth.learning.c_video_7302970667907992850.mp4   5.22 
+##  9 statisticsglobe_video_7242068680484408581.mp4     1.90 
+## 10 statisticsglobe_video_7252226153828584731.mp4     1.82 
+## 11 statisticsglobe_video_7278304897911491872.mp4     1.99 
+## 12 statisticsglobe_video_7306893853297052960.mp4     1.64</code></pre>
+<p>And with these two commands, you already have a small TikTok dataset to play with 📊🚀!</p>

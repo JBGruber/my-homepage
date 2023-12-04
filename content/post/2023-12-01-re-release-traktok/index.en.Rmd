@@ -1,0 +1,68 @@
+---
+title: 'Re-Release: `traktok`'
+author: ''
+date: '2023-12-04'
+slug: []
+categories: []
+tags:
+  - R
+  - social media
+  - web-scraping
+header:
+  caption: ''
+  image: 'traktok.png'
+  preview: yes
+---
+
+I'm happy to announce that `traktok`, my package to get content from TikTok, has returned from the dead.
+That's slightly exaggerated, because it actually always worked in some shape or form, but up until about September, the most recent state on Github had very limited functionality.
+Now I extended the package substantially and also gave it an appealing home on a `pkgdown` site here: <https://jbgruber.github.io/traktok/>.
+
+The main issue I had before, [namely that some requests to the unofficial TikTok API need to be signed](https://github.com/JBGruber/traktok/issues/5), still remains unresolved.
+But the remaining functions are now much more stable.
+I have also moved the 'authentication'for the unofficial API to a separate package, `cookiemonster`, since it seemed silly to maintain two different code bases for using cookies in `R` (the other place being in [`paperboy`](https://github.com/JBGruber/paperboy/), which I will discuss here soon).
+
+However, what is new is that `traktok` now supports the Research API!
+This was actually also an issue because it required me to decide on a new naming scheme.
+I landed on keeping most of the functions, but writing separate version for whether you have Research API access or not.
+But I think the most analysis projects will profit from being able to mix and match functions from both APIs:
+
+| Description                 | Shorthand        | Research API       | Hidden API              |
+|:----------------------------|:-----------------|:-------------------|:------------------------|
+| search videos               | tt_search        | tt_search_api      | tt_search_hidden        |
+| get video detail (+file)    | tt_videos        | \-                 | tt_videos_hidden        |
+| get user videos             | tt_user_info     | tt_user_info_api   | \-                      |
+| get comments under a video  | tt_comments      | tt_comments_api    | \-                      |
+| get who follows a user      | tt_get_follower  | \-                 | tt_get_follower_hidden  |
+| get who a user is following | tt_get_following | \-                 | tt_get_following_hidden |
+| get raw video data          | \-               | \-                 | tt_request_hidden       |
+| authenticate a session      | \-               | auth_research      | auth_hidden             |
+
+- To get started with the unofficial/hidden API, you can have a look here: <https://jbgruber.github.io/traktok/articles/unofficial-api.html>
+- If you have access to the Research API or want to apply for it, have a look at this: <https://jbgruber.github.io/traktok/articles/research-api.html>
+
+You can install the package from GitHub.
+I'm not sure if it will ever be released on CRAN, since I'm not entirely sure they would be happy with the reverse engineering of a hidden API (but let me know if you think otherwise).
+
+```
+pak::pak("JBGruber/traktok")
+```
+
+For a very quick demonstration, let's look up some videos about `R` on TikTok (this will only work after authenticating):
+
+```{r}
+library(traktok)
+rstats_vids_urls <- tt_search("#rstats", max_pages = 1L, verbose = FALSE)
+rstats_vids_urls
+```
+
+If you want to download these videos as well:
+
+```{r}
+dir.create("videos", showWarnings = FALSE)
+tt_videos(rstats_vids_urls$video_url, dir = "videos", verbose = FALSE)
+tibble::tibble(file = list.files("videos"),
+               size_Mb = file.size(list.files("videos", full.names = TRUE)) / 1000000)
+```
+
+And with these two commands, you already have a small TikTok dataset to play with 📊🚀!
