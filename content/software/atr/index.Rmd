@@ -1,0 +1,30 @@
+---
+title: 'atr'
+author: JBGruber
+date: '2023-10-11'
+categories: []
+tags: []
+abstract: 'The goal of atr is to wrap the AT Protocol (Authenticated Transfer Protocol) behind Bluesky. And we have actually already fulfilled this goal!'
+authors:
+  - 'Johannes B. Gruber'
+draft: no
+header:
+  caption: ''
+  image: 'https://github.com/JBGruber/atr/raw/main/man/figures/logo.png'
+highlight: yes
+image_preview: ''
+math: no
+projects: []
+publication: ''
+publication_short: ''
+publication_types:
+  - '0'
+selected: no
+url_code: 'https://jbgruber.github.io/atr/'
+status: 'published'
+buttons:
+  - https://img.shields.io/badge/lifecycle-experimental-orange.svg
+  - https://github.com/JBGruber/atr/workflows/R-CMD-check/badge.svg
+  - https://codecov.io/gh/JBGruber/atr/branch/main/graph/badge.svg
+---
+

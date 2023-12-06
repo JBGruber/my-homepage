@@ -1,0 +1,30 @@
+---
+title: 'traktok'
+author: JBGruber
+date: '2023-12-04'
+categories: []
+tags: []
+abstract: 'The goal of traktok is to provide easy access to TikTok data'
+authors:
+  - 'Johannes B. Gruber'
+draft: no
+header:
+  caption: ''
+  image: 'https://github.com/JBGruber/traktok/raw/main/man/figures/logo.png'
+highlight: yes
+image_preview: ''
+math: no
+projects: []
+publication: ''
+publication_short: ''
+publication_types:
+  - '0'
+selected: no
+url_code: 'https://github.com/JBGruber/traktok'
+status: 'published'
+buttons:
+  - https://img.shields.io/badge/lifecycle-experimental-orange.svg
+  - https://github.com/JBGruber/traktok/workflows/R-CMD-check/badge.svg
+  - https://codecov.io/gh/JBGruber/traktok/branch/main/graph/badge.svg
+---
+
