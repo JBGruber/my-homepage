@@ -1,0 +1,44 @@
+---
+title: 'Release: `atrrr`, a wrapper for the AT protocol behind ’Bluesky’'
+author: ''
+date: '2024-01-09'
+slug: []
+categories: []
+tags:
+  - R
+  - social media
+  - web-scraping
+header:
+  caption: ''
+  image: 'atrrr_hex.png'
+  preview: yes
+---
+
+I'm happy to announce that `atrrr` has made its way to CRAN.
+The purpose of `atrrr` is to communicate with the Authenticated transfer protocol (atproto for short), which powers the Twitter replacement social media site Bluesky.
+I think there are two things that are especially interesting about the package:
+
+1. it gives near limitless access to a social network site from `R`
+2. the backbone of the package was written mostly automatically
+
+The first point will make this interesting for teaching, as the well of interesting data that the Twitter research API once was has tried out, thanks to a certain billionaire.
+So many of my colleagues had to redesign their social network analysis courses or workshops and think about alternatives.
+I hope that they will consider Bluesky to fill the void.
+Hopefully, this will lead to a wider adoption of Bluesky, so that I can finally delete my account on ex-Twitter.
+But I will likely write about that somewhere else soon.
+
+The second point is what got me into this project.
+One day in late September, I got a very exited text from Ben in a Whatsapp group that showed off a little script scraping Bluesky content.
+We got to talk a bit about atproto and how it is different from most classic APIs.
+All definitions of data records and endpoints are done through [lexicons](https://atproto.com/guides/lexicon), which are essentially JSON files with definitions valid requests and typical replies.
+
+In a first step, Ben wrote a small function that downloads these lexicons systematically and turns them into R functions.
+The resulting automatically generated functions (more than 100) wrap the entire protocol, and should make it possible to interact with all aspects of Bluesky and other sites using atproto in the future.
+
+On top of that, I built convenience functions for authentication and for parsing the output from the API.
+Fabio then wrote some very cool tutorials, designed a logo and put it all on a website.
+And voila: a new R package was born.
+
+It is, the most complete implementation of the protocol in R to date, and we will work to extend it with more possibilities in the future.
+Head over to <https://jbgruber.github.io/atrrr/> to learn more and find some tutorials for finding content on Bluesky, doing network analysis, create posts and thread and more.
+
