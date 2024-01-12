@@ -6,8 +6,7 @@ date = "2023-03-31"
 title = "askgpt"
 
 # Project summary to display on homepage.
-summary = "A chat package connecting to API endpoints by ’OpenAI’ to an-
-swer questions (about R)"
+summary = "A chat package connecting to API endpoints by ’OpenAI’ to answer questions (about R)"
 
 # Optional image to display on homepage (relative to `static/img/` folder).
 image_preview = "rwhatsapp.jpeg"
