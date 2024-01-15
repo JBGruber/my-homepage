@@ -30,7 +30,7 @@ After spending some time on this, I have to say: it's not that bad, especially g
 
 But let's have a look at the result first:
 
-![](rbsky.mp4){width="892px" height="866px"}
+![](https://www.johannesbgruber.eu/img/rbsky.mp4){width="892px" height="866px"}
 
 And here is of course the commented source code (also available as a [GitHub Gist](https://gist.github.com/JBGruber/31d8b88b79426c03eb8534f48344cbd8)):
 
