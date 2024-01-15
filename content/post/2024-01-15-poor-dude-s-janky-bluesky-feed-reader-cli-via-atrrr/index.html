@@ -1,0 +1,116 @@
+---
+title: Poor Dude’s Janky Bluesky Feed Reader CLI Via atrrr
+author: JBGruber
+date: '2024-01-15'
+slug: []
+categories: []
+tags:
+  - R
+  - social media
+  - cli
+draft: no
+header:
+  caption: ''
+  image: '2024-01-15-poor-dude-s-janky-bluesky-feed-reader-cli-via-atrrr-thumb.png'
+  preview: yes
+---
+
+
+
+<p>Have you ever wanted to see your favourite social media posts in your command line?
+No?
+Me neither, but at least <a href="https://rud.is/b/2023/07/07/poor-dudes-janky-bluesky-feed-reader-cli-via-r-python/">hrbrmstr</a> has a few months ago.
+Or to be honest, I don’t know which social media site he prefers, but Bluesky is currently <em>my</em> favourite.
+With the ease of use and algorithmic curation that I loved about Twitter before its demise and the super interesting and easy to work with AT protocol, which should make Bluesky “billionaire-proof”<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, I’m hopeful that this social network it here to stay.</p>
+<p>Recently, I have published the <a href="https://www.johannesbgruber.eu/post/2024-01-09-release-atrrr/"><code>atrrr</code></a> package with a few friends, so I thought I could remove the pesky Python part from hrbrmstr’s command line interface.
+Along the way, I also looked into how one can write a command line tool with R.
+I really love using command line tools<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and was always a bit disappointed that people don’t seem to write them in R.
+After spending some time on this, I have to say: it’s not that bad, especially given the packages <code>docopt</code> and <code>cli</code>, but it’s definitly a bit more manual than in Python.</p>
+<p>But let’s have a look at the result first:</p>
+<p><video src="img/rbsky.mp4" width="892" height="866" controls=""><a href="img/rbsky.mp4">Video</a></video></p>
+<p>And here is of course the commented source code (also available as a <a href="https://gist.github.com/JBGruber/31d8b88b79426c03eb8534f48344cbd8">GitHub Gist</a>):</p>
+<pre><code>#!/usr/bin/Rscript
+
+# Command line application Bluesky feed reader based on atrrr.
+#
+# Make executable with `chmod u+x rbsky`.
+#
+# If you are on macOS, you should replace the first line with:
+#
+# #!/usr/local/bin/Rscript
+#
+# Not sure how to make it work in Windows ¯\_(ツ)_/¯
+#
+# based on https://rud.is/b/2023/07/07/poor-dudes-janky-bluesky-feed-reader-cli-via-r-python/
+
+library(atrrr)
+library(cli)
+library(lubridate, include.only = c(&quot;as.period&quot;, &quot;interval&quot;), 
+        quietly = TRUE, warn.conflicts = FALSE)
+if (!require(&quot;docopt&quot;, quietly = TRUE)) install.packages(&quot;docopt&quot;)
+library(docopt)
+
+# function to displace time since a post was made
+ago &lt;- function(t) {
+  as.period(Sys.time() - t) |&gt;
+    as.character() |&gt;
+    tolower() |&gt;
+    gsub(&quot;\\d+\\.\\d+s&quot;, &quot;ago&quot;, x = _)
+}
+
+# docopt can produce some documentation when you run `rbsky -h`
+doc &lt;- &quot;Usage: rbsky [-a ALGO] [-n NUM] [-t S] [-h]
+
+-a --algorithm ALGO   algorithm used to sort the posts [e.g., \&quot;reverse-chronological\&quot;]
+-n --n_posts NUM      Maximum number of records to return [default: 25]
+-t --timeout S        Time to wait before displaying the next post [default. 0.5 seconds]
+-h --help             show this help text&quot;
+
+# this line parses the arguments passed from the command line and makes sure the
+# documentation is shown when `rbsky -h` is run
+args &lt;- docopt(doc)
+if (is.null(args$n_posts)) args$n_posts &lt;- 25L
+if (is.null(args$timeout)) args$timeout &lt;- 0.5
+
+# get feed
+feed &lt;- get_own_timeline(algorithm = args$algorithm,
+                         limit = as.integer(args$n_posts),
+                         verbose = FALSE)
+
+# print feed
+for (i in seq_along(feed$uri)) {
+  item &lt;- feed[i, ]
+  cli({
+    # headline from author • time since post
+    cli_h1(c(col_blue(item$author_name), &quot; • &quot;,
+             col_silver(ago(item$indexed_at))))
+    # text of post in italic (not all terminals support it)
+    cli_text(style_italic(&quot;{item$text}&quot;))
+    # print quoted text if available
+    quote &lt;- purrr::pluck(item, &quot;embed_data&quot;, 1, &quot;external&quot;)
+    if (!is.null(quote)) {
+      cli_blockquote(&quot;{quote$title}\n{quote$text}&quot;, citation = quote$uri)
+    }
+    # display that posts contains image(s)
+    imgs &lt;- length(purrr::pluck(item, &quot;embed_data&quot;, 1, &quot;images&quot;))
+    if (imgs &gt; 0) {
+      cli_text(col_green(&quot;[{imgs} IMAGE{?S}]&quot;))
+    }
+    # new line before next post
+    cli_text(&quot;\n&quot;)
+  })
+  # wait a little before showing the next post
+  Sys.sleep(args$timeout)
+}</code></pre>
+<p>I added the location of the file to my PATH<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> with <code>export PATH="/home/johannes/bin/:$PATH"</code> to make it run without typing e.g., <code>Rscript rbsky</code> or <code>./rbsky</code>.
+And there you go.
+If you want to explore how to search and analyse posts from Bluesky and then post the results via <code>R</code>, have a look at the <code>atrrr</code>-<code>pkgdown</code> site: <a href="https://jbgruber.github.io/atrrr/" class="uri">https://jbgruber.github.io/atrrr/</a>.</p>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>
+Once the protocol fulfils its vision that one can always take their follower network and posts to a different site using the protocol.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>I liked this summary of reasons to use them <a href="https://youtu.be/Q1dwzi5DKio" class="uri">https://youtu.be/Q1dwzi5DKio</a>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>The PATH environment variable is the location of one or several directories that your system searches for executables.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
