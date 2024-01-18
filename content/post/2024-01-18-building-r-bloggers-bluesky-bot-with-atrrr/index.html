@@ -1,0 +1,157 @@
+---
+title: Building the R-Bloggers Bluesky Bot with atrrr and GitHub Actions
+author: JBGruber
+date: '2024-01-18'
+slug: []
+categories: []
+tags:
+  - R
+  - social media
+  - cli
+draft: no
+header:
+  caption: ''
+  image: 'r-bloggers.png'
+  preview: yes
+---
+
+
+
+<p>Bluesky is shaping up to be a nice, “billionaire-proof”<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> replacement of what Twitter once was.
+To bring back a piece of the thriving R community that once existed on ex-Twitter, I decided to bring back the <a href="https://bsky.app/profile/r-bloggers.bsky.social">R-Bloggers bot</a>, which spread the word about blog posts from many R users and developers.
+Especially when first learning R, this was a very important resource for me and I created my first package using <a href="https://www.r-bloggers.com/2014/04/writing-an-r-package-from-scratch/">a post from R-Bloggers</a>.
+Since I have recently published the <a href="https://www.johannesbgruber.eu/post/2024-01-09-release-atrrr/"><code>atrrr</code></a> package with a few friends, I thought it was a good opportunity to promote that package and show how you can write a completely free bot with it.</p>
+<p>You can find the bot at <a href="https://github.com/JBGruber/r-bloggers-bluesky" class="uri">https://github.com/JBGruber/r-bloggers-bluesky</a>.
+This posts describes how the parts fit together.</p>
+<div id="writing-the-r-bot" class="section level1">
+<h1>Writing the R-bot</h1>
+<p>The first part of my bot is a minimal RSS parser to get new posts from <a href="http://r-bloggers.com" class="uri">http://r-bloggers.com</a>.
+You can parse the content of an RSS feed with packages like <code>tidyRSS</code>, but I wanted to keep it minimal and not have too many packages in the script.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+I won’t spend too much time on this part, because it will be different for other bots.
+However, if you want to build a bot to promote content on your own website or your podcast, RSS is well-suited for that and often easier to parse than HTML.</p>
+<pre class="r"><code>## packages
+library(atrrr)
+library(anytime)
+library(dplyr)
+library(stringr)
+library(glue)
+library(purrr)
+library(xml2)
+
+## Part 1: read RSS feed
+feed &lt;- read_xml(&quot;http://r-bloggers.com/rss&quot;)
+# minimal custom RSS reader
+rss_posts &lt;- tibble::tibble(
+  title = xml_find_all(feed, &quot;//item/title&quot;) |&gt;
+    xml_text(),
+
+  creator = xml_find_all(feed, &quot;//item/dc:creator&quot;) |&gt;
+    xml_text(),
+
+  link = xml_find_all(feed, &quot;//item/link&quot;) |&gt;
+    xml_text(),
+
+  ext_link = xml_find_all(feed, &quot;//item/guid&quot;) |&gt;
+    xml_text(),
+
+  timestamp = xml_find_all(feed, &quot;//item/pubDate&quot;) |&gt;
+    xml_text() |&gt;
+    utctime(tz = &quot;UTC&quot;),
+
+  description = xml_find_all(feed, &quot;//item/description&quot;) |&gt;
+    xml_text() |&gt;
+    # strip html from description
+    vapply(function(d) {
+      read_html(d) |&gt;
+        xml_text() |&gt;
+        trimws()
+    }, FUN.VALUE = character(1))
+)</code></pre>
+<p>To create the posts for Bluesky, we have to keep in mind that the platform has a 300 character limit per post.
+I want the posts to look like this:</p>
+<blockquote>
+<p>title</p>
+<p>first sentences of post</p>
+<p>post URL</p>
+</blockquote>
+<p>The first sentence of the post needs to be trimmed then to 300 characters minus the length of the title and URL.
+I calculate the remaining number of characters and truncate the post description, which contains the entire text of the post in most cases.</p>
+<pre class="r"><code>## Part 2: create posts from feed
+posts &lt;- rss_posts |&gt;
+  # measure length of title and link and truncate description
+  mutate(desc_preview_len = 294 - nchar(title) - nchar(link),
+         desc_preview = map2_chr(description, desc_preview_len, function(x, y) str_trunc(x, y)),
+         post_text = glue(&quot;{title}\n\n\&quot;{desc_preview}\&quot;\n\n{link}&quot;))</code></pre>
+<p>I’m pretty proud of part 3 of the bot:
+it checks the posts on the timeline (excuse me, I meant skyline) of the bot (with the handle <code>r-bloggers.bsky.social</code>) and discards all posts that are identical to posts already on the timeline.
+This means the bot does not need to keep any storage of previous runs.
+It essentially uses the actual timeline as its database of previous posts.
+Don’t mind the <code>Sys.setenv</code> and <code>auth</code> part, I will talk about them below.</p>
+<pre class="r"><code>## Part 3: get already posted updates and de-duplicate
+Sys.setenv(BSKY_TOKEN = &quot;r-bloggers.rds&quot;)
+auth(user = &quot;r-bloggers.bsky.social&quot;,
+     password = Sys.getenv(&quot;ATR_PW&quot;),
+     overwrite = TRUE)
+old_posts &lt;- get_skeets_authored_by(&quot;r-bloggers.bsky.social&quot;, limit = 5000L)
+posts_new &lt;- posts |&gt;
+  filter(!post_text %in% old_posts$text)</code></pre>
+<p>To post from an account on Bluesky, the bot uses the function <code>post_skeet</code> (a portmanteau of “sky” + “twee.. I mean”posting”).
+Unlike most social networks, Bluesky allows users to backdate posts (the technical reasons are too much to go into here).
+So I thought it would be nice to make it look like the publication date of the blog post was also when the post on Bluesky was made.</p>
+<pre class="r"><code>## Part 4: Post skeets!
+for (i in seq_len(nrow(posts_new))) {
+  post_skeet(text = posts_new$post_text[i],
+             created_at = posts_new$timestamp[i])
+}</code></pre>
+<p>Update: after a day of working well, the bot ran into a problem where a specific post used a malformed GIF image as header image, resulting in</p>
+<p>So I introduced some error handling with <code>try</code>:</p>
+<pre class="r"><code>## Part 4: Post skeets!
+for (i in seq_len(nrow(posts_new))) {
+  # if people upload broken preview images, this fails
+  resp &lt;- try(post_skeet(text = posts_new$post_text[i],
+                         created_at = posts_new$timestamp[i]))
+  if (methods::is(resp, &quot;try-error&quot;)) post_skeet(text = posts_new$post_text[i],
+                                                 created_at = posts_new$timestamp[i],
+                                                 preview_card = FALSE)
+}</code></pre>
+</div>
+<div id="deploying-the-bot-on-github" class="section level1">
+<h1>Deploying the bot on GitHub</h1>
+<p>Now I can run this script on my computer and the <code>r-bloggers.bsky.social</code> will post about all blog post currently in feed on <a href="http://r-bloggers.com/rss" class="uri">http://r-bloggers.com/rss</a>!
+But for an actual bot, this needs to run not once but repeatedly!</p>
+<p>So the choice is to either deploy this on a computer that is on 24/7, like a server.
+You can get very cheap computers to do that for you, but you can also do it completely for free running it on someone else’s server (like a pro).
+One such way is through <a href="https://github.com/features/actions">Github Actions</a>.</p>
+<p>To do that, you need to create a free account and move the bot script into a repo.
+You then need to define an “Action” which is a pre-defined script that sets up all the neccesary dependencies and then executes a task.
+You can copy and paste the action file from <a href="https://github.com/JBGruber/r-bloggers-bluesky/blob/main/.github/workflows/bot.yml" class="uri">https://github.com/JBGruber/r-bloggers-bluesky/blob/main/.github/workflows/bot.yml</a> into the folder <code>.github/workflows/</code> of your repo:</p>
+</div>
+<div id="authentication" class="section level1">
+<h1>Authentication</h1>
+<p>We paid close attention to make it as easy as possible to <a href="https://jbgruber.github.io/atrrr/">authenticate yourself using <code>atrrr</code></a>.
+However, on a server, you do not have a user interface and can’t enter a password.
+However, you also do not want to make your key public!
+So after following the authentication steps, you want to put your bot’s password into <code>.Renviron</code> file (e.g., by using <code>usethis::edit_r_environ()</code>).
+The you can use <code>Sys.getenv("ATR_PW")</code> to get the password in R.
+Using the <code>auth</code> function, you can explitily provide your username and password to authenticate your bot to Bluesky without manual intervention.
+To not interfere with my main Bluesky account, I also set the variable <code>BSKY_TOKEN</code> which defines the file name of your token in the current session.
+Which leads us to the code you saw earlier.</p>
+<pre class="r"><code>Sys.setenv(BSKY_TOKEN = &quot;r-bloggers.rds&quot;)
+auth(user = &quot;r-bloggers.bsky.social&quot;,
+     password = Sys.getenv(&quot;ATR_PW&quot;),
+     overwrite = TRUE)</code></pre>
+<p>Then, the final thing to do before uploading everything and running your bot n GitHub for the first time is to make sure the Action script has access to the environment variable (NEVER commit your <code>.Renviron</code> to GitHub!).
+The way you do this is by nagvigating to <code>/settings/secrets/actions</code> in your repository and define a repository secret with the name <code>ATR_PW</code> and your Bluesky App password as the value.</p>
+<p><img src="gh_action_secrets.png" /></p>
+<p>And that is it.
+A free Bluesky bot in <code>R</code>!</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>
+Once the protocol fulfills its vision that one can always take their follower network and posts to a different site using the protocol.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>
+While you can do some caching, packages need to be installed on each GitHub Actions run, meaning that every extra package increases the run time quite a bit. <a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
