@@ -33,7 +33,7 @@ This posts describes how the parts fit together.
 
 The first part of my bot is a minimal RSS parser to get new posts from <http://r-bloggers.com>.
 You can parse the content of an RSS feed with packages like `tidyRSS`, but I wanted to keep it minimal and not have too many packages in the script.^[
-While you can do some caching, packages need to be installed on each GitHub Actions run, meaning that every extra package increases the run time quite a bit. 
+While you can do some caching, packages need to be installed on each GitHub Actions run, meaning that every extra package increases the run time quite a bit.
 ]
 I won't spend too much time on this part, because it will be different for other bots.
 However, if you want to build a bot to promote content on your own website or your podcast, RSS is well-suited for that and often easier to parse than HTML.
@@ -129,9 +129,9 @@ for (i in seq_len(nrow(posts_new))) {
 }
 ```
 
-Update: after a day of working well, the bot ran into a problem where a specific post used a malformed GIF image as header image, resulting in 
+Update: after a day of working well, the bot ran into a problem where a specific post used a malformed GIF image as header image, resulting in:
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=TRUE}
 cli::cli_alert_danger(c(cli::col_white("Something went wrong [605ms]\n"),
                       "Error: insufficient image data in file `/tmp/Rtmp8Gat9r/file7300766c1e29c.gif' @ error/gif.c/ReadGIFImage/1049"))
 ```
@@ -163,9 +163,10 @@ To do that, you need to create a free account and move the bot script into a rep
 You then need to define an "Action" which is a pre-defined script that sets up all the neccesary dependencies and then executes a task.
 You can copy and paste the action file from <https://github.com/JBGruber/r-bloggers-bluesky/blob/main/.github/workflows/bot.yml> into the folder `.github/workflows/` of your repo:
 
-```{r echo=FALSE, results='asis'}
-yml <- readLines("https://raw.githubusercontent.com/JBGruber/r-bloggers-bluesky/main/.github/workflows/bot.yml") |> 
+```{r echo=FALSE, eval=TRUE, results='asis'}
+yml <- readLines("https://raw.githubusercontent.com/JBGruber/r-bloggers-bluesky/main/.github/workflows/bot.yml") |>
   paste(collapse = "\n")
+
 cli::cat_line("```\n", yml, "\n```")
 ```
 
