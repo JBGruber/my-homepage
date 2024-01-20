@@ -22,11 +22,11 @@ knitr::opts_chunk$set(eval = FALSE)
 Bluesky is shaping up to be a nice, "billionaire-proof"^[
 Once the protocol fulfills its vision that one can always take their follower network and posts to a different site using the protocol.
 ] replacement of what Twitter once was.
-To bring back a piece of the thriving R community that once existed on ex-Twitter, I decided to bring back the [R-Bloggers bot](https://bsky.app/profile/r-bloggers.bsky.social), which spread the word about blog posts from many R users and developers.
-Especially when first learning R, this was a very important resource for me and I created my first package using [a post from R-Bloggers](https://www.r-bloggers.com/2014/04/writing-an-r-package-from-scratch/).
-Since I have recently published the [`atrrr`](https://www.johannesbgruber.eu/post/2024-01-09-release-atrrr/) package with a few friends, I thought it was a good opportunity to promote that package and show how you can write a completely free bot with it.
-
-You can find the bot at <https://github.com/JBGruber/r-bloggers-bluesky>.
+One of the things the community was still missing, in my opinion, was the R-Bloggers bot that once spread the news about new R blog posts on ex-Twitter.
+Especially when first learning R, this was an important resource for me and I created my first package using [a post from R-Bloggers](https://www.r-bloggers.com/2014/04/writing-an-r-package-from-scratch/).
+Since I have recently published the [`atrrr`](https://www.johannesbgruber.eu/post/2024-01-09-release-atrrr/) package with a few friends, I thought re-creating the bot that posted new entries was a good opportunity to promote that package and show how you can write a completely free bot with it.
+So after asking Tal Galili, the developer and operator behind R-Bloggers, to give me permission to use the name and logo of the site, I set up a Bluesky account for it at [@r-bloggers.bsky.social](https://bsky.app/profile/r-bloggers.bsky.social).
+You can find the code behind the bot at <https://github.com/JBGruber/r-bloggers-bluesky>.
 This posts describes how the parts fit together.
 
 # Writing the R-bot
