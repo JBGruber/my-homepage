@@ -73,8 +73,7 @@ defaultContentLanguageInSubdir = false
 
   # Organizations/Affiliations.
   #   Separate multiple entries with a comma, using the form: `[ {name="Org1", url=""}, {name="Org2", url=""} ]`.
-  organizations = [ { name = "ASCoR | University of Amsterdam", url = "https://www.uva.nl/en/profile/g/r/j.b.gruber/j.b.gruber.html" } ]
-
+  organizations = [ { name = "Vrije Universiteit Amsterdam", url = "https://research.vu.nl/en/persons/johannes-gruber" } ]
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "JBGruber.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
   email = "J.B.Gruber@uva.nl"
