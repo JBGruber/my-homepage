@@ -76,7 +76,7 @@ defaultContentLanguageInSubdir = false
   organizations = [ { name = "Vrije Universiteit Amsterdam", url = "https://research.vu.nl/en/persons/johannes-gruber" } ]
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "JBGruber.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
-  email = "J.B.Gruber@uva.nl"
+  email = "J.B.Gruber@vu.nl"
   address = ""
   office_hours = ""
   phone = ""
@@ -233,7 +233,7 @@ defaultContentLanguageInSubdir = false
   [[params.social]]
     icon = "envelope"
     icon_pack = "fa"
-    link = "mailto:J.B.Gruber@uva.nl"
+    link = "mailto:J.B.Gruber@vu.nl"
 
   [[params.social]]
     icon = "square"
