@@ -16,7 +16,7 @@ authors:
 draft: no
 header:
   caption: ''
-  image: ''
+  image: 'large-language-models.png'
 highlight: yes
 image_preview: ''
 math: no
