@@ -27,12 +27,13 @@ publication_types:
 selected: no
 url_code: ''
 url_dataset: ''
-url_pdf: 'https://www.dropbox.com/scl/fi/eafy73his9lwy8h8a5de1/Large-Language-Models_Gruber-Votta_FINAL.pdf?rlkey=0f7396prp5cikxv1purqjg0jj&st=1ee5cgww&dl=1'
+url_pdf: 'https://osf.io/s7qx2/download/'
 url_poster: ''
 url_preprint: ''
 url_project: ''
 url_slides: ''
 url_source: ''
+url_custom: [{name: 'DOI: 10.31219/osf.io/s7qx2', url: 'https://doi.org/10.31219/osf.io/s7qx2'}]
 status: 'accepted'
 ---
 
