@@ -236,10 +236,10 @@ defaultContentLanguageInSubdir = false
     link = "mailto:J.B.Gruber@vu.nl"
 
   [[params.social]]
-    icon = "square"
+    icon = "bluesky"
     rel = "fa-"
     icon_pack = "fa"
-    cat = "-solid"
+    cat = "-brands"
     link = "https://bsky.app/profile/jbgruber.bsky.social"
 
   [[params.social]]
