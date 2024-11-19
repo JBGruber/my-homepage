@@ -47,7 +47,7 @@ weight = 5
 
 # Background
 
-I am a Post-Doc Researcher at the Department of ~~Communication Science at the University of Amsterdam~~ Language, Literature and Communication Vrije Universiteit Amsterdam working on the [NEWSFLOWS project](https://newsflows.eu/) (the project was recently moved to the VU).
+I am a Post-Doc Researcher at the Department of Language, Literature and Communication Vrije Universiteit Amsterdam working on the [NEWSFLOWS project](https://newsflows.eu/) (the project was recently moved to the VU).
 Previously, I worked at the  Department of Communication Science at Vrije Universiteit Amsterdam within the [OPTED project](https://opted.eu/team/wp7-pre-processing-storage-and-data-sharing/johannes-b-gruber/) and a focus on text as data methods and creating open source software tools to make these methods easily accessible and reproducible.
 Before that, I worked as Post-Doc Researcher at the Chair for Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder).
 In 2021, I passed my PhD in Politics at the University of Glasgow.
