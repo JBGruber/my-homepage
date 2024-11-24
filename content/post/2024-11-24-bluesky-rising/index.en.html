@@ -63,8 +63,8 @@ Specifically, I loop through all accounts that I follow and get the follows from
   bind_rows() |&gt; 
   # not sure what this means
   filter(actor_handle != &quot;handle.invalid&quot;)</code></pre>
-<p>This data is huge, with 450,000 accounts.
-So who in the `not_yet_follows´ list shows up there most often?</p>
+<p>This data is huge, with over 450,000 accounts.
+So who in the <code>not_yet_follows</code> list shows up there most often?</p>
 <pre class="r"><code>follows_of_follows_count &lt;- follows_of_follows |&gt; 
   count(actor_handle, name = &quot;n_following&quot;, sort = TRUE)
 follows_of_follows_count</code></pre>
@@ -130,7 +130,7 @@ follow(lets_follow)</code></pre>
 <p>This can be done relatively conveniently by opening the user profiles in my browser.
 I can do that with:</p>
 <pre class="r"><code>walk(
-  lets_follow,
+  paste0(&quot;https://bsky.app/profile/&quot;, lets_follow),
   browseURL
 )</code></pre>
 <div id="how-else-can-i-find-followers" class="section level2">

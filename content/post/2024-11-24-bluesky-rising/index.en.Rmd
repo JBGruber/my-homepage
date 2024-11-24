@@ -118,8 +118,8 @@ if (!file.exists(data_loc)) {
 }
 ```
 
-This data is huge, with 450,000 accounts.
-So who in the `not_yet_follows´ list shows up there most often?
+This data is huge, with over 450,000 accounts.
+So who in the `not_yet_follows` list shows up there most often?
 
 ```{r}
 follows_of_follows_count <- follows_of_follows |> 
@@ -198,7 +198,7 @@ I can do that with:
 ```{r}
 #| eval: false
 walk(
-  lets_follow,
+  paste0("https://bsky.app/profile/", lets_follow),
   browseURL
 )
 ```
