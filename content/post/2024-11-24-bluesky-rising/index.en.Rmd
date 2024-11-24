@@ -1,0 +1,230 @@
+---
+title: 'So many new people on Bluesky! Who should I follow?'
+author: ''
+date: '2024-11-24'
+slug: []
+categories: []
+tags:
+  - R
+  - social media
+header:
+  caption: 'Image generated using DALL E'
+  image: 'DALLE_bluesky_follower.webp'
+  preview: yes
+---
+
+If there is one development at the moment which I full heartedly enjoy reading about it's that the remains of what was once called Twitter is seeing a large E𝕏odus.
+Since a certain billionaire has taken over that platform, it has continuously become worse and I was hoping that politcians, media outlets and my fellow social scientists would come to Bluesky instead, which is [apparently exactly what is happening now](https://www.dw.com/en/another-x-odus-is-underway-as-users-grow-on-other-social-media-platforms/a-70783182).
+So after a lot of disappointment with world events this year, my wish that Bluesky would become Twitter's heir, [seems to come true](https://www.theverge.com/2024/11/23/24303502/bluesky-next-twitter-threads-x).
+The reasons I like Bluesky so much are that it connects me with a peer group that is spread around the world, like Twitter once did, but that it is built on [open source infrastructure](https://docs.bsky.app/), which not only makes it billionaire proof, but also incredibly easy to tap into the data.
+Overall it [is just a place of joy](https://www.nature.com/articles/d41586-024-03784-6) right now and thanks to how serious the developers took community moderation, I'm hopeful that it will stay this way.
+
+However, that led to a problem this week which can only be described as 'incredibly first world'.
+I was getting too many notifications about new followers!
+So many that it became impossible to go through all of them and check whom to follow back.
+My approach to solving the problem?
+Using R and the `atrrr` package I created with friends ealiers this year.
+
+## Who follows me, but I'm not following back?
+
+I start by looking at who follows me, and whom I already follow back:
+
+```{r}
+#| eval: false
+library(atrrr)
+library(tidyverse)
+my_followers <- get_followers("jbgruber.bsky.social", limit = Inf) |> 
+  # remove columns containing more complex data
+  select(-ends_with("_data"))
+my_follows <- get_follows("jbgruber.bsky.social", limit = Inf) |> 
+  select(-ends_with("_data"))
+not_yet_follows <- my_followers |> 
+  filter(!actor_handle %in% my_follows$actor_handle)
+```
+
+```{r}
+#| include: false
+library(atrrr)
+library(tidyverse)
+data_loc <- "my_followers.rds"
+if (!file.exists(data_loc)) {
+  my_followers <- get_followers("jbgruber.bsky.social", limit = Inf) |> 
+    # remove columns containing more complex data
+    select(-ends_with("_data"))
+  saveRDS(my_followers, "my_followers.rds")
+} else {
+  my_followers <- readRDS("my_followers.rds")
+}
+data_loc <- "my_follows.rds"
+if (!file.exists(data_loc)) {
+  my_follows <- get_follows("jbgruber.bsky.social", limit = Inf) |> 
+    select(-ends_with("_data"))
+  saveRDS(my_follows, data_loc)
+} else {
+  my_follows <- readRDS(data_loc)
+}
+not_yet_follows <- my_followers |> 
+  filter(!actor_handle %in% my_follows$actor_handle)
+```
+
+Now `not_yet_follows` contains 372 people!
+More than I thought.
+My assumption is that they are interested in similar topics and it would probably enrich my feed if I followed a chunk of them back.
+But how to decide?
+I came up with three criteria:
+
+1. who is already followed by a large chunk of my follows
+2. who has #commsky, #polsky or #rstats in their description
+3. who has a big account, which I defined at the moment as 1,000 followers+ 
+
+Number 1 and 3 are made under the assumption that popular accounts are popular for a reason and I'm relying on the wisdom of the crowd.
+
+
+## Who is followed by the people I follow?
+
+To answer this, we need to get quite a bit of data.
+Specifically, I loop through all accounts that I follow and get the follows from them:
+
+```{r}
+#| eval: false
+follows_of_follows <- my_follows |>
+  pull(actor_handle) |> 
+  # iterate over follows getting their follows
+  map(function(handle) {
+    get_follows(handle, limit = Inf, verbose = FALSE) |>
+      mutate(from = handle)
+  }, .progress = interactive()) |> 
+  bind_rows() |> 
+  # not sure what this means
+  filter(actor_handle != "handle.invalid")
+```
+
+```{r}
+#| include: false
+data_loc <- "follows_of_follows.rds"
+if (!file.exists(data_loc)) {
+  follows_of_follows <- my_follows |>
+    pull(actor_handle) |> 
+    # iterate over follows getting their follows
+    map(function(handle) {
+      get_follows(handle, limit = Inf, verbose = FALSE) |>
+        mutate(from = handle)
+    }, .progress = interactive()) |> 
+    bind_rows() |> 
+    filter(actor_handle != "handle.invalid")
+  saveRDS(follows_of_follows, data_loc)
+} else {
+  follows_of_follows <- readRDS(data_loc)
+}
+```
+
+This data is huge, with 450,000 accounts.
+So who in the `not_yet_follows´ list shows up there most often?
+
+```{r}
+follows_of_follows_count <- follows_of_follows |> 
+  count(actor_handle, name = "n_following", sort = TRUE)
+follows_of_follows_count
+```
+
+Unsurprisingly, I'm on top of this very specific list since this is a network around my own account.
+But let's see who among my `not_yet_follows` list is popular here:
+
+```{r}
+popular_among_follows <- not_yet_follows |> 
+  left_join(follows_of_follows_count, by = "actor_handle") |> 
+  filter(n_following > 30)
+```
+
+I put the people who have more than 30 `n_following` here, which is an arbitry number I picked, and ended up with 76 people I should look into.
+
+
+## Who matches my interest in their description?
+
+Specifically, I look for a couple of key hashtags: #commsky, #polsky or #rstats in their description.
+These are the words I look for when checking out someone's bio and it is very likely I want to follow them then.
+Looking for the keywords is pretty simple, since we already have the data:
+
+```{r}
+probably_interesting_content <- not_yet_follows |> 
+  filter(!is.na(actor_description)) |> 
+  filter(str_detect(actor_description, regex("#commsky|#polsky|#rstats", 
+                                             ignore_case = TRUE)))
+```
+
+Only 20 accounts fit this filter.
+Maybe I could find better keywords?
+But this is just a demo of what you could do, so let's move on.
+
+
+# Who are the big accounts trying to connect?
+
+We can look up the user info to see how many followers they have.^[
+This currently only works with the development version of atrrr, install via `remotes::install_github("JBGruber/atrrr")`.
+]
+
+```{r}
+popular_not_yet_follows <- not_yet_follows |> 
+  mutate(followers_count = get_user_info(actor_handle)$followers_count) |> 
+  filter(followers_count > 1000)
+```
+
+Again the 1,000 follower number is arbitrary, but when I look at an account and see four figure follower counts, I still think it's a lot.
+This gave me 80 accounts.
+
+So what could I do now?
+Two ways to approach it:
+
+1. let's just follow them all if they fit these criteria:
+
+```{r}
+#| eval: false
+lets_follow <- bind_rows(
+  popular_among_follows,
+  probably_interesting_content,
+  popular_not_yet_follows
+) |> 
+  distinct(actor_handle) |> 
+  pull(actor_handle)
+
+follow(lets_follow)
+```
+
+2. More realistically though, I still want to have a look at the 136 accounts before following them.
+
+This can be done relatively conveniently by opening the user profiles in my browser.
+I can do that with:
+
+```{r}
+#| eval: false
+walk(
+  lets_follow,
+  browseURL
+)
+```
+
+
+## How else can I find followers?
+
+What you can also do with the data is to simply check `follows_of_follows_count` which of the accounts that are popular among your friends you don't yet follow -- without the condition that they are following you.
+
+```{r}
+popular_among_follows2 <-  follows_of_follows_count |> 
+  filter(!actor_handle %in% my_follows$actor_handle) |> 
+  filter(n_following > 30)
+```
+
+This gives me another 60 accounts to look through.
+
+Of course the best way to search for intersting accounts when you are new to the platform is to look for starter packs.
+The website [Bluesky Directory](https://blueskydirectory.com/starter-packs/all) has these ordered by topics and let's you search through it.
+
+
+## How can I learn more about `atrrr`?
+
+We collected a couple of tutorials on the package's website: https://jbgruber.github.io/atrrr/
+If there is something you would like to have explained (better) or you went through the docs and found an interesting endpoint, head over to GitHub and [create and issue](https://github.com/JBGruber/atrrr/issues/new).
+We are very open for ideas that make the package better!
+
+
+

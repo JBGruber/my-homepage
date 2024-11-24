@@ -1,0 +1,159 @@
+---
+title: 'So many new people on Bluesky! Who should I follow?'
+author: ''
+date: '2024-11-24'
+slug: []
+categories: []
+tags:
+  - R
+  - social media
+header:
+  caption: 'Image generated using DALL E'
+  image: 'DALLE_bluesky_follower.webp'
+  preview: yes
+---
+
+
+
+<p>If there is one development at the moment which I full heartedly enjoy reading about it’s that the remains of what was once called Twitter is seeing a large E𝕏odus.
+Since a certain billionaire has taken over that platform, it has continuously become worse and I was hoping that politcians, media outlets and my fellow social scientists would come to Bluesky instead, which is <a href="https://www.dw.com/en/another-x-odus-is-underway-as-users-grow-on-other-social-media-platforms/a-70783182">apparently exactly what is happening now</a>.
+So after a lot of disappointment with world events this year, my wish that Bluesky would become Twitter’s heir, <a href="https://www.theverge.com/2024/11/23/24303502/bluesky-next-twitter-threads-x">seems to come true</a>.
+The reasons I like Bluesky so much are that it connects me with a peer group that is spread around the world, like Twitter once did, but that it is built on <a href="https://docs.bsky.app/">open source infrastructure</a>, which not only makes it billionaire proof, but also incredibly easy to tap into the data.
+Overall it <a href="https://www.nature.com/articles/d41586-024-03784-6">is just a place of joy</a> right now and thanks to how serious the developers took community moderation, I’m hopeful that it will stay this way.</p>
+<p>However, that led to a problem this week which can only be described as ‘incredibly first world’.
+I was getting too many notifications about new followers!
+So many that it became impossible to go through all of them and check whom to follow back.
+My approach to solving the problem?
+Using R and the <code>atrrr</code> package I created with friends ealiers this year.</p>
+<div id="who-follows-me-but-im-not-following-back" class="section level2">
+<h2>Who follows me, but I’m not following back?</h2>
+<p>I start by looking at who follows me, and whom I already follow back:</p>
+<pre class="r"><code>library(atrrr)
+library(tidyverse)
+my_followers &lt;- get_followers(&quot;jbgruber.bsky.social&quot;, limit = Inf) |&gt; 
+  # remove columns containing more complex data
+  select(-ends_with(&quot;_data&quot;))
+my_follows &lt;- get_follows(&quot;jbgruber.bsky.social&quot;, limit = Inf) |&gt; 
+  select(-ends_with(&quot;_data&quot;))
+not_yet_follows &lt;- my_followers |&gt; 
+  filter(!actor_handle %in% my_follows$actor_handle)</code></pre>
+<p>Now <code>not_yet_follows</code> contains 372 people!
+More than I thought.
+My assumption is that they are interested in similar topics and it would probably enrich my feed if I followed a chunk of them back.
+But how to decide?
+I came up with three criteria:</p>
+<ol style="list-style-type: decimal">
+<li>who is already followed by a large chunk of my follows</li>
+<li>who has #commsky, #polsky or #rstats in their description</li>
+<li>who has a big account, which I defined at the moment as 1,000 followers+</li>
+</ol>
+<p>Number 1 and 3 are made under the assumption that popular accounts are popular for a reason and I’m relying on the wisdom of the crowd.</p>
+</div>
+<div id="who-is-followed-by-the-people-i-follow" class="section level2">
+<h2>Who is followed by the people I follow?</h2>
+<p>To answer this, we need to get quite a bit of data.
+Specifically, I loop through all accounts that I follow and get the follows from them:</p>
+<pre class="r"><code>follows_of_follows &lt;- my_follows |&gt;
+  pull(actor_handle) |&gt; 
+  # iterate over follows getting their follows
+  map(function(handle) {
+    get_follows(handle, limit = Inf, verbose = FALSE) |&gt;
+      mutate(from = handle)
+  }, .progress = interactive()) |&gt; 
+  bind_rows() |&gt; 
+  # not sure what this means
+  filter(actor_handle != &quot;handle.invalid&quot;)</code></pre>
+<p>This data is huge, with 450,000 accounts.
+So who in the `not_yet_follows´ list shows up there most often?</p>
+<pre class="r"><code>follows_of_follows_count &lt;- follows_of_follows |&gt; 
+  count(actor_handle, name = &quot;n_following&quot;, sort = TRUE)
+follows_of_follows_count</code></pre>
+<pre><code>## # A tibble: 160,440 × 2
+##    actor_handle              n_following
+##    &lt;chr&gt;                           &lt;int&gt;
+##  1 jbgruber.bsky.social              400
+##  2 claesdevreese.bsky.social         352
+##  3 rossdahlke.bsky.social            292
+##  4 alessandronai.bsky.social         285
+##  5 favstats.eu                       263
+##  6 feloe.bsky.social                 263
+##  7 jamoeberl.bsky.social             246
+##  8 brendannyhan.bsky.social          226
+##  9 fgilardi.bsky.social              225
+## 10 dfreelon.bsky.social              224
+## # ℹ 160,430 more rows</code></pre>
+<p>Unsurprisingly, I’m on top of this very specific list since this is a network around my own account.
+But let’s see who among my <code>not_yet_follows</code> list is popular here:</p>
+<pre class="r"><code>popular_among_follows &lt;- not_yet_follows |&gt; 
+  left_join(follows_of_follows_count, by = &quot;actor_handle&quot;) |&gt; 
+  filter(n_following &gt; 30)</code></pre>
+<p>I put the people who have more than 30 <code>n_following</code> here, which is an arbitry number I picked, and ended up with 76 people I should look into.</p>
+</div>
+<div id="who-matches-my-interest-in-their-description" class="section level2">
+<h2>Who matches my interest in their description?</h2>
+<p>Specifically, I look for a couple of key hashtags: #commsky, #polsky or #rstats in their description.
+These are the words I look for when checking out someone’s bio and it is very likely I want to follow them then.
+Looking for the keywords is pretty simple, since we already have the data:</p>
+<pre class="r"><code>probably_interesting_content &lt;- not_yet_follows |&gt; 
+  filter(!is.na(actor_description)) |&gt; 
+  filter(str_detect(actor_description, regex(&quot;#commsky|#polsky|#rstats&quot;, 
+                                             ignore_case = TRUE)))</code></pre>
+<p>Only 20 accounts fit this filter.
+Maybe I could find better keywords?
+But this is just a demo of what you could do, so let’s move on.</p>
+</div>
+<div id="who-are-the-big-accounts-trying-to-connect" class="section level1">
+<h1>Who are the big accounts trying to connect?</h1>
+<p>We can look up the user info to see how many followers they have.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>popular_not_yet_follows &lt;- not_yet_follows |&gt; 
+  mutate(followers_count = get_user_info(actor_handle)$followers_count) |&gt; 
+  filter(followers_count &gt; 1000)</code></pre>
+<p>Again the 1,000 follower number is arbitrary, but when I look at an account and see four figure follower counts, I still think it’s a lot.
+This gave me 80 accounts.</p>
+<p>So what could I do now?
+Two ways to approach it:</p>
+<ol style="list-style-type: decimal">
+<li>let’s just follow them all if they fit these criteria:</li>
+</ol>
+<pre class="r"><code>lets_follow &lt;- bind_rows(
+  popular_among_follows,
+  probably_interesting_content,
+  popular_not_yet_follows
+) |&gt; 
+  distinct(actor_handle) |&gt; 
+  pull(actor_handle)
+
+follow(lets_follow)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>More realistically though, I still want to have a look at the 136 accounts before following them.</li>
+</ol>
+<p>This can be done relatively conveniently by opening the user profiles in my browser.
+I can do that with:</p>
+<pre class="r"><code>walk(
+  lets_follow,
+  browseURL
+)</code></pre>
+<div id="how-else-can-i-find-followers" class="section level2">
+<h2>How else can I find followers?</h2>
+<p>What you can also do with the data is to simply check <code>follows_of_follows_count</code> which of the accounts that are popular among your friends you don’t yet follow – without the condition that they are following you.</p>
+<pre class="r"><code>popular_among_follows2 &lt;-  follows_of_follows_count |&gt; 
+  filter(!actor_handle %in% my_follows$actor_handle) |&gt; 
+  filter(n_following &gt; 30)</code></pre>
+<p>This gives me another 60 accounts to look through.</p>
+<p>Of course the best way to search for intersting accounts when you are new to the platform is to look for starter packs.
+The website <a href="https://blueskydirectory.com/starter-packs/all">Bluesky Directory</a> has these ordered by topics and let’s you search through it.</p>
+</div>
+<div id="how-can-i-learn-more-about-atrrr" class="section level2">
+<h2>How can I learn more about <code>atrrr</code>?</h2>
+<p>We collected a couple of tutorials on the package’s website: <a href="https://jbgruber.github.io/atrrr/" class="uri">https://jbgruber.github.io/atrrr/</a>
+If there is something you would like to have explained (better) or you went through the docs and found an interesting endpoint, head over to GitHub and <a href="https://github.com/JBGruber/atrrr/issues/new">create and issue</a>.
+We are very open for ideas that make the package better!</p>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>
+This currently only works with the development version of atrrr, install via <code>remotes::install_github("JBGruber/atrrr")</code>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
