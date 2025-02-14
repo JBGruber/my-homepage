@@ -1,0 +1,197 @@
+---
+title: You R My Valentine 4.0
+author: JBGruber
+date: '2025-02-14'
+slug: []
+categories: []
+tags: []
+header:
+  caption: ''
+  image: 'contributions_calendar_final.png'
+  preview: yes
+---
+
+
+
+<p>I like to make something myself to show my appreciation for my significant other.
+So like <a href="https://www.johannesbgruber.eu/post/you-r-my-valentine/">in 2019</a>, <a href="https://www.johannesbgruber.eu/post/you-r-my-valentine-2-0/">2020</a> and <a href="https://www.johannesbgruber.eu/post/you-r-my-valentine-3-0/">2023</a> I’m writing some code for my wonderful special R-Lady – which I happen to be better at than at arts and crafts.
+Last year, we talked a lot about Git, the version control system you might know from GitHub and which is the default for collaborative work on code.
+Because since she started using it for work last year, I’m not the only one in our household who is frustrated by merge conflicts any more.
+And for whatever reason, I only realised in the last few months that it is actually possible <a href="https://docs.ropensci.org/git2r/">to use Git via <code>R</code> scripts</a> instead of googleing or llming the commands every time.
+So let’s see if I can craft a nerdy Git(Hub) message this year.</p>
+<p>Specifically, I want to make some contributions that show up in my GitHub contributions calendar like this:</p>
+<p><a href="https://github.com/JBGruber?tab=overview&amp;from=2009-01-01&amp;to=2009-12-31"><img src="Screenshot_20241205_181156.png" /></a></p>
+<p>Each green box (in case I used red to sketch my message out) shows something I added to a repository on GitHub.
+And the crucial piece of information is that commits can be backdated.
+So when I pick a view from a year in which I did not use GitHub yet, I have an empty canvas to draw something with code!</p>
+<p>So let’s first define all the points I want to draw:</p>
+<pre class="r"><code>points &lt;- c(
+  # I
+  seq.Date(as.Date(&quot;2009-02-22&quot;), as.Date(&quot;2009-02-28&quot;), by = 1L),
+  
+  # heart
+  as.Date(&quot;2009-03-23&quot;), as.Date(&quot;2009-03-24&quot;), 
+  as.Date(&quot;2009-03-29&quot;), as.Date(&quot;2009-04-01&quot;),
+  as.Date(&quot;2009-04-05&quot;), as.Date(&quot;2009-04-09&quot;),
+  as.Date(&quot;2009-04-13&quot;), as.Date(&quot;2009-04-17&quot;),
+  as.Date(&quot;2009-04-21&quot;), as.Date(&quot;2009-04-25&quot;),
+  as.Date(&quot;2009-04-27&quot;), as.Date(&quot;2009-05-01&quot;),
+  as.Date(&quot;2009-05-03&quot;), as.Date(&quot;2009-05-07&quot;),
+  as.Date(&quot;2009-05-10&quot;), as.Date(&quot;2009-05-13&quot;),
+  as.Date(&quot;2009-05-18&quot;), as.Date(&quot;2009-05-19&quot;),
+  
+  # &quot;ALEX&quot;
+  as.Date(&quot;2009-05-29&quot;), as.Date(&quot;2009-05-30&quot;), # left leg
+  as.Date(&quot;2009-06-03&quot;), as.Date(&quot;2009-06-04&quot;),
+  as.Date(&quot;2009-06-08&quot;), as.Date(&quot;2009-06-09&quot;),
+  as.Date(&quot;2009-06-14&quot;),
+  as.Date(&quot;2009-06-22&quot;), as.Date(&quot;2009-06-23&quot;), #right leg
+  as.Date(&quot;2009-07-01&quot;), as.Date(&quot;2009-07-02&quot;),
+  as.Date(&quot;2009-07-10&quot;), as.Date(&quot;2009-07-11&quot;),
+  # crossbar
+  as.Date(&quot;2009-06-04&quot;) + 7, as.Date(&quot;2009-06-04&quot;) + 14, as.Date(&quot;2009-06-04&quot;) + 21,
+  
+  # L
+  seq.Date(as.Date(&quot;2009-07-19&quot;), as.Date(&quot;2009-07-25&quot;), by = 1L),
+  as.Date(&quot;2009-07-25&quot;) + 7, as.Date(&quot;2009-07-25&quot;) + 14, as.Date(&quot;2009-07-25&quot;) + 21,
+  
+  # E
+  seq.Date(as.Date(&quot;2009-08-23&quot;), as.Date(&quot;2009-08-29&quot;), by = 1L),
+  as.Date(&quot;2009-08-23&quot;) + 7, as.Date(&quot;2009-08-23&quot;) + 14, as.Date(&quot;2009-08-23&quot;) + 21,
+  as.Date(&quot;2009-08-26&quot;) + 7, as.Date(&quot;2009-08-26&quot;) + 14,
+  as.Date(&quot;2009-08-29&quot;) + 7, as.Date(&quot;2009-08-29&quot;) + 14, as.Date(&quot;2009-08-29&quot;) + 21,
+  
+  # X
+  seq.Date(as.Date(&quot;2009-09-27&quot;), as.Date(&quot;2009-11-14&quot;), by = 8L),
+  seq.Date(as.Date(&quot;2009-10-03&quot;), as.Date(&quot;2009-11-08&quot;), by = 6L)
+)</code></pre>
+<p>To make sure the green squares will be in the right location, let’s quickly check by recreating the contributions calendar as a plot:</p>
+<pre class="r"><code>library(tidyverse)
+tibble(
+  weekday = wday(points, label = TRUE, week_start = 7L, locale = &quot;en_GB.UTF-8&quot;),
+  week = epiweek(points) # I discovered this is the way GitHub counts weeks
+) |&gt; 
+  ggplot(aes(x = week, y = fct_rev(weekday))) +
+  geom_point(colour = &quot;darkgreen&quot;, shape = 15L, size = 2L) +
+  theme_minimal() +
+  labs(x = NULL, y = NULL)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="864" /></p>
+<p>Now let’s get to the Git part.
+The package I’m using is <code>git2r</code>:</p>
+<pre class="r"><code># install.packages(&quot;git2r&quot;)
+library(git2r)
+path &lt;- &quot;valentine-repo&quot;
+dir.create(path)
+repo &lt;- init(path)
+summary(repo)</code></pre>
+<pre><code>## Local:    /home/johannes/Documents/GitHub/my-homepage/content/post/2025-02-14-you-r-my-valentine-4-0/valentine-repo
+## Head:     nothing commited (yet)
+## 
+## Branches:        0
+## Tags:            0
+## Commits:         0
+## Contributors:    0
+## Stashes:         0
+## Ignored files:   0
+## Untracked files: 0
+## Unstaged files:  0
+## Staged files:    0
+## 
+## Latest commits:</code></pre>
+<p>I initialised a new repository to store the commits in.
+So far so good, but now comes the non standard part:
+backdating the commits to some day in 2009 (when we started dating).
+To understand commits better, I first connect to the repository of this website:</p>
+<pre class="r"><code>repo_ws &lt;- repository(here::here())</code></pre>
+<p>Strangely enough, the commit time is saved in the author field of a commit.
+Let’s look at one of them:</p>
+<pre class="r"><code>author &lt;- commits(repo_ws)[[1]]$author
+author</code></pre>
+<pre><code>## name:  JBGruber
+## email: johannesb.gruber@gmail.com
+## when:  2024-11-24 14:29:33 GMT</code></pre>
+<p>This looks like a special object, but is actually just a list with some formatting applied to it:</p>
+<pre class="r"><code>unclass(author)</code></pre>
+<pre><code>## $name
+## [1] &quot;JBGruber&quot;
+## 
+## $email
+## [1] &quot;johannesb.gruber@gmail.com&quot;
+## 
+## $when
+## 2024-11-24 14:29:33 GMT</code></pre>
+<p>And the time is stored as a number:</p>
+<pre class="r"><code>author$when$time</code></pre>
+<pre><code>## [1] 1732458573</code></pre>
+<p>Knowing all that, I can write a loop to make the commits.
+To make a commit, I need to change some file in the repository.
+I decided to simply write a text file letter by letter with this message:</p>
+<pre class="r"><code>msg &lt;- c(
+  strsplit(&quot;Will you be my valentine? &quot;, &quot;&quot;)[[1]],
+  rep(&quot;&lt;3&quot;, 54)
+)</code></pre>
+<p>I add 54 <code>&lt;3</code>s to make this the same length as the number of points, so I can use <code>walk2</code> to loop over <code>points</code> and <code>msg</code> simultaneously:</p>
+<pre class="r"><code>purrr::walk2(points, msg, function(date, letter) {
+  # add a letter to love.txx
+  write(letter, &quot;valentine-repo/love.txt&quot;, append = TRUE)
+
+  # add the file to the commit
+  add(repo, &quot;valentine-repo/love.txt&quot;)
+  
+  # assign datetime to signature
+  # (make it 9am every day to not get confused with time zones)
+  datetime &lt;- as.POSIXct(date, tz = &quot;UTC&quot;) + 60 * 60 * 9 
+  author$when$time &lt;- as.numeric(datetime)
+  
+  commit(repo, &quot;valentine commit&quot;, author = author, committer = author)
+})</code></pre>
+<p>Let’s have a look at the commits:</p>
+<pre class="r"><code>commits(repo) |&gt; 
+  tail()</code></pre>
+<pre><code>## [[1]]
+## [fdacaa1] 2009-02-27: valentine commit
+## 
+## [[2]]
+## [69d61f0] 2009-02-26: valentine commit
+## 
+## [[3]]
+## [8427108] 2009-02-25: valentine commit
+## 
+## [[4]]
+## [7e8bf93] 2009-02-24: valentine commit
+## 
+## [[5]]
+## [ff57773] 2009-02-23: valentine commit
+## 
+## [[6]]
+## [10fc476] 2009-02-22: valentine commit</code></pre>
+<p>Excellent.
+I don’t like the default name of the branch that git assigns so let’s rename it:</p>
+<pre class="r"><code>branch_rename(repository_head(repo), &quot;main&quot;)</code></pre>
+<p>I now had leave <code>R</code> for a second to create the repository on GitHub.
+Then I can connect my local repository with the one on GitHub:</p>
+<pre class="r"><code>remote_add(repo, name = &quot;origin&quot;, url = &quot;https://github.com/JBGruber/valentine-repo.git&quot;)
+summary(repo)</code></pre>
+<pre><code>## Local:    main /home/johannes/Documents/GitHub/my-homepage/content/post/2025-02-14-you-r-my-valentine-4-0/valentine-repo
+## Head:     [a0c6e8e] 2009-11-08: valentine commit
+## 
+## Branches:         1
+## Tags:             0
+## Commits:         80
+## Contributors:     1
+## Stashes:          0
+## Ignored files:    0
+## Untracked files:  0
+## Unstaged files:   0
+## Staged files:     0
+## 
+## Latest commits:
+## [a0c6e8e] 2009-11-08: valentine commit
+## [fbd5bf5] 2009-11-02: valentine commit
+## [fcc6ec5] 2009-10-27: valentine commit
+## [7edfa41] 2009-10-21: valentine commit
+## [40dd198] 2009-10-15: valentine commit</code></pre>
+<p>Now I can push (upload) my commits (local changes)!</p>
+<pre class="r"><code>push(repo, name = &quot;origin&quot;, refspec = &quot;refs/heads/main&quot;, set_upstream = TRUE)</code></pre>
+<p>The result can be viewed here: <a href="https://github.com/JBGruber?tab=overview&amp;from=2009-01-01&amp;to=2009-12-31" class="uri">https://github.com/JBGruber?tab=overview&amp;from=2009-01-01&amp;to=2009-12-31</a>.
+Happy nerdy valentine my dear and everyone :heart:!</p>
