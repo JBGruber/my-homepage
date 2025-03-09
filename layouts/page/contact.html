@@ -1,0 +1,114 @@
+{{ partial "header.html" . }}
+{{ partial "navbar.html" . }}
+
+<article class="article">
+  <div class="article-container">
+    <h1 class="animate__animated animate__fadeInDown">{{ .Title }}</h1>
+    
+    <div class="article-style">
+      <p class="animate__animated animate__fadeIn" style="animation-delay: 0.1s;">Feel free to reach out to me through any of the following channels:</p>
+      
+      <ul style="list-style-type: none; padding-left: 0;">
+        <li style="margin-bottom: 20px; display: flex; align-items: center;">
+          <div class="animate__animated animate__fadeInLeft" style="animation-delay: 0.2s;">
+            <i class="fa fa-envelope" aria-hidden="true" style="width: 25px; text-align: center;"></i>
+            <strong>Email</strong>:
+          </div>
+          <div class="animate__animated animate__fadeInRight" style="animation-delay: 0.2s; margin-left: 10px;">
+            <a href="mailto:{{ .Site.Params.email }}" class="contact-link">{{ .Site.Params.email }}</a>
+          </div>
+        </li>
+        
+        {{ $index := 0 }}
+        {{ range .Site.Params.social }}
+          {{ $index = add $index 1 }}
+          {{ $delay := mul 0.1 (add $index 2) }}
+          
+          {{ if eq .icon "bluesky" }}
+            <li style="margin-bottom: 20px; display: flex; align-items: center;">
+              <div class="animate__animated animate__fadeInLeft" style="animation-delay: {{ $delay }}s;">
+                <i class="fa fa-brands fa-bluesky" aria-hidden="true" style="width: 25px; text-align: center;"></i>
+                <strong>Bluesky</strong>:
+              </div>
+              <div class="animate__animated animate__fadeInRight" style="animation-delay: {{ $delay }}s; margin-left: 10px;">
+                <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">@jbgruber.bsky.social</a>
+              </div>
+            </li>
+          {{ else if eq .icon "mastodon" }}
+            <li style="margin-bottom: 20px; display: flex; align-items: center;">
+              <div class="animate__animated animate__fadeInLeft" style="animation-delay: {{ $delay }}s;">
+                <i class="fa fa-brands fa-mastodon" aria-hidden="true" style="width: 25px; text-align: center;"></i>
+                <strong>Mastodon</strong>:
+              </div>
+              <div class="animate__animated animate__fadeInRight" style="animation-delay: {{ $delay }}s; margin-left: 10px;">
+                <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">@JBGruber@fosstodon.org</a>
+              </div>
+            </li>
+          {{ else if eq .icon "github" }}
+            <li style="margin-bottom: 20px; display: flex; align-items: center;">
+              <div class="animate__animated animate__fadeInLeft" style="animation-delay: {{ $delay }}s;">
+                <i class="fa fa-brands fa-github" aria-hidden="true" style="width: 25px; text-align: center;"></i>
+                <strong>GitHub</strong>:
+              </div>
+              <div class="animate__animated animate__fadeInRight" style="animation-delay: {{ $delay }}s; margin-left: 10px;">
+                <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">JBGruber</a>
+              </div>
+            </li>
+          {{ else if eq .icon "google-scholar" }}
+            <li style="margin-bottom: 20px; display: flex; align-items: center;">
+              <div class="animate__animated animate__fadeInLeft" style="animation-delay: {{ $delay }}s;">
+                <i class="ai ai-google-scholar" aria-hidden="true" style="width: 25px; text-align: center;"></i>
+                <strong>Google Scholar</strong>:
+              </div>
+              <div class="animate__animated animate__fadeInRight" style="animation-delay: {{ $delay }}s; margin-left: 10px;">
+                <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">Johannes B. Gruber</a>
+              </div>
+            </li>
+          {{ else if eq .icon "stack-overflow" }}
+            <li style="margin-bottom: 20px; display: flex; align-items: center;">
+              <div class="animate__animated animate__fadeInLeft" style="animation-delay: {{ $delay }}s;">
+                <i class="fa fa-brands fa-stack-overflow" aria-hidden="true" style="width: 25px; text-align: center;"></i>
+                <strong>Stack Overflow</strong>:
+              </div>
+              <div class="animate__animated animate__fadeInRight" style="animation-delay: {{ $delay }}s; margin-left: 10px;">
+                <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">JBGruber</a>
+              </div>
+            </li>
+          {{ end }}
+        {{ end }}
+      </ul>
+      
+      <p class="animate__animated animate__fadeIn" style="animation-delay: 0.8s;">I'm currently a Post-Doc Researcher at the Department of Language, Literature and Communication at Vrije Universiteit Amsterdam working on the <a href="https://newsflows.eu/" target="_blank" rel="noopener" class="contact-link">NEWSFLOWS project</a>.</p>
+      
+      {{ with .Content }}
+        <div class="animate__animated animate__fadeIn" style="animation-delay: 0.9s;">
+          {{ . }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</article>
+
+<style>
+  /* Link hover effect similar to your navbar */
+  .contact-link {
+    white-space: nowrap;
+    -webkit-transition: 0.2s ease;
+    transition: 0.2s ease;
+    color: #272935; /* Hardcoded from your theme's menu_text */
+    font-weight: 600;
+    display: inline-block;
+    transform-origin: left center;
+  }
+  
+  .contact-link:hover {
+    color: #B05859; /* Hardcoded from your theme's menu_text_active */
+    letter-spacing: 0.14em;
+    transform: scale(1.1);
+    text-decoration: none;
+    transform-origin: left center;
+  }
+</style>
+
+{{ partial "footer_container.html" . }}
+{{ partial "footer.html" . }}
