@@ -54,26 +54,6 @@
                 <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">JBGruber</a>
               </div>
             </li>
-          {{ else if eq .icon "google-scholar" }}
-            <li style="margin-bottom: 20px; display: flex; align-items: center;">
-              <div class="animate__animated animate__fadeInLeft" style="animation-delay: {{ $delay }}s;">
-                <i class="ai ai-google-scholar" aria-hidden="true" style="width: 25px; text-align: center;"></i>
-                <strong>Google Scholar</strong>:
-              </div>
-              <div class="animate__animated animate__fadeInRight" style="animation-delay: {{ $delay }}s; margin-left: 10px;">
-                <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">Johannes B. Gruber</a>
-              </div>
-            </li>
-          {{ else if eq .icon "stack-overflow" }}
-            <li style="margin-bottom: 20px; display: flex; align-items: center;">
-              <div class="animate__animated animate__fadeInLeft" style="animation-delay: {{ $delay }}s;">
-                <i class="fa fa-brands fa-stack-overflow" aria-hidden="true" style="width: 25px; text-align: center;"></i>
-                <strong>Stack Overflow</strong>:
-              </div>
-              <div class="animate__animated animate__fadeInRight" style="animation-delay: {{ $delay }}s; margin-left: 10px;">
-                <a href="{{ .link }}" target="_blank" rel="noopener" class="contact-link">JBGruber</a>
-              </div>
-            </li>
           {{ end }}
         {{ end }}
       </ul>
