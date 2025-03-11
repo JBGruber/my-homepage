@@ -16,9 +16,17 @@
           </div>
           <div class="animate__animated animate__fadeInRight" style="animation-delay: 0.2s; margin-left: 10px;">
             <a href="mailto:{{ .Site.Params.email }}" class="contact-link">{{ .Site.Params.email }}</a>
-          </div>
+          </div>         
         </li>
-        
+        <li style="margin-bottom: 20px; display: flex; align-items: center;">
+          <div class="animate__animated animate__fadeInLeft" style="animation-delay: 1.0s;">
+            <i class="fa fa-envelope" aria-hidden="true" style="width: 25px; text-align: center;"></i>
+            <strong>Email (from April 1st)</strong>:
+          </div>
+          <div class="animate__animated animate__fadeInRight" style="animation-delay: 1.0s; margin-left: 10px;">
+            <a href="mailto:Johannes.Gruber@gesis.org" class="contact-link">Johannes.Gruber@gesis.org</a>
+          </div>       
+        </li>        
         {{ $index := 0 }}
         {{ range .Site.Params.social }}
           {{ $index = add $index 1 }}
@@ -58,7 +66,7 @@
         {{ end }}
       </ul>
       
-      <p class="animate__animated animate__fadeIn" style="animation-delay: 0.8s;">I'm currently a Post-Doc Researcher at the Department of Language, Literature and Communication at Vrije Universiteit Amsterdam working on the <a href="https://newsflows.eu/" target="_blank" rel="noopener" class="contact-link">NEWSFLOWS project</a>.</p>
+      <p class="animate__animated animate__fadeIn" style="animation-delay: 0.8s;">I'm currently a Post-Doc Researcher at the Department of Language, Literature and Communication at Vrije Universiteit Amsterdam working on the <a href="https://newsflows.eu/" target="_blank" rel="noopener" class="contact-link">NEWSFLOWS project</a>. Starting on April 1st, I will be a Senior Researcher/Team Lead at Data Services for the Social Sciences department at <a href="https://www.gesis.org/en/institute/about-us/departments/data-services-for-the-social-sciences" target="_blank" rel="noopener" class="contact-link">GESIS</a>.</p>
       
       {{ with .Content }}
         <div class="animate__animated animate__fadeIn" style="animation-delay: 0.9s;">
