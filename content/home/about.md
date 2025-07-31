@@ -47,9 +47,10 @@ weight = 5
 
 # Background
 
-I am a Post-Doc Researcher at the Department of Language, Literature and Communication Vrije Universiteit Amsterdam working on the [NEWSFLOWS project](https://newsflows.eu/) (the project was recently moved to the VU).
-Previously, I worked at the  Department of Communication Science at Vrije Universiteit Amsterdam within the [OPTED project](https://opted.eu/team/wp7-pre-processing-storage-and-data-sharing/johannes-b-gruber/) and a focus on text as data methods and creating open source software tools to make these methods easily accessible and reproducible.
-Before that, I worked as Post-Doc Researcher at the Chair for Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder).
+I am a Senior Researcher and Team Lead of the team Metadata Standards and Interoperability at the [*Data Services for the Social Sciences*](https://www.gesis.org/en/institute/about-us/departments/data-services-for-the-social-sciences) department at [GESIS](https://gesis.org/).
+Before joining GESIS in April 2025, I worked as a Post-Doc Researcher on the [NEWSFLOWS project](https://newsflows.eu/), which started at the Department of Communication Science at the University of Amsterdam before being moved to VU Amsterdam.
+Until September 2023, I was based at the Department of Communication Science at Vrije Universiteit Amsterdam, where I worked on the [OPTED project](https://opted.eu/team/wp7-pre-processing-storage-and-data-sharing/johannes-b-gruber/) and [AmCAT (Amsterdam Conent Analyis Toolkit](https://amcat.nl/).
+From 2021 to 2022, I worked as Post-Doc Researcher at the Chair for Digital Democracy at the European New School of Digital Studies (ENS), European University Viadrina Foundation Frankfurt (Oder).
 In 2021, I passed my PhD in Politics at the University of Glasgow.
 
 In my PhD project, I scrutinised how the media in the UK portrays protest events. Most literature about the topic assumes that the messages of protests are delegitimised by the media through routinised framing, i.e. a focus on disruption by and deviance of protesters. 
